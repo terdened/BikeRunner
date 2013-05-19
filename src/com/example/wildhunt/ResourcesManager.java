@@ -45,6 +45,9 @@ public class ResourcesManager
 	public ITextureRegion knob_region;
 	public ITiledTextureRegion player_region;
 	public ITextureRegion building_region;
+	public ITextureRegion wall_region;
+	public ITextureRegion roadtile_region;
+	public ITextureRegion light_region;
 	public ITextureRegion gamebkg_region;
 	public LinkedList<ITextureRegion> objectsList=new LinkedList <ITextureRegion>();
 	private BuildableBitmapTextureAtlas gameTextureAtlas;
@@ -127,6 +130,10 @@ public class ResourcesManager
 	    building_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "buildings/building1.png");
 	    base_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "controllers/base.png");
 	    knob_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "controllers/knob.png");
+	    roadtile_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "tiles/road.png");
+	    light_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "effects/light.png");
+	    wall_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "buildings/wall.png");
+	    
 	    //background_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "background.png");
 	    try 
 	    {
