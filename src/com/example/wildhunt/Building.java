@@ -10,6 +10,8 @@ import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.color.Color;
 
+import com.badlogic.gdx.physics.box2d.Body;
+
 public class Building extends Sprite
 {
 
@@ -20,9 +22,9 @@ public class Building extends Sprite
 	Sprite wallBottom;
 	Sprite wallRight;
 	Sprite wallLeft;
-	
+	Body body;
 	float align=0;
-	public Building(float pX, float pY, ITextureRegion pTextureRegion,ITextureRegion wallRegion,
+	public Building(float pX, float pY, ITextureRegion pTextureRegion,ITextureRegion wallRegion, ITextureRegion wallSide_region,
 			VertexBufferObjectManager vbom) {
 		super(pX, pY, pTextureRegion,
 				vbom);
@@ -37,13 +39,13 @@ public class Building extends Sprite
 		wallBottom=new Sprite(0, 0, wallRegion,vbom);
 		attachChild(wallBottom);
 		
-		wallRight=new Sprite(0, 0, wallRegion,vbom);
+		wallRight=new Sprite(0, 0, wallSide_region,vbom);
 		
 		attachChild(wallRight);
 		wallRight.setHeight(this.getHeight());
 		wallRight.setPosition(this.getWidth(), 0);
 		
-		wallLeft=new Sprite(0, 0, wallRegion,vbom);
+		wallLeft=new Sprite(0, 0, wallSide_region,vbom);
 		
 		attachChild(wallLeft);
 		wallLeft.setHeight(this.getHeight());
@@ -52,6 +54,12 @@ public class Building extends Sprite
 		
 	}
 
+	public void initBody(Body Body)
+	{
+		this.body=Body;
+	}
+	
+	
 	public void setBrightness(float x,float y)
 	{
 		float thisX=getX()+getWidth()/2;

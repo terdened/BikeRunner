@@ -1,14 +1,22 @@
 package com.example.wildhunt;
 
+import java.util.LinkedList;
+
+import org.andengine.engine.camera.Camera;
 import org.andengine.entity.sprite.AnimatedSprite;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.sprite.vbo.ISpriteVertexBufferObject;
 import org.andengine.entity.sprite.vbo.ITiledSpriteVertexBufferObject;
+import org.andengine.extension.physics.box2d.PhysicsConnector;
+import org.andengine.extension.physics.box2d.PhysicsFactory;
+import org.andengine.extension.physics.box2d.PhysicsWorld;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 
 public class Player extends AnimatedSprite
 {
@@ -20,11 +28,31 @@ public class Player extends AnimatedSprite
 	float acceleration=0.2f;
 	Boolean isMove=false;
 	
+	private Body body;
 	
-	public Player(float pX, float pY, ITiledTextureRegion pTiledTextureRegion,
+	 private void createPhysics( PhysicsWorld physicsWorld)
+	 {        
+	     body = PhysicsFactory.createBoxBody(physicsWorld, this, BodyType.DynamicBody, PhysicsFactory.createFixtureDef(0, 0, 0));
+	     body.setUserData("player");
+	     body.setFixedRotation(true);  
+	     physicsWorld.registerPhysicsConnector(new PhysicsConnector(this, body, true, false)
+	     {
+	         @Override
+	         public void onUpdate(float pSecondsElapsed)
+	         {
+	             super.onUpdate(pSecondsElapsed);                  
+	         }
+	     });
+	    
+	 }
+	
+	
+	public Player(float pX, float pY,PhysicsWorld physicsWorld, ITiledTextureRegion pTiledTextureRegion,
 			VertexBufferObjectManager vbom) {
 		super(pX, pY, pTiledTextureRegion,
 				vbom);
+		
+		createPhysics(physicsWorld);
 		// TODO Auto-generated constructor stub
 	}
 
@@ -63,18 +91,30 @@ public class Player extends AnimatedSprite
 		if(Math.abs(currentSpeedY)<acceleration)
 			currentSpeedY=0;
 		
-		this.setX(this.getX()+currentSpeedX);
-		this.setY(this.getY()+currentSpeedY);
+		Vector2 temp=new Vector2(currentSpeedX,currentSpeedY);
+		
+		
+		//this.setY();
 		isMove=false;
 		
 		
 		if(currentSpeedX!=0)
 		{				
 			if(currentSpeedX>0)	
-			this.setRotation((float)(Math.atan(currentSpeedY/currentSpeedX)*180/3.14)+90);
+			{
+				body.setTransform(body.getPosition(), (float)(Math.atan(currentSpeedY/currentSpeedX))+1.57f);
+			    this.setRotation((float)(Math.atan(currentSpeedY/currentSpeedX)*180/3.14)+90);
+			}
 			else
-			this.setRotation((float)(Math.atan(currentSpeedY/currentSpeedX)*180/3.14)-90);
+			{
+				body.setTransform(body.getPosition(), (float)(Math.atan(currentSpeedY/currentSpeedX))+1.57f);
+				this.setRotation((float)(Math.atan(currentSpeedY/currentSpeedX)*180/3.14)-90);
+			}
+			
 		}
+		body.setLinearVelocity(temp);
+		
+
 	}
 	
 	public void setAcceleration(float x, float y)

@@ -15,12 +15,20 @@ import org.andengine.entity.scene.menu.item.SpriteMenuItem;
 import org.andengine.entity.scene.menu.item.decorator.ScaleMenuItemDecorator;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
+import org.andengine.extension.physics.box2d.FixedStepPhysicsWorld;
+import org.andengine.extension.physics.box2d.PhysicsConnector;
+import org.andengine.extension.physics.box2d.PhysicsFactory;
+import org.andengine.extension.physics.box2d.PhysicsWorld;
 import org.andengine.opengl.util.GLState;
 import org.andengine.util.color.Color;
 
 
 import android.opengl.GLES20;
 
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.example.wildhunt.SceneManager.SceneType;
 
 public class GameScene extends BaseScene
@@ -31,11 +39,21 @@ public class GameScene extends BaseScene
 	LinkedList<Building> buildings;
 	LinkedList<RoadTile> roadTiles;
 	Light light;
+	
+	FixtureDef FIXTURE_DEF = PhysicsFactory.createFixtureDef(0, 0.01f, 0.5f);
+	private PhysicsWorld physicsWorld;
+	
+	private void createPhysics()
+	{
+	    physicsWorld = new FixedStepPhysicsWorld(60, new Vector2(0, 0), false); 
+	    registerUpdateHandler(physicsWorld);
+	}
+	
     @Override
     public void createScene()
     {
     	createBackground();
-        
+    	createPhysics();
         createControllers();
         buildings=new LinkedList<Building>();
         roadTiles=new LinkedList<RoadTile>();
@@ -146,7 +164,7 @@ public class GameScene extends BaseScene
     
     private void createPlayer()
     {
-    	player=new Player(640.0f,350.0f,resourcesManager.player_region,vbom);
+    	player=new Player(640.0f,350.0f,physicsWorld,resourcesManager.player_region,vbom);
     	player.registerUpdateHandler(new IUpdateHandler(){
     		
     		 	@Override
@@ -170,10 +188,17 @@ public class GameScene extends BaseScene
     private void createBuilding(float x, float y)
     {
     	
-    	Building building=new Building(x,y,resourcesManager.building_region,resourcesManager.wall_region,vbom);
+    	Building building=new Building(x,y,resourcesManager.building_region,resourcesManager.wall_region,resourcesManager.wallSide_region,vbom);
     	buildings.add(building);
     	
-    	
+    	FIXTURE_DEF = PhysicsFactory.createFixtureDef(0, 0.01f, 0.5f);
+		
+		Body tempBody;
+		tempBody = PhysicsFactory.createBoxBody(physicsWorld, buildings.getLast(), BodyType.StaticBody, FIXTURE_DEF);
+		tempBody.setUserData("wall");
+		buildings.getLast().initBody(tempBody);
+		
+		physicsWorld.registerPhysicsConnector(new PhysicsConnector(buildings.getLast(), buildings.getLast().body, true, false));   	
     	this.attachChild(building);
     }
     

@@ -46,6 +46,7 @@ public class ResourcesManager
 	public ITiledTextureRegion player_region;
 	public ITextureRegion building_region;
 	public ITextureRegion wall_region;
+	public ITextureRegion wallSide_region;
 	public ITextureRegion roadtile_region;
 	public ITextureRegion light_region;
 	public ITextureRegion gamebkg_region;
@@ -133,7 +134,7 @@ public class ResourcesManager
 	    roadtile_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "tiles/road.png");
 	    light_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "effects/light.png");
 	    wall_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "buildings/wall.png");
-	    
+	    wallSide_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "buildings/wallSide.png");
 	    //background_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "background.png");
 	    try 
 	    {
