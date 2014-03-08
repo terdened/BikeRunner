@@ -40,16 +40,12 @@ public class ResourcesManager
 	public ITextureRegion options_region;
 	private BuildableBitmapTextureAtlas menuTextureAtlas;
 	
-	public ITextureRegion base_region;
-	//public ITextureRegion background_region;
-	public ITextureRegion knob_region;
-	public ITiledTextureRegion player_region;
-	public ITextureRegion building_region;
-	public ITextureRegion wall_region;
-	public ITextureRegion wallSide_region;
-	public ITextureRegion roadtile_region;
-	public ITextureRegion light_region;
-	public ITextureRegion gamebkg_region;
+	
+	public ITextureRegion road_background_a_region;
+	public ITextureRegion road_background_desert_region;
+	public ITextureRegion sign_speed_region;
+	public ITiledTextureRegion biker_region;
+	
 	public LinkedList<ITextureRegion> objectsList=new LinkedList <ITextureRegion>();
 	private BuildableBitmapTextureAtlas gameTextureAtlas;
 	
@@ -127,15 +123,10 @@ public class ResourcesManager
 	    	   
 	    objectsList=new LinkedList <ITextureRegion>();
 	    
-	    player_region = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "animals/tiger.png", 1, 1);
-	    building_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "buildings/building1.png");
-	    base_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "controllers/base.png");
-	    knob_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "controllers/knob.png");
-	    roadtile_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "tiles/road.png");
-	    light_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "effects/light.png");
-	    wall_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "buildings/wall.png");
-	    wallSide_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "buildings/wallSide.png");
-	    //background_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "background.png");
+	    road_background_a_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "road/background/road_a.png");
+	    road_background_desert_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "road/background/backgroung_desert.png");
+	    sign_speed_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "road/sign_speed.png");
+	    biker_region = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "biker/biker_a.png", 1, 1);
 	    try 
 	    {
 	        this.gameTextureAtlas.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(0, 0, 0));
