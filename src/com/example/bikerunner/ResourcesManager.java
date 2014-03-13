@@ -1,11 +1,16 @@
 package com.example.bikerunner;
 
 
+import java.io.IOException;
 import java.util.LinkedList;
 
+import org.andengine.audio.music.Music;
+import org.andengine.audio.music.MusicFactory;
+import org.andengine.audio.sound.SoundFactory;
 import org.andengine.engine.Engine;
 import org.andengine.engine.camera.BoundCamera;
 import org.andengine.engine.camera.Camera;
+import org.andengine.entity.scene.Scene;
 import org.andengine.opengl.font.Font;
 import org.andengine.opengl.font.FontFactory;
 import org.andengine.opengl.texture.ITexture;
@@ -22,6 +27,7 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 //import org.andengine.util.color.Color;
 import org.andengine.util.debug.Debug;
 
+import android.content.Context;
 import android.graphics.Color;
 
 import com.example.bikerunner.GameActivity;
@@ -43,10 +49,17 @@ public class ResourcesManager
 	
 	public ITextureRegion road_background_a_region;
 	public ITextureRegion road_background_desert_region;
+	public ITextureRegion road_background_desert_grass_region;
+	public ITextureRegion road_background_desert_bush_region;
+	public ITextureRegion road_background_blink_region;
 	public ITextureRegion background_desert_region;
 	public ITextureRegion sign_speed_region;
-	public ITextureRegion fence_region;
+	public ITiledTextureRegion fence_region;
+	public ITiledTextureRegion bus_a_region;
 	public ITiledTextureRegion biker_region;
+	
+	public Music music;
+	public Music motorSound;
 	
 	public LinkedList<ITextureRegion> objectsList=new LinkedList <ITextureRegion>();
 	private BuildableBitmapTextureAtlas gameTextureAtlas;
@@ -86,9 +99,9 @@ public class ResourcesManager
         loadMenuFonts();
     }
     
-    public void loadGameResources(String element, String level)
+    public void loadGameResources()
     {
-        loadGameGraphics(element, level);
+        loadGameGraphics();
         loadGameFonts();
         loadGameAudio();
     }
@@ -118,7 +131,7 @@ public class ResourcesManager
         
     }
 
-    private void loadGameGraphics(String element, String level)
+    private void loadGameGraphics()
     {
     	BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/game/");
 	    gameTextureAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 2048, 2048, TextureOptions.BILINEAR);
@@ -127,11 +140,14 @@ public class ResourcesManager
 	    
 	    road_background_a_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "road/background/road_a.png");
 	    road_background_desert_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "road/background/background_desert.png");
+	    road_background_desert_grass_region= BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "road/background/background_desert_grass.png");
+	    road_background_desert_bush_region= BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "road/background/background_desert_bush.png");  
+	    road_background_blink_region= BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "road/background/background_blink.png");
 	    background_desert_region= BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "background/background_desert.png");
 	    sign_speed_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "road/sign_speed.png");
-	    fence_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "road/fence.png");
+	    fence_region = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "road/fence.png", 3, 1);
+	    bus_a_region= BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "road/bus_b.png", 3, 1);
 	    biker_region = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "biker/biker_a.png", 3, 1);
-	    
 	    
 	    try 
 	    {
@@ -155,12 +171,21 @@ public class ResourcesManager
     
     private void loadGameAudio()
     {
-        
+    	MusicFactory mf=new MusicFactory();
+	    try {
+			music = MusicFactory.createMusicFromAsset(this.engine.getMusicManager(), this.activity ,"mfx/music.ogg");
+			motorSound = MusicFactory.createMusicFromAsset(this.engine.getMusicManager(), this.activity ,"mfx/motor.mp3");
+	    } catch (IllegalStateException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
     }
     
-    public void unloadGameTextures()
+    public void unloadGame()
     {
-        
+        music.stop();
+        motorSound.stop();
     }
     
     public void unloadMenuTextures()

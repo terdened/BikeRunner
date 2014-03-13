@@ -15,14 +15,18 @@ public class Biker extends AnimatedSprite {
 
 
 	private int mLine;
+	private int mHeight;
 	private LinkedList<Animation> pAnimationList;
+	private final Road pRoad;
 	
 	public Biker(float pX, float pY, ITiledTextureRegion pTiledTextureRegion,
-			VertexBufferObjectManager pVertexBufferObjectManager) {
+			VertexBufferObjectManager pVertexBufferObjectManager, final Road road) {
 		
 		super(pX, pY,pTiledTextureRegion, pVertexBufferObjectManager);
 		
+		pRoad = road;
 		mLine = 1;
+		mHeight = 0;
 		pAnimationList = new LinkedList<Animation>();
 		final long[] PLAYER_ANIMATE = new long[] { 200, 0, 0 };
 		animate(PLAYER_ANIMATE, 0, 2, true);
@@ -31,19 +35,30 @@ public class Biker extends AnimatedSprite {
 	
 	public void updateObject(int speed)
 	{
-		if((mLine==0)&&(pAnimationList.size()==0))
-			this.setPosition(350-128,400);
-		if((mLine==1)&&(pAnimationList.size()==0))
-			this.setPosition(640-128,400);
-		if((mLine==2)&&(pAnimationList.size()==0))
-			this.setPosition(910-128,400);
+		checkGround();
 		
-		if(pAnimationList.size()>0)
+		if((mLine==0)&&(pAnimationList.size()==0))
+			this.setX(350-128);
+		if((mLine==1)&&(pAnimationList.size()==0))
+			this.setX(640-128);
+		if((mLine==2)&&(pAnimationList.size()==0))
+			this.setX(910-128);
+		
+		if((mHeight==0)&&(pAnimationList.size()==0))
+			this.setY(400);
+		if((mHeight==1)&&(pAnimationList.size()==0))
+			this.setY(300);
+		if((mHeight==2)&&(pAnimationList.size()==0))
+			this.setY(200);
+		if((mHeight==3)&&(pAnimationList.size()==0))
+			this.setY(100);
+		
+		for(int i=0;i<pAnimationList.size();i++)
 		{
-			pAnimationList.getFirst().update();
-			if(pAnimationList.getFirst().canDelete())
+			pAnimationList.get(i).update();
+			if(pAnimationList.get(i).canDelete())
 			{
-				pAnimationList.removeFirst();
+				pAnimationList.remove(i);
 			}
 		}
 		
@@ -64,7 +79,14 @@ public class Biker extends AnimatedSprite {
 			}
 		}else
 		{
-			
+			if(yStart>yStop)
+			{
+				moveBiker("up");
+			}
+			else
+			{
+				moveBiker("down");
+			}
 		}
 	}
 	
@@ -73,9 +95,15 @@ public class Biker extends AnimatedSprite {
 		return mLine;
 	}
 	
+	public int getBikeHight()
+	{
+		return mHeight;
+	}
+	
 	public void resetGame()
 	{
 		mLine = 1;
+		mHeight = 0;
 		pAnimationList = new LinkedList<Animation>();
 		final long[] PLAYER_ANIMATE = new long[] { 200, 0, 0 };
 		animate(PLAYER_ANIMATE, 0, 2, true);
@@ -86,22 +114,162 @@ public class Biker extends AnimatedSprite {
 	{
 		if(direction=="left")
 		{
-			if((mLine>0)&&(pAnimationList.size()==0))
+			if((mLine>0)&&(!isMovingAnimation()))
 			{
-				mLine--;
 				pAnimationList.add(new MoveLeftAnimation(this));
 				pAnimationList.getLast().initAnimation("left", 10);
 			}
 		}else
 		if(direction=="right")
 		{
-			if((mLine<2)&&(pAnimationList.size()==0))
+			if((mLine<2)&&(!isMovingAnimation()))
 			{
-				mLine++;
 				pAnimationList.add(new MoveRightAnimation(this));
 				pAnimationList.getLast().initAnimation("right", 10);
 			}
+		}else
+		if(direction=="up")
+		{
+			if((mHeight<3)&&(pAnimationList.size()==0)&&(this.thereIsGround()))
+			{
+				pAnimationList.add(new MoveUpAnimation(this));
+				pAnimationList.getLast().initAnimation("up", 20);
+			}
+		}else
+		if(direction=="down")
+		{
+			if((mHeight>0)&&(pAnimationList.size()==0))
+			{
+				pAnimationList.add(new MoveDownAnimation(this));
+				pAnimationList.getLast().initAnimation("down", 20);
+			}
 		}
 	}
+	
+	public void moveLeft()
+	{
+		mLine--;
+	}
+	
+	public void moveRight()
+	{
+		mLine++;
+	}
+	
+	public void moveUp()
+	{
+		mHeight++;
+	}
+	
+	public void moveDown()
+	{
+		mHeight--;
+	}
+	
+	public boolean isMovingAnimation()
+	{
+		boolean result=false;
+		
+		for(int i=0;i<pAnimationList.size();i++)
+		{
+			if((pAnimationList.get(i).getTitle()=="right")||(pAnimationList.get(i).getTitle()=="left"))
+				result=true;
+		}
+		
+		return result;
+	}
+	
+	public boolean isFlyingAnimation()
+	{
+		boolean result=false;
+		
+		for(int i=0;i<pAnimationList.size();i++)
+		{
+			if((pAnimationList.get(i).getTitle()=="up")||(pAnimationList.get(i).getTitle()=="down"))
+				result=true;
+		}
+		
+		return result;
+	}
+	
+	public boolean isFallingAnimation()
+	{
+		boolean result=false;
+		
+		for(int i=0;i<pAnimationList.size();i++)
+		{
+			if(pAnimationList.get(i).getTitle()=="down")
+				result=true;
+		}
+		
+		return result;
+	}
+	
+	public void deleteDownAnimation()
+	{
+		for(int i=0;i<pAnimationList.size();i++)
+		{
+			if(pAnimationList.get(i).getTitle()=="down")
+			{
+				pAnimationList.remove(i);
+				break;
+			}
+		}
+	}
+	
+	private void checkGround()
+	{
+		if(mHeight>0)
+		{
+			boolean[][] bunnedLines = pRoad.getBunnedLines();
+			
+			if(!bunnedLines[mHeight-1][mLine])
+			{
+				if(!this.isFlyingAnimation())
+				{
+					pAnimationList.add(new MoveDownAnimation(this));
+					pAnimationList.getLast().initAnimation("down", 20);
+				}
+			}else
+			{
+				this.deleteDownAnimation();
+			}
+		}
+	}
+	
+	public boolean thereIsGround()
+	{
+		if(mHeight>0)
+		{
+			boolean[][] bunnedLines = pRoad.getBunnedLines();
+			
+			if(!bunnedLines[mHeight-1][mLine])
+			{
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	public String collisionControl()
+    {
+    	boolean[][] bunnedLines=pRoad.getBunnedLines();
+    	String gameState="game";
+    	
+    	for(int i=0;i<3;i++)
+    	{
+    		for(int j=0;j<3;j++)
+        	{
+	    		if((mLine==j)&&(mHeight==i))
+	    		{
+	    			if(bunnedLines[i][j])
+	    				gameState="die";
+	    			
+	    		}
+        	}
+    	}
+    	
+    	return gameState;
+    }
 
 }

@@ -42,30 +42,50 @@ public class WorldManager {
 		if(mCounter%600==0)
 		{
 			RoadObject obj = objFactory.createSign(mVbom, mResManager);
-			
+			obj.setAlpha(0);
 			mRoad.addObject(obj,"front");
+			mRoad.sortChildren("front");
 			
 		}
 		
 		if(mCounter%600==0)
 		{
-			Obstacle obj = objFactory.createObstacle(mVbom, mResManager);
-			mRoad.addObject(obj,"front");
-			
+			Obstacle obj = objFactory.createObstacle(mVbom, mResManager);obj.setAlpha(0);
+			mRoad.addObstacle(obj,"front");
+			mRoad.sortChildren("front");
 		}
 		
-		if(mCounter%getCreationFreq(speed)==0)
-		{
-			
-			RoadObject obj1 = objFactory.createBackgroundPart(mVbom, mResManager);
-			obj1.initObject(600, obj1.getX(), obj1.getY(), 1, 156, 12800);
-			mRoad.addObject(obj1,"back");
-			
+		/*if(mCounter%getCreationFreq(speed)==0)
+		{			
 			RoadObject obj = objFactory.createRoadPart(mVbom, mResManager);
 			obj.initObject(600, obj.getX(), obj.getY(), 1, obj.getHeight(), obj.getWidth());
 			mRoad.addObject(obj,"middle");
 		}
+		*/
+		if(mCounter%20==0)
+		{			
+			RoadObject obj = objFactory.createGrass(mVbom, mResManager);
+			obj.initObject(-1000, obj.getX(), obj.getY(), 1, obj.getHeight(), obj.getWidth());
+			obj.setAlpha(0);
+			mRoad.addObject(obj,"middle");
+		}
 		
+		if(mCounter%50==0)
+		{			
+			RoadObject obj = objFactory.createBush(mVbom, mResManager);
+			obj.initObject(-0, obj.getX(), obj.getY(), 1, obj.getHeight(), obj.getWidth());
+			obj.setAlpha(0);
+			mRoad.addObject(obj,"middle");
+		}
+		
+		if(mCounter%10==0)
+		{			
+			RoadObject obj = objFactory.createBlink(mVbom, mResManager);
+			obj.initObject(-1000, obj.getX(), obj.getY(), 1, obj.getHeight(), obj.getWidth());
+			obj.setAlpha(0);
+			mRoad.addObject(obj,"middle");
+		}
+				
 		
 		
 		if(mCounter>=1200)

@@ -12,7 +12,11 @@ public class MoveLeftAnimation extends Animation{
 	public void update()
 	{
 		this.pCounter--;
-		pTarget.setX(pTarget.getX()-22);
+		pTarget.setX(pTarget.getX()-28);
+		if(pCounter==pDuration/2)
+		{
+			pTarget.moveLeft();
+		}
 	}
 	
 	@Override

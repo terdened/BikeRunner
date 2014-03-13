@@ -8,6 +8,7 @@ public class Road {
 	
 	//private
 	private LinkedList<RoadObject> objectList;
+	private LinkedList<Obstacle> obstacleList;
 	public Entity pBackScene;
 	public Entity pFrontScene;
 	public Entity pMiddleScene;
@@ -18,6 +19,7 @@ public class Road {
 		pFrontScene = new Entity();
 		pMiddleScene = new Entity();
 		objectList = new LinkedList<RoadObject>();
+		obstacleList = new LinkedList<Obstacle>();
 	}
 	
 	public void updateRoad(int speed)
@@ -30,7 +32,13 @@ public class Road {
 				this.removeObject(objectList.get(i));
 		}
 		
-		
+		for(int i=0; i<obstacleList.size();i++)
+		{
+			obstacleList.get(i).updateObject(speed);
+			
+			if(obstacleList.get(i).canDelete())
+				this.removeObstacle(obstacleList.get(i));
+		}
 	}
 	
 	public void sortChildren(String scene)
@@ -46,7 +54,7 @@ public class Road {
 		if(scene=="front")
 		{
 			this.pFrontScene.sortChildren();
-			for(int i=0;i<objectList.size();i++)
+			for(int i=0;i<pFrontScene.getChildCount();i++)
 			{
 				this.pFrontScene.getChildByIndex(i).setZIndex(i);
 			}
@@ -112,30 +120,84 @@ public class Road {
 		}
 	}
 	
-	public LinkedList<String> getBunnedLines()
+	public void addObstacle(Obstacle obj, String scene)
 	{
-		LinkedList<String> result = new LinkedList<String>();
+		obstacleList.add(obj);
 		
-		for(int i=0;i<objectList.size();i++)
+		if(scene=="back")
 		{
-			if(objectList.get(i).getClass()==Obstacle.class)
+			pBackScene.attachChild(obj);
+		}else
+		if(scene=="front")
+		{
+			pFrontScene.attachChild(obj);
+		}else
+		if(scene=="middle")
+		{
+			pMiddleScene.attachChild(obj);
+		}
+	}
+	
+	public void removeObstacle(Obstacle obj)
+	{
+		obstacleList.remove(obj);
+		
+		try
+		{
+			pBackScene.detachChild(obj);
+		}
+		finally
+		{
+			
+		}
+		
+		try
+		{
+			pMiddleScene.detachChild(obj);
+		}
+		finally
+		{
+			
+		}
+		
+		try
+		{
+			pFrontScene.detachChild(obj);
+		}
+		finally
+		{
+			
+		}
+	}
+	
+	public boolean[][] getBunnedLines()
+	{
+		boolean[][] result = new boolean[3][];
+		
+		for(int i=0;i<3;i++)
+		{
+			result[i] = new boolean[3];
+			
+			for(int j=0;j<3;j++)
 			{
-				Obstacle temp = (Obstacle)objectList.get(i);
-				if((temp.getZ()>-15-1800)&&(temp.getZ()<temp.getLength()-1800))
+				result[i][j]=false;
+			}
+		}
+		
+		for(int i=0;i<obstacleList.size();i++)
+		{
+			
+			for(int j=0;j<3;j++)
+			{
+				for(int k=0;k<3;k++)
 				{
-					boolean inList=false;
-					for(int j=0; j<result.size();j++)
+					if(obstacleList.get(i).getCollisionGrid()[j][k])
 					{
-						if(result.get(j)==String.valueOf(temp.getLine()))
-						{
-							inList=true;
-						}
+						result[j][k]=true;
 					}
-					
-					if(!inList)
-						result.add(String.valueOf(temp.getLine()));
 				}
 			}
+			
 		}
 		
 		return result;
@@ -143,18 +205,15 @@ public class Road {
 	
 	public void resetGame()
 	{
-		LinkedList<RoadObject> toRemove = new LinkedList<RoadObject>();
-		for(int i=0;i<objectList.size();i++)
+		LinkedList<Obstacle> toRemove = new LinkedList<Obstacle>();
+		for(int i=0;i<obstacleList.size();i++)
 		{
-			if(objectList.get(i).getClass()==Obstacle.class)
-			{
-				toRemove.add(objectList.get(i));
-			}
+				toRemove.add(obstacleList.get(i));
 		}
 		
 		while(toRemove.size()>0)
 		{
-			this.removeObject(toRemove.getFirst());
+			this.removeObstacle(toRemove.getFirst());
 			toRemove.removeFirst();
 		}
 	}

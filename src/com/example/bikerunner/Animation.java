@@ -4,7 +4,8 @@ import org.andengine.entity.sprite.AnimatedSprite;
 
 public class Animation {
 	protected String pAnimationTitle;
-	protected int pCounter;
+	protected float pCounter;
+	protected int pDuration;
 	protected final Biker pTarget;
 	protected boolean pIsStarted;
 	
@@ -17,6 +18,7 @@ public class Animation {
 	public void initAnimation(String title, int duration)
 	{
 		pCounter = duration;
+		pDuration = duration;
 		pAnimationTitle = title;
 		pIsStarted = true;
 	}
@@ -29,5 +31,10 @@ public class Animation {
 	public boolean canDelete()
 	{
 		return true;
+	}
+	
+	public String getTitle()
+	{
+		return this.pAnimationTitle;
 	}
 }

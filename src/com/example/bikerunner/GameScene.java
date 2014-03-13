@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import org.andengine.engine.handler.IUpdateHandler;
 import org.andengine.entity.scene.IOnSceneTouchListener;
 import org.andengine.entity.scene.Scene;
+import org.andengine.entity.sprite.Sprite;
 import org.andengine.input.touch.TouchEvent;
 
 import com.badlogic.gdx.math.Vector2;
@@ -33,6 +34,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
     	createRoad();
     	createWorldManager();
     	createBiker();
+    	playMusic();
     	
     	pGameState = "wait";
     	
@@ -50,7 +52,9 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 	            	mRoad.updateRoad(speed);
 	            	mWorldManager.updateWorld(speed);
 	            	mBiker.updateObject(speed);
-	            	collisionControl();
+	            	pGameState=mBiker.collisionControl();
+	            	if(pGameState=="die")
+	            		lowerMusic();
             	}
             }
             	
@@ -114,6 +118,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 	        if (pSceneTouchEvent.isActionUp())
 	        {
 	        	pGameState="game";
+	        	resumeMusic();
 	        }
     	}
     	
@@ -122,6 +127,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 	        if (pSceneTouchEvent.isActionUp())
 	        {
 	        	resetGame();
+	        	stopMusic();
 	        	pGameState="wait";
 	        }
     	}
@@ -139,13 +145,15 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
     
     public void createBiker()
     {
-    	mBiker = new Biker(0, 0, resourcesManager.biker_region, vbom);
+    	mBiker = new Biker(0, 0, resourcesManager.biker_region, vbom, mRoad);
     	this.attachChild(mBiker);
     }
     
     public void createBackground()
     {
+    	Sprite back = new Sprite(0,325, resourcesManager.road_background_desert_region, vbom);
     	mBackground = new Background(0, 0, resourcesManager.background_desert_region, vbom);
+    	mBackground.attachChild(back);
     	this.attachChild(mBackground);
     }
     
@@ -154,16 +162,36 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
     	mWorldManager = new WorldManager(mRoad, vbom, resourcesManager);
     }
     
-    public void collisionControl()
+    public void playMusic()
     {
-    	LinkedList<String> bunnedLines=mRoad.getBunnedLines();
-    	for(int i=0;i<bunnedLines.size();i++)
-    	{
-    		if(mBiker.getLine()==Integer.valueOf(bunnedLines.get(i)))
-    		{
-    			pGameState="die";
-    		}
-    	}
+    	resourcesManager.music.setLooping(true);
+    	resourcesManager.music.play();
+    	resourcesManager.music.setVolume(0.5f);
+    	resourcesManager.music.pause();
+    	resourcesManager.motorSound.setLooping(true);
+    	resourcesManager.motorSound.play();
+    	resourcesManager.motorSound.setVolume(0.5f);
+    	resourcesManager.motorSound.pause();
+    }
+    
+    public void resumeMusic()
+    {
+    	resourcesManager.music.setVolume(0.5f);
+    	resourcesManager.music.resume();
+    	resourcesManager.motorSound.setVolume(0.5f);
+    	resourcesManager.motorSound.resume();
+    }
+    
+    public void lowerMusic()
+    {
+    	resourcesManager.music.setVolume(0.2f);
+    	resourcesManager.music.resume();
+    	resourcesManager.motorSound.pause();
+    }
+    
+    public void stopMusic()
+    {
+    	resourcesManager.music.pause();
     }
     
     public void resetGame()

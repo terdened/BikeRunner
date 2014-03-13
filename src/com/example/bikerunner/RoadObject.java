@@ -15,6 +15,8 @@ public class RoadObject extends Sprite{
 	protected float mRealWidth;
 	protected float mSize;
 	protected float speed;
+	protected float pDeltaY;
+	
 	
 	public RoadObject(float pX, float pY, ITextureRegion pTextureRegion,
 			VertexBufferObjectManager pVertexBufferObjectManager) {
@@ -31,10 +33,21 @@ public class RoadObject extends Sprite{
 		mRealHeight=realHeight;
 		mRealWidth=realWidth;
 		updateObject(0);
+		pDeltaY=0;
+	}
+	
+	public void initDeltaY(float delta)
+	{
+		pDeltaY=delta;
 	}
 	
 	public void updateObject(int speed)
 	{
+		if(this.getAlpha()<1)
+		{
+			this.setAlpha(this.getAlpha()+0.1f);
+		}
+		
 		mZ-=speed;
 		mSize=(150.0f)/(mZ+2000);
 
@@ -42,7 +55,7 @@ public class RoadObject extends Sprite{
 		this.setHeight(mSize*mRealHeight);
 		
 		mX=640.0f-(this.getWidth()/2)+(mSize*mRealX);
-		mY=300.0f-(this.getHeight())+((80000.0f)/(mZ+2000));
+		mY=300.0f-(this.getHeight())+((80000.0f)/(mZ+2000))+(mSize*pDeltaY);
 		
 		this.setPosition(mX,mY);
 		
@@ -54,6 +67,11 @@ public class RoadObject extends Sprite{
 			return true;
 		else
 			return false;
+	}
+	
+	public float getZ()
+	{
+		return mZ;
 	}
 	
 }

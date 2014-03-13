@@ -143,7 +143,7 @@ public class SceneManager
             	String tempElement = element;
             	String tempLevel = level;
                 mEngine.unregisterUpdateHandler(pTimerHandler);
-                ResourcesManager.getInstance().loadGameResources(tempElement,tempLevel);
+                ResourcesManager.getInstance().loadGameResources();
                 gameScene = new GameScene();
                 setScene(gameScene);
             }
@@ -153,8 +153,7 @@ public class SceneManager
     public void loadMenuScene(final Engine mEngine)
     {
         setScene(loadingScene);
-        playerMenuScene.disposeScene();
-        ResourcesManager.getInstance().unloadPlayerMenuTextures();
+        ResourcesManager.getInstance().unloadGame();
         mEngine.registerUpdateHandler(new TimerHandler(0.1f, new ITimerCallback() 
         {
             public void onTimePassed(final TimerHandler pTimerHandler) 
