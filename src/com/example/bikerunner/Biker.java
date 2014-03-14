@@ -205,6 +205,19 @@ public class Biker extends AnimatedSprite {
 		return result;
 	}
 	
+	public boolean isUpAnimation()
+	{
+		boolean result=false;
+		
+		for(int i=0;i<pAnimationList.size();i++)
+		{
+			if(pAnimationList.get(i).getTitle()=="up")
+				result=true;
+		}
+		
+		return result;
+	}
+	
 	public void deleteDownAnimation()
 	{
 		for(int i=0;i<pAnimationList.size();i++)
@@ -221,9 +234,9 @@ public class Biker extends AnimatedSprite {
 	{
 		if(mHeight>0)
 		{
-			boolean[][] bunnedLines = pRoad.getBunnedLines();
+			int[][] bunnedLines = pRoad.getBunnedLines();
 			
-			if(!bunnedLines[mHeight-1][mLine])
+			if(bunnedLines[mHeight-1][mLine]!=1)
 			{
 				if(!this.isFlyingAnimation())
 				{
@@ -241,9 +254,9 @@ public class Biker extends AnimatedSprite {
 	{
 		if(mHeight>0)
 		{
-			boolean[][] bunnedLines = pRoad.getBunnedLines();
+			int[][] bunnedLines = pRoad.getBunnedLines();
 			
-			if(!bunnedLines[mHeight-1][mLine])
+			if(bunnedLines[mHeight-1][mLine]!=1)
 			{
 				return false;
 			}
@@ -253,7 +266,7 @@ public class Biker extends AnimatedSprite {
 	
 	public String collisionControl()
     {
-    	boolean[][] bunnedLines=pRoad.getBunnedLines();
+    	int[][] bunnedLines=pRoad.getBunnedLines();
     	String gameState="game";
     	
     	for(int i=0;i<3;i++)
@@ -262,9 +275,18 @@ public class Biker extends AnimatedSprite {
         	{
 	    		if((mLine==j)&&(mHeight==i))
 	    		{
-	    			if(bunnedLines[i][j])
+	    			if(bunnedLines[i][j]==1)
 	    				gameState="die";
-	    			
+	    			else
+	    			if(bunnedLines[i][j]==2)
+	    			{
+	    				if(!this.isUpAnimation())
+	    				{
+	    					deleteDownAnimation();
+		    				pAnimationList.add(new JumpUpAnimation(this));
+							pAnimationList.getLast().initAnimation("jump", 20);
+	    				}
+	    			}
 	    		}
         	}
     	}

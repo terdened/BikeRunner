@@ -170,17 +170,17 @@ public class Road {
 		}
 	}
 	
-	public boolean[][] getBunnedLines()
+	public int[][] getBunnedLines()
 	{
-		boolean[][] result = new boolean[3][];
+		int[][] result = new int[3][];
 		
 		for(int i=0;i<3;i++)
 		{
-			result[i] = new boolean[3];
+			result[i] = new int[3];
 			
 			for(int j=0;j<3;j++)
 			{
-				result[i][j]=false;
+				result[i][j]=0;
 			}
 		}
 		
@@ -191,9 +191,12 @@ public class Road {
 			{
 				for(int k=0;k<3;k++)
 				{
-					if(obstacleList.get(i).getCollisionGrid()[j][k])
+					if(obstacleList.get(i).getCollisionGrid()[j][k]>0)
 					{
-						result[j][k]=true;
+						if(obstacleList.get(i).getAction()=="crash")
+							result[j][k]=1;
+						if(obstacleList.get(i).getAction()=="jump")
+							result[j][k]=2;
 					}
 				}
 			}

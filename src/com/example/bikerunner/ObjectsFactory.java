@@ -64,9 +64,9 @@ public class ObjectsFactory {
 		{
 			obj = new Obstacle(-380, 128, resManager.bus_a_region, vbom);
 			obj.initObject(0, 600, obj.getY(), 1, obj.getHeight(), obj.getWidth(), 110);
-			obj.initCollision(new boolean[][]{{true,false,false}, 
-											  {true,false,false},
-											  {false,false,false}});
+			obj.initCollision(new int[][]{{1,0,0}, 
+										  {1,0,0},
+										  {0,0,0}});
 			obj.setDislocation(50);
 		}
 		else
@@ -74,9 +74,9 @@ public class ObjectsFactory {
 		{
 			obj = new Obstacle(-380, 128, resManager.bus_a_region, vbom);
 			obj.initObject(1, 600, obj.getY(), 1, obj.getHeight(), obj.getWidth(), 110);
-			obj.initCollision(new boolean[][]{{false,true,false}, 
-											  {false,true,false},
-											  {false,false,false}});
+			obj.initCollision(new int[][]{{0,1,0}, 
+										  {0,1,0},
+										  {0,0,0}});
 			
 		}
 		else 
@@ -84,9 +84,9 @@ public class ObjectsFactory {
 		{
 			obj = new Obstacle(0, 128, resManager.bus_a_region, vbom);
 			obj.initObject(2, 600, obj.getY(), 1, obj.getHeight(), obj.getWidth(), 110);
-			obj.initCollision(new boolean[][]{{false,false,true}, 
-											  {false,false,true},
-											  {false,false,false}});
+			obj.initCollision(new int[][]{{0,0,1}, 
+										  {0,0,1},
+										  {0,0,0}});
 			obj.setDislocation(-50);
 		}
 		else 
@@ -94,28 +94,43 @@ public class ObjectsFactory {
 		{
 			obj = new Obstacle(-380, 128, resManager.fence_region, vbom);
 			obj.initObject(0, 600, obj.getY(), 1, obj.getHeight(), obj.getWidth(), 50);
-			obj.initCollision(new boolean[][]{{true,false,false}, 
-											  {false,false,false},
-											  {false,false,false}});
+			obj.initCollision(new int[][]{{1,0,0}, 
+										  {0,0,0},
+										  {0,0,0}});
 		}
 		else 
 		if(randomValue>1)
 		{
 			obj = new Obstacle(0, 128, resManager.fence_region, vbom);
 			obj.initObject(1, 600, obj.getY(), 1, obj.getHeight(), obj.getWidth(), 50);
-			obj.initCollision(new boolean[][]{{false,true,false}, 
-											  {false,false,false},
-											  {false,false,false}});
+			obj.initCollision(new int[][]{{0,1,0}, 
+										  {0,0,0},
+										  {0,0,0}});
 		}
 		else
 		{
 			obj = new Obstacle(380, 128, resManager.fence_region, vbom);
 			obj.initObject(2, 600, obj.getY(), 1, obj.getHeight(), obj.getWidth(), 50);
-			obj.initCollision(new boolean[][]{{false,false,true}, 
-											  {false,false,false},
-											  {false,false,false}});
+			obj.initCollision(new int[][]{{0,0,1}, 
+										  {0,0,0},
+										  {0,0,0}});
 		}
 		
 		return obj; 
 	}
+	
+	public Obstacle createLift(VertexBufferObjectManager vbom, ResourcesManager resManager)
+	{
+		Obstacle obj= new Obstacle(-380, 128, resManager.bus_a_region, vbom);
+		obj.initObject(0, 400, obj.getY(), 1, obj.getHeight(), obj.getWidth(), 110);
+		obj.initCollision(new int[][]{{1,0,0}, 
+									  {1,0,0},
+									  {0,0,0}});
+		obj.setDislocation(50);
+		
+		return obj; 
+	}
 }
+
+
+

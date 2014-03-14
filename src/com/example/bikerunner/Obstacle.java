@@ -1,9 +1,6 @@
 package com.example.bikerunner;
 
-import java.util.LinkedList;
-
 import org.andengine.entity.sprite.AnimatedSprite;
-import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
@@ -15,7 +12,8 @@ public class Obstacle extends AnimatedSprite {
 	}
 
 	private int pLine;
-	private boolean[][] pCollision;
+	private int[][] pCollision;
+	private String pAction;
 	
 	private float pLength;
 	protected float mZ;
@@ -29,7 +27,7 @@ public class Obstacle extends AnimatedSprite {
 	protected float mSize;
 	protected float speed;
 	
-	public void initCollision(boolean[][] line)
+	public void initCollision(int[][] line)
 	{
 		this.pCollision=line;
 	}
@@ -87,6 +85,16 @@ public class Obstacle extends AnimatedSprite {
 		mDislocationX = dislocation;
 	}
 	
+	public void setAction(String action)
+	{
+		pAction=action;
+	}
+	
+	public String getAction()
+	{
+		return pAction;
+	}
+	
 	public float getZ()
 	{
 		return this.mZ;
@@ -102,14 +110,14 @@ public class Obstacle extends AnimatedSprite {
 		return this.pLine;
 	}
 	
-	public boolean[][] getCollisionGrid()
+	public int[][] getCollisionGrid()
 	{
 		if((mZ<-1800+this.pLength)&&(mZ>-1800))
 			return pCollision;
 		else
-			return new boolean[][]{{false,false,false},
-								   {false,false,false},
-								   {false,false,false}};
+			return new int[][]{{0,0,0},
+							   {0,0,0},
+							   {0,0,0}};
 	}
 	
 	public void updateObject(int speed)
