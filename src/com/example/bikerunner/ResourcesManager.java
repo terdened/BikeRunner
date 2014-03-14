@@ -59,7 +59,10 @@ public class ResourcesManager
 	public ITiledTextureRegion tramp_a_region;
 	public ITiledTextureRegion biker_region;
 	
-	public Music music;
+	public Music intro;
+	public Music main;
+	public Music solo;
+	
 	public Music motorSound;
 	
 	public LinkedList<ITextureRegion> objectsList=new LinkedList <ITextureRegion>();
@@ -175,7 +178,9 @@ public class ResourcesManager
     {
     	MusicFactory mf=new MusicFactory();
 	    try {
-			music = MusicFactory.createMusicFromAsset(this.engine.getMusicManager(), this.activity ,"mfx/music.ogg");
+			intro = MusicFactory.createMusicFromAsset(this.engine.getMusicManager(), this.activity ,"mfx/intro.ogg");
+			main = MusicFactory.createMusicFromAsset(this.engine.getMusicManager(), this.activity ,"mfx/main.ogg");
+			solo = MusicFactory.createMusicFromAsset(this.engine.getMusicManager(), this.activity ,"mfx/solo.ogg");
 			motorSound = MusicFactory.createMusicFromAsset(this.engine.getMusicManager(), this.activity ,"mfx/motor.mp3");
 	    } catch (IllegalStateException e) {
 			e.printStackTrace();
@@ -186,7 +191,9 @@ public class ResourcesManager
     
     public void unloadGame()
     {
-        music.stop();
+        intro.stop();
+        main.stop();
+        solo.stop();
         motorSound.stop();
     }
     

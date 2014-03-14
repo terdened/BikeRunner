@@ -6,6 +6,7 @@ import org.andengine.engine.handler.IUpdateHandler;
 import org.andengine.entity.scene.IOnSceneTouchListener;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.sprite.Sprite;
+import org.andengine.entity.text.Text;
 import org.andengine.input.touch.TouchEvent;
 
 import com.badlogic.gdx.math.Vector2;
@@ -19,11 +20,14 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 	private int speed = 15;
 	private Biker mBiker;
 	private Background mBackground;
+	private Text pDistanceText;
 	
 	private float mStartTapX;
 	private float mStartTapY;
 	private int pTapTime=0;
 	private boolean pIsMoved=false;
+	private MusicManager pMusicManager;
+	private int pDistance=0;
 	
 	private String pGameState;
 	
@@ -34,6 +38,8 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
     	createRoad();
     	createWorldManager();
     	createBiker();
+    	createScore();
+    	pMusicManager = new MusicManager(resourcesManager);
     	playMusic();
     	
     	pGameState = "wait";
@@ -49,9 +55,12 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
             { 
             	if(pGameState=="game")
             	{
+            		pDistance++;
+            		updateComplex();
 	            	mRoad.updateRoad(speed);
 	            	mWorldManager.updateWorld(speed);
 	            	pGameState=mBiker.updateObject(speed);
+	            	pDistanceText.setText(String.valueOf(pDistance));
 	            	if(pGameState=="die")
 	            		lowerMusic();
             	}
@@ -123,7 +132,10 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 	        {
 	        	resetGame();
 	        	stopMusic();
+	        	speed=15;
+	        	this.mWorldManager.reset();
 	        	pGameState="wait";
+	        	pDistance=0;
 	        }
     	}
         
@@ -144,6 +156,12 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
     	this.attachChild(mBiker);
     }
     
+    public void createScore()
+    {
+    	pDistanceText = new Text(0, 0, resourcesManager.font, "0", 10, vbom);
+    	this.attachChild(pDistanceText);
+    }
+    
     public void createBackground()
     {
     	Sprite back = new Sprite(0,325, resourcesManager.road_background_desert_region, vbom);
@@ -159,39 +177,38 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
     
     public void playMusic()
     {
-    	resourcesManager.music.setLooping(true);
-    	resourcesManager.music.play();
-    	resourcesManager.music.setVolume(0.5f);
-    	resourcesManager.music.pause();
-    	resourcesManager.motorSound.setLooping(true);
-    	resourcesManager.motorSound.play();
-    	resourcesManager.motorSound.setVolume(0.5f);
-    	resourcesManager.motorSound.pause();
+
+    	//pMusicManager.playMusic();
     }
     
     public void resumeMusic()
     {
-    	resourcesManager.music.setVolume(0.5f);
-    	resourcesManager.music.resume();
-    	resourcesManager.motorSound.setVolume(0.5f);
-    	resourcesManager.motorSound.resume();
+
+    	//pMusicManager.resumeMusic();
     }
     
     public void lowerMusic()
     {
-    	resourcesManager.music.setVolume(0.2f);
-    	resourcesManager.music.resume();
-    	resourcesManager.motorSound.pause();
+    	//pMusicManager.lowerMusic();
     }
     
     public void stopMusic()
     {
-    	resourcesManager.music.pause();
+    	//pMusicManager.stopMusic();
     }
     
     public void resetGame()
     {
     	mRoad.resetGame();
     	mBiker.resetGame();
+    }
+    
+    public void updateComplex()
+    {
+    	if((pDistance>0)&&(pDistance%2000==0))
+    	{
+    		mWorldManager.increaseLevelComplex();
+    		speed++;
+    	}
     }
 }

@@ -63,7 +63,7 @@ public class RoadObject extends Sprite{
 	
 	public boolean canDelete()
 	{
-		if(mY>900)
+		if(mZ<-1999)
 			return true;
 		else
 			return false;
