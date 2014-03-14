@@ -11,11 +11,11 @@ public class Obstacle extends AnimatedSprite {
 		super(pX, pY, pTiledTextureRegion, pVertexBufferObjectManager);
 	}
 
-	private int pLine;
-	private int[][] pCollision;
-	private String pAction;
+	protected int pLine;
+	protected int pHeight;
+	protected String pAction;
 	
-	private float pLength;
+	protected float pLength;
 	protected float mZ;
 	protected float mX;
 	protected float mY;
@@ -27,13 +27,9 @@ public class Obstacle extends AnimatedSprite {
 	protected float mSize;
 	protected float speed;
 	
-	public void initCollision(int[][] line)
+	public void initObject(int line, int height, float z, float y, float size, float realHeight, float realWidth, float length)
 	{
-		this.pCollision=line;
-	}
-	
-	public void initObject(int line, float z, float y, float size, float realHeight, float realWidth, float length)
-	{
+		pHeight=height;
 		mDislocationX=0;
 		mZ=z;
 		mRealY=y;
@@ -110,14 +106,12 @@ public class Obstacle extends AnimatedSprite {
 		return this.pLine;
 	}
 	
-	public int[][] getCollisionGrid()
+	public int getObstacleHeight()
 	{
-		if((mZ<-1800+this.pLength)&&(mZ>-1800))
-			return pCollision;
+		if((mZ<-1700)&&(mZ>-1700-this.pLength))
+			return pHeight;
 		else
-			return new int[][]{{0,0,0},
-							   {0,0,0},
-							   {0,0,0}};
+			return 0;
 	}
 	
 	public void updateObject(int speed)

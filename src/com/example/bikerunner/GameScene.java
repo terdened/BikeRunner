@@ -51,8 +51,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
             	{
 	            	mRoad.updateRoad(speed);
 	            	mWorldManager.updateWorld(speed);
-	            	mBiker.updateObject(speed);
-	            	pGameState=mBiker.collisionControl();
+	            	pGameState=mBiker.updateObject(speed);
 	            	if(pGameState=="die")
 	            		lowerMusic();
             	}
@@ -93,17 +92,13 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 	        
 	    	if((pTapTime>10)&&(pIsMoved==false))
 	    	{
-	    		if(new Vector2(pSceneTouchEvent.getX()-mStartTapX, pSceneTouchEvent.getY()-mStartTapY).len()>50)
-	    		{
-	    			mBiker.setAction(mStartTapX, mStartTapY, pSceneTouchEvent.getX(), pSceneTouchEvent.getY());
-	    			pIsMoved=true;
-	    		}
-	    			
+    			mBiker.setAction(mStartTapX, mStartTapY, pSceneTouchEvent.getX(), pSceneTouchEvent.getY());
+    			pIsMoved=true;
 	    	}
 	    	
 	        if (pSceneTouchEvent.isActionUp())
 	        {
-	        	if((pTapTime<=10)&&(new Vector2(pSceneTouchEvent.getX()-mStartTapX, pSceneTouchEvent.getY()-mStartTapY).len()>50))
+	        	if(pTapTime<=10)
 	        	{
 	        		mBiker.setAction(mStartTapX, mStartTapY, pSceneTouchEvent.getX(), pSceneTouchEvent.getY());
 	        	}

@@ -56,6 +56,7 @@ public class ResourcesManager
 	public ITextureRegion sign_speed_region;
 	public ITiledTextureRegion fence_region;
 	public ITiledTextureRegion bus_a_region;
+	public ITiledTextureRegion tramp_a_region;
 	public ITiledTextureRegion biker_region;
 	
 	public Music music;
@@ -147,6 +148,7 @@ public class ResourcesManager
 	    sign_speed_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "road/sign_speed.png");
 	    fence_region = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "road/fence.png", 3, 1);
 	    bus_a_region= BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "road/bus_b.png", 3, 1);
+	    tramp_a_region= BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "road/tramp_a.png", 3, 1);
 	    biker_region = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "biker/biker_a.png", 3, 1);
 	    
 	    try 

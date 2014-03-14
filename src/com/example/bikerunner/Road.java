@@ -170,41 +170,22 @@ public class Road {
 		}
 	}
 	
-	public int[][] getBunnedLines()
+	public int[] getLinesHeight()
 	{
-		int[][] result = new int[3][];
-		
-		for(int i=0;i<3;i++)
-		{
-			result[i] = new int[3];
-			
-			for(int j=0;j<3;j++)
-			{
-				result[i][j]=0;
-			}
-		}
+		int[] result = new int[]{0,0,0};
 		
 		for(int i=0;i<obstacleList.size();i++)
 		{
-			
-			for(int j=0;j<3;j++)
+			if(obstacleList.get(i).getObstacleHeight()>0)
 			{
-				for(int k=0;k<3;k++)
-				{
-					if(obstacleList.get(i).getCollisionGrid()[j][k]>0)
-					{
-						if(obstacleList.get(i).getAction()=="crash")
-							result[j][k]=1;
-						if(obstacleList.get(i).getAction()=="jump")
-							result[j][k]=2;
-					}
-				}
+				result[obstacleList.get(i).getLine()]=obstacleList.get(i).getObstacleHeight();
 			}
-			
 		}
 		
 		return result;
 	}
+	
+	
 	
 	public void resetGame()
 	{

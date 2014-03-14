@@ -39,26 +39,6 @@ public class WorldManager {
 		ObjectsFactory objFactory = new ObjectsFactory();
 		mCounter += speed;
 		
-		
-		
-		if(mCounter%600==0)
-		{
-			if(Math.random()*2>1)
-			{
-				Obstacle obj1 = objFactory.createLift(mVbom, mResManager);
-				obj1.setAlpha(0);
-				obj1.setAction("jump");
-				mRoad.addObstacle(obj1,"front");
-				mRoad.sortChildren("front");
-			}
-			
-			Obstacle obj = objFactory.createObstacle(mVbom, mResManager);
-			obj.setAlpha(0);
-			obj.setAction("crash");
-			mRoad.addObstacle(obj,"front");
-			mRoad.sortChildren("front");
-		}
-		
 		if(mCounter%600==0)
 		{
 			RoadObject obj = objFactory.createSign(mVbom, mResManager);
@@ -66,6 +46,15 @@ public class WorldManager {
 			mRoad.addObject(obj,"front");
 			mRoad.sortChildren("front");
 			
+		}
+		
+		if(mCounter%600==0)
+		{
+			Obstacle obj = objFactory.createObstacle(mVbom, mResManager);
+			obj.setAlpha(0);
+			obj.setAction("crash");
+			mRoad.addObstacle(obj,"front");
+			mRoad.sortChildren("front");
 		}
 		
 		/*if(mCounter%getCreationFreq(speed)==0)

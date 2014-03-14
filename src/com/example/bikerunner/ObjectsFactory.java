@@ -58,62 +58,65 @@ public class ObjectsFactory {
 		Obstacle obj;
 		
 		
-		float randomValue=(float)Math.random()*6f;
+		float randomValue=(float)Math.random()*9f;
 		
+		if(randomValue>8)
+		{
+			obj = new ObstacleTramp(-380, 128, resManager.tramp_a_region, vbom);
+			obj.initObject(0, 200, 600, obj.getY(), 1, obj.getHeight(), obj.getWidth(), 250);
+			obj.setDislocation(50);
+		}
+		else
+		if(randomValue>7)
+		{
+			obj = new ObstacleTramp(0, 128, resManager.tramp_a_region, vbom);
+			obj.initObject(1, 200, 600, obj.getY(), 1, obj.getHeight(), obj.getWidth(), 250);
+			obj.setDislocation(50);
+		}
+		else
+		if(randomValue>6)
+		{
+			obj = new ObstacleTramp(380, 128, resManager.tramp_a_region, vbom);
+			obj.initObject(2, 200, 600, obj.getY(), 1, obj.getHeight(), obj.getWidth(), 250);
+			obj.setDislocation(50);
+		}
+		else
 		if(randomValue>5)
 		{
 			obj = new Obstacle(-380, 128, resManager.bus_a_region, vbom);
-			obj.initObject(0, 600, obj.getY(), 1, obj.getHeight(), obj.getWidth(), 110);
-			obj.initCollision(new int[][]{{1,0,0}, 
-										  {1,0,0},
-										  {0,0,0}});
+			obj.initObject(0, 200, 600, obj.getY(), 1, obj.getHeight(), obj.getWidth(), 250);
 			obj.setDislocation(50);
 		}
 		else
 		if(randomValue>4)
 		{
-			obj = new Obstacle(-380, 128, resManager.bus_a_region, vbom);
-			obj.initObject(1, 600, obj.getY(), 1, obj.getHeight(), obj.getWidth(), 110);
-			obj.initCollision(new int[][]{{0,1,0}, 
-										  {0,1,0},
-										  {0,0,0}});
+			obj = new Obstacle(0, 128, resManager.bus_a_region, vbom);
+			obj.initObject(1, 200, 600, obj.getY(), 1, obj.getHeight(), obj.getWidth(), 250);
 			
 		}
 		else 
 		if(randomValue>3)
 		{
-			obj = new Obstacle(0, 128, resManager.bus_a_region, vbom);
-			obj.initObject(2, 600, obj.getY(), 1, obj.getHeight(), obj.getWidth(), 110);
-			obj.initCollision(new int[][]{{0,0,1}, 
-										  {0,0,1},
-										  {0,0,0}});
+			obj = new Obstacle(380, 128, resManager.bus_a_region, vbom);
+			obj.initObject(2, 200, 600, obj.getY(), 1, obj.getHeight(), obj.getWidth(), 250);
 			obj.setDislocation(-50);
 		}
 		else 
 		if(randomValue>2)
 		{
 			obj = new Obstacle(-380, 128, resManager.fence_region, vbom);
-			obj.initObject(0, 600, obj.getY(), 1, obj.getHeight(), obj.getWidth(), 50);
-			obj.initCollision(new int[][]{{1,0,0}, 
-										  {0,0,0},
-										  {0,0,0}});
+			obj.initObject(0, 100, 600, obj.getY(), 1, obj.getHeight(), obj.getWidth(), 50);
 		}
 		else 
 		if(randomValue>1)
 		{
 			obj = new Obstacle(0, 128, resManager.fence_region, vbom);
-			obj.initObject(1, 600, obj.getY(), 1, obj.getHeight(), obj.getWidth(), 50);
-			obj.initCollision(new int[][]{{0,1,0}, 
-										  {0,0,0},
-										  {0,0,0}});
+			obj.initObject(1, 100, 600, obj.getY(), 1, obj.getHeight(), obj.getWidth(), 50);
 		}
 		else
 		{
 			obj = new Obstacle(380, 128, resManager.fence_region, vbom);
-			obj.initObject(2, 600, obj.getY(), 1, obj.getHeight(), obj.getWidth(), 50);
-			obj.initCollision(new int[][]{{0,0,1}, 
-										  {0,0,0},
-										  {0,0,0}});
+			obj.initObject(2, 100, 600, obj.getY(), 1, obj.getHeight(), obj.getWidth(), 50);
 		}
 		
 		return obj; 
@@ -122,10 +125,7 @@ public class ObjectsFactory {
 	public Obstacle createLift(VertexBufferObjectManager vbom, ResourcesManager resManager)
 	{
 		Obstacle obj= new Obstacle(-380, 128, resManager.bus_a_region, vbom);
-		obj.initObject(0, 400, obj.getY(), 1, obj.getHeight(), obj.getWidth(), 110);
-		obj.initCollision(new int[][]{{1,0,0}, 
-									  {1,0,0},
-									  {0,0,0}});
+		obj.initObject(0, 0, 400, obj.getY(), 1, obj.getHeight(), obj.getWidth(), 110);
 		obj.setDislocation(50);
 		
 		return obj; 
