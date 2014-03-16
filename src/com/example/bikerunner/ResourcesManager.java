@@ -42,12 +42,15 @@ public class ResourcesManager
 	public ITextureRegion splash_region;
 	private BitmapTextureAtlas splashTextureAtlas;	
 	
+	public ITextureRegion empty_region;
 	public ITextureRegion play_region;
 	public ITextureRegion options_region;
+	public ITextureRegion[] level_background_region;
+	public ITextureRegion[] level_background_far_region;
+	public ITiledTextureRegion[] bike_region;
+	
 	private BuildableBitmapTextureAtlas menuTextureAtlas;
 	
-	
-	public ITextureRegion road_background_a_region;
 	public ITextureRegion road_background_desert_region;
 	public ITextureRegion road_background_desert_grass_region;
 	public ITextureRegion road_background_desert_bush_region;
@@ -58,6 +61,8 @@ public class ResourcesManager
 	public ITiledTextureRegion bus_a_region;
 	public ITiledTextureRegion tramp_a_region;
 	public ITiledTextureRegion biker_region;
+	
+	public ITextureRegion[] road_background_region;
 	
 	public Music intro;
 	public Music main;
@@ -113,9 +118,20 @@ public class ResourcesManager
     private void loadMenuGraphics()
     {
     	BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/menu/");
-    	menuTextureAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 1024, TextureOptions.BILINEAR);
+    	menuTextureAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 2048, 2048, TextureOptions.BILINEAR);
     	play_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "play.png");
     	options_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "options.png");
+    	
+    	level_background_region = new ITextureRegion[1];
+    	level_background_region[0] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "level_background_a.png");
+    	
+    	level_background_far_region = new ITextureRegion[1];
+    	level_background_far_region[0] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "level_background_far_a.png");
+    	
+    	bike_region =  new ITiledTextureRegion[1];
+    	bike_region[0]= BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(menuTextureAtlas, activity, "bike_a.png", 1, 1);
+	    
+    	empty_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "empty.png");
     	
     	
     	try 
@@ -142,7 +158,6 @@ public class ResourcesManager
 	    	   
 	    objectsList=new LinkedList <ITextureRegion>();
 	    
-	    road_background_a_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "road/background/road_a.png");
 	    road_background_desert_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "road/background/background_desert.png");
 	    road_background_desert_grass_region= BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "road/background/background_desert_grass.png");
 	    road_background_desert_bush_region= BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "road/background/background_desert_bush.png");  
@@ -153,6 +168,12 @@ public class ResourcesManager
 	    bus_a_region= BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "road/bus_b.png", 3, 1);
 	    tramp_a_region= BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "road/tramp_a.png", 3, 1);
 	    biker_region = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "biker/biker_a.png", 3, 1);
+	    
+	    
+	    
+	    road_background_region=new ITextureRegion[1];
+	    road_background_region[0]= BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "background/mountain_a_desert.png");
+	    
 	    
 	    try 
 	    {

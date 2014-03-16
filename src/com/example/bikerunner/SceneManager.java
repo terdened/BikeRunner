@@ -145,6 +145,7 @@ public class SceneManager
                 mEngine.unregisterUpdateHandler(pTimerHandler);
                 ResourcesManager.getInstance().loadGameResources();
                 gameScene = new GameScene();
+                menuScene.disposeScene();
                 setScene(gameScene);
             }
         }));
@@ -160,6 +161,7 @@ public class SceneManager
             {
                 mEngine.unregisterUpdateHandler(pTimerHandler);
                 ResourcesManager.getInstance().loadMenuTextures();
+                menuScene = new MainMenuScene();
                 setScene(menuScene);
             }
         }));

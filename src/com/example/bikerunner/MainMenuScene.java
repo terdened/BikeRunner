@@ -1,38 +1,72 @@
 package com.example.bikerunner;
 
 import org.andengine.engine.camera.Camera;
+import org.andengine.engine.handler.IUpdateHandler;
+import org.andengine.entity.scene.IOnSceneTouchListener;
+import org.andengine.entity.scene.Scene;
 import org.andengine.entity.scene.background.Background;
 import org.andengine.entity.scene.menu.MenuScene;
 import org.andengine.entity.scene.menu.MenuScene.IOnMenuItemClickListener;
 import org.andengine.entity.scene.menu.item.IMenuItem;
 import org.andengine.entity.scene.menu.item.SpriteMenuItem;
 import org.andengine.entity.scene.menu.item.decorator.ScaleMenuItemDecorator;
+import org.andengine.entity.sprite.AnimatedSprite;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
+import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.util.GLState;
 import org.andengine.util.color.Color;
 
 
+import android.content.Context;
 import android.opengl.GLES20;
 
 import com.example.bikerunner.SceneManager;
 import com.example.bikerunner.SceneManager.SceneType;
 
-public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
+public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener, IOnSceneTouchListener
 {
 	
 	private MenuScene menuChildScene;
 	private final int MENU_PLAY = 0;
 	private final int MENU_OPTIONS = 1;
 	
+	private int pSpeed=10;
+
+	private AnimatedSprite mBike;
+	private MenuInfo pMenuInfo;
+	private MenuBackground pMenuBackground;
+	private PlayerDataManager pPlayerDataManager;
+	
     @Override
     public void createScene()
     {
-    	setBackground(new Background(Color.BLACK));
-    	Text textHolder=new Text(250, 300, resourcesManager.font, "Main menu", vbom);
-    	textHolder.setColor(Color.GREEN);
-        attachChild(textHolder);
-        createMenuChildScene();
+    	createPlayerDataManager();
+    	createBackground();
+    	createBike();
+        //createMenuChildScene();
+        createInfoText();
+        
+
+    	this.setOnSceneTouchListener(this);
+        this.registerUpdateHandler(new IUpdateHandler() {
+      		 
+            @Override
+            public void reset() { }
+     
+            @Override
+            public void onUpdate(final float pSecondsElapsed) 
+            { 
+            	pMenuBackground.update(pSpeed);
+            }
+            	
+        });
+    }
+    
+    public boolean onSceneTouchEvent(Scene pScene, TouchEvent pSceneTouchEvent)
+    {
+    	SceneManager.getInstance().loadGameScene(engine);
+    	return true;
     }
     
     
@@ -75,7 +109,26 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 
     private void createBackground()
     {
-    	
+    	pMenuBackground = new MenuBackground(0,0,this.resourcesManager, this.vbom);
+    	this.attachChild(pMenuBackground);
+    }
+    
+    private void createBike()
+    {
+		mBike = new AnimatedSprite(400, 270, resourcesManager.bike_region[0], vbom);
+		this.attachChild(mBike);
+    }
+    
+    private void createPlayerDataManager()
+    {
+    	pPlayerDataManager=new PlayerDataManager
+    			(this.activity.getSharedPreferences("com.example.bikerunner", Context.MODE_PRIVATE));
+    }
+    
+    private void createInfoText()
+    {
+    	pMenuInfo = new MenuInfo(1280, 800, resourcesManager, vbom, pPlayerDataManager);
+    	this.attachChild(pMenuInfo);
     }
    
     

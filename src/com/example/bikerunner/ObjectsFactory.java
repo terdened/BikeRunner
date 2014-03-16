@@ -4,11 +4,6 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 public class ObjectsFactory {
 	
-	public RoadObject createRoadPart(VertexBufferObjectManager vbom, ResourcesManager resManager)
-	{
-		return new RoadObject(0, 156, resManager.road_background_a_region, vbom);
-	}
-	
 	public RoadObject createGrass(VertexBufferObjectManager vbom, ResourcesManager resManager)
 	{
 		int sign=1;

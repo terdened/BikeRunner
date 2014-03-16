@@ -14,6 +14,7 @@ import org.andengine.entity.scene.background.Background;
 import org.andengine.ui.activity.BaseGameActivity;
 import org.andengine.engine.*;
 
+import android.content.Context;
 import android.view.KeyEvent;
 
 

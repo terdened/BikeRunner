@@ -9,6 +9,8 @@ import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
 import org.andengine.input.touch.TouchEvent;
 
+import android.content.Context;
+
 import com.badlogic.gdx.math.Vector2;
 import com.example.bikerunner.SceneManager.SceneType;
 
@@ -20,7 +22,9 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 	private int speed = 15;
 	private Biker mBiker;
 	private Background mBackground;
+	private TripManager mTripManager;
 	private Text pDistanceText;
+	private Text pCoinsText;
 	
 	private float mStartTapX;
 	private float mStartTapY;
@@ -28,15 +32,20 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 	private boolean pIsMoved=false;
 	private MusicManager pMusicManager;
 	private int pDistance=0;
+	private int pCoins=0;
+	
+	private PlayerDataManager pPlayerDataManager;
 	
 	private String pGameState;
 	
     @Override
     public void createScene()
     {
+    	createPlayerDataManager();
     	createBackground();
     	createRoad();
     	createWorldManager();
+    	createTripManager();
     	createBiker();
     	createScore();
     	pMusicManager = new MusicManager(resourcesManager);
@@ -59,10 +68,14 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
             		updateComplex();
 	            	mRoad.updateRoad(speed);
 	            	mWorldManager.updateWorld(speed);
+	            	mTripManager.update(pDistance);
 	            	pGameState=mBiker.updateObject(speed);
 	            	pDistanceText.setText(String.valueOf(pDistance));
 	            	if(pGameState=="die")
+	            	{
 	            		lowerMusic();
+	            		updatePlayerData();
+	            	}
             	}
             }
             	
@@ -136,6 +149,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 	        	this.mWorldManager.reset();
 	        	pGameState="wait";
 	        	pDistance=0;
+	        	pCoins=0;
 	        }
     	}
         
@@ -160,11 +174,13 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
     {
     	pDistanceText = new Text(0, 0, resourcesManager.font, "0", 10, vbom);
     	this.attachChild(pDistanceText);
+    	pCoinsText = new Text(0, 60, resourcesManager.font, "0", 10, vbom);
+    	this.attachChild(pCoinsText);
     }
     
     public void createBackground()
     {
-    	Sprite back = new Sprite(0,325, resourcesManager.road_background_desert_region, vbom);
+    	Sprite back = new Sprite(0,320, resourcesManager.road_background_desert_region, vbom);
     	mBackground = new Background(0, 0, resourcesManager.background_desert_region, vbom);
     	mBackground.attachChild(back);
     	this.attachChild(mBackground);
@@ -173,6 +189,12 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
     public void createWorldManager()
     {
     	mWorldManager = new WorldManager(mRoad, vbom, resourcesManager);
+    }
+    
+    public void createTripManager()
+    {
+    	mTripManager = new TripManagerDesert(mRoad, vbom, resourcesManager);
+    	mTripManager.initTripManager();
     }
     
     public void playMusic()
@@ -210,5 +232,19 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
     		mWorldManager.increaseLevelComplex();
     		speed++;
     	}
+    }
+    
+    private void createPlayerDataManager()
+    {
+    	pPlayerDataManager=new PlayerDataManager
+    			(this.activity.getSharedPreferences("com.example.bikerunner", Context.MODE_PRIVATE));
+    }
+    
+    public void updatePlayerData()
+    {
+    	if(pPlayerDataManager.getHighScore()<pDistance)
+    		pPlayerDataManager.updateHighScore(this.pDistance);
+    	
+    	pPlayerDataManager.addCoins(pCoins);
     }
 }

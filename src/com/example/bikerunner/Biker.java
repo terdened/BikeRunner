@@ -205,7 +205,9 @@ public class Biker extends AnimatedSprite {
     	if(linesHeight[mLine]-mHeight>30)
     	{
     		if(linesHeight[mLine]-mHeight>Math.abs(pDeltaY))
+    		{
     			gameState="die";
+    		}
     		else
 	    	if(linesHeight[mLine]-mHeight>0)
 	    		mHeight=linesHeight[mLine];
