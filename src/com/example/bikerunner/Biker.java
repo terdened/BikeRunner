@@ -2,6 +2,7 @@ package com.example.bikerunner;
 
 import java.util.LinkedList;
 
+import org.andengine.entity.scene.Scene;
 import org.andengine.entity.sprite.AnimatedSprite;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.opengl.texture.region.ITextureRegion;
@@ -20,12 +21,14 @@ public class Biker extends AnimatedSprite {
 	
 	private LinkedList<Animation> pAnimationList;
 	private final Road pRoad;
+	private final GameScene pScene;
 	
 	public Biker(float pX, float pY, ITiledTextureRegion pTiledTextureRegion,
-			VertexBufferObjectManager pVertexBufferObjectManager, final Road road) {
+			VertexBufferObjectManager pVertexBufferObjectManager, final Road road, GameScene scene) {
 		
 		super(pX, pY,pTiledTextureRegion, pVertexBufferObjectManager);
 		
+		pScene = scene;
 		pRoad = road;
 		mLine = 1;
 		mHeight = 0;
@@ -40,6 +43,7 @@ public class Biker extends AnimatedSprite {
 	{
 		updateHeight();
 		String result = collisionControl();
+		coinCollisionControl();
 		checkGround();
 		
 		if((mLine==0)&&(pAnimationList.size()==0))
@@ -219,6 +223,19 @@ public class Biker extends AnimatedSprite {
     	}
     	
     	return gameState;
+    }
+	
+	public void coinCollisionControl()
+    {
+    	ObstacleCoin[] linesCoin=pRoad.getLineCoins();
+    	
+    	if(linesCoin[mLine]!=null)
+    	{	
+	    	if(linesCoin[mLine].getObstacleHeight()>mHeight)
+	    	{
+	    		pScene.collectCoin(linesCoin[mLine]);
+	    	}
+    	}
     }
 	
 	private void updateHeight()

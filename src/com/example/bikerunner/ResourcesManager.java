@@ -61,6 +61,7 @@ public class ResourcesManager
 	public ITiledTextureRegion bus_a_region;
 	public ITiledTextureRegion tramp_a_region;
 	public ITiledTextureRegion biker_region;
+	public ITiledTextureRegion coin_region;
 	
 	public ITextureRegion[] road_background_region;
 	
@@ -169,6 +170,7 @@ public class ResourcesManager
 	    tramp_a_region= BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "road/tramp_a.png", 3, 1);
 	    biker_region = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "biker/biker_a.png", 3, 1);
 	    
+	    coin_region = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "road/coin.png", 4, 2);
 	    
 	    
 	    road_background_region=new ITextureRegion[1];

@@ -24,6 +24,15 @@ public class WorldControllerVeryHard extends WorldController{
 			
 		}
 		
+		if(mCounter%100==0)
+		{
+			ObstacleCoin obj = objFactory.createCoin(mVbom, mResManager);
+			obj.setAlpha(0);
+			mRoad.addCoin(obj,"front");
+			mRoad.sortChildren("front");
+			
+		}
+		
 		if(mCounter%450==0)
 		{
 			Obstacle obj = objFactory.createObstacle(mVbom, mResManager);

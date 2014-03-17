@@ -71,6 +71,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
 	            	mTripManager.update(pDistance);
 	            	pGameState=mBiker.updateObject(speed);
 	            	pDistanceText.setText(String.valueOf(pDistance));
+	            	pCoinsText.setText(String.valueOf(pCoins));
 	            	if(pGameState=="die")
 	            	{
 	            		lowerMusic();
@@ -100,6 +101,12 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
     {
         this.detachSelf();
         this.dispose();
+    }
+    
+    public void collectCoin(ObstacleCoin coin)
+    {
+        mRoad.deleteCoin(coin);
+        pCoins++;
     }
     
     public boolean onSceneTouchEvent(Scene pScene, TouchEvent pSceneTouchEvent)
@@ -166,7 +173,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
     
     public void createBiker()
     {
-    	mBiker = new Biker(0, 0, resourcesManager.biker_region, vbom, mRoad);
+    	mBiker = new Biker(0, 0, resourcesManager.biker_region, vbom, mRoad, this);
     	this.attachChild(mBiker);
     }
     

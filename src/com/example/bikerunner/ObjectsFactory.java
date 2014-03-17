@@ -53,7 +53,7 @@ public class ObjectsFactory {
 		Obstacle obj;
 		
 		
-		float randomValue=(float)Math.random()*9f;
+		float randomValue=(float)Math.random()*12f;
 		
 		if(randomValue>8)
 		{
@@ -116,6 +116,33 @@ public class ObjectsFactory {
 		
 		return obj; 
 	}
+	
+	public ObstacleCoin createCoin(VertexBufferObjectManager vbom, ResourcesManager resManager)
+	{
+		ObstacleCoin obj;
+		
+		float randomValue=(float)Math.random()*3f;
+		
+		if(randomValue>2)
+		{
+			obj = new ObstacleCoin(-380, 128, resManager.coin_region, vbom);
+			obj.initObject(0, 100, 600, obj.getY(), 1, obj.getHeight()*3, obj.getWidth()*3, 50);
+		}
+		else
+		if(randomValue>1)
+		{
+			obj = new ObstacleCoin(0, 128, resManager.coin_region, vbom);
+			obj.initObject(1, 100, 600, obj.getY(), 1, obj.getHeight()*3, obj.getWidth()*3, 50);
+		}
+		else
+		{
+			obj = new ObstacleCoin(380, 128, resManager.coin_region, vbom);
+			obj.initObject(2, 100, 600, obj.getY(), 1, obj.getHeight()*3, obj.getWidth()*3, 50);
+		}
+		
+		return obj;
+	}
+	
 	
 	public Obstacle createLift(VertexBufferObjectManager vbom, ResourcesManager resManager)
 	{

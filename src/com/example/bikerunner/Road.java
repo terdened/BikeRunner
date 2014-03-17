@@ -9,6 +9,7 @@ public class Road {
 	//private
 	private LinkedList<RoadObject> objectList;
 	private LinkedList<Obstacle> obstacleList;
+	private LinkedList<ObstacleCoin> coinsList;
 	public Entity pBackScene;
 	public Entity pFrontScene;
 	public Entity pMiddleScene;
@@ -20,6 +21,7 @@ public class Road {
 		pMiddleScene = new Entity();
 		objectList = new LinkedList<RoadObject>();
 		obstacleList = new LinkedList<Obstacle>();
+		coinsList = new LinkedList<ObstacleCoin>();
 	}
 	
 	public void updateRoad(int speed)
@@ -38,6 +40,14 @@ public class Road {
 			
 			if(obstacleList.get(i).canDelete())
 				this.removeObstacle(obstacleList.get(i));
+		}
+		
+		for(int i=0; i<coinsList.size();i++)
+		{
+			coinsList.get(i).updateObject(speed);
+			
+			if(coinsList.get(i).canDelete())
+				this.removeCoin(coinsList.get(i));
 		}
 	}
 	
@@ -170,6 +180,66 @@ public class Road {
 		}
 	}
 	
+	
+	public void addCoin(ObstacleCoin obj, String scene)
+	{
+		coinsList.add(obj);
+		
+		if(scene=="back")
+		{
+			pBackScene.attachChild(obj);
+		}else
+		if(scene=="front")
+		{
+			pFrontScene.attachChild(obj);
+		}else
+		if(scene=="middle")
+		{
+			pMiddleScene.attachChild(obj);
+		}
+	}
+	
+	public void deleteCoin(ObstacleCoin obj)
+	{
+		for(int i=0;i<coinsList.size();i++)
+		{
+			if(coinsList.get(i)==obj)
+				coinsList.get(i).delete();
+		}
+	}
+	
+	public void removeCoin(Obstacle obj)
+	{
+		coinsList.remove(obj);
+		
+		try
+		{
+			pBackScene.detachChild(obj);
+		}
+		finally
+		{
+			
+		}
+		
+		try
+		{
+			pMiddleScene.detachChild(obj);
+		}
+		finally
+		{
+			
+		}
+		
+		try
+		{
+			pFrontScene.detachChild(obj);
+		}
+		finally
+		{
+			
+		}
+	}
+	
 	public int[] getLinesHeight()
 	{
 		int[] result = new int[]{0,0,0};
@@ -179,6 +249,21 @@ public class Road {
 			if(obstacleList.get(i).getObstacleHeight()>0)
 			{
 				result[obstacleList.get(i).getLine()]=obstacleList.get(i).getObstacleHeight();
+			}
+		}
+		
+		return result;
+	}
+	
+	public ObstacleCoin[] getLineCoins()
+	{
+		ObstacleCoin[] result = new ObstacleCoin[]{null,null,null};
+		
+		for(int i=0;i<coinsList.size();i++)
+		{
+			if(coinsList.get(i).getObstacleHeight()>0)
+			{
+				result[coinsList.get(i).getLine()]=(ObstacleCoin) coinsList.get(i);
 			}
 		}
 		
