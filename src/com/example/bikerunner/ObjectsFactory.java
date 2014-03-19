@@ -11,7 +11,7 @@ public class ObjectsFactory {
 		{
 			sign=-1;
 		}
-		return new RoadObject(((float)Math.random()*5000+1000)*sign, 40, resManager.road_background_desert_grass_region, vbom);
+		return new RoadObject(((float)Math.random()*5000+1000)*sign, 40, resManager.road_background_desert_a_region, vbom);
 	}
 	
 	public RoadObject createBlink(VertexBufferObjectManager vbom, ResourcesManager resManager)
@@ -26,12 +26,12 @@ public class ObjectsFactory {
 		{
 			sign=-1;
 		}
-		return new RoadObject(((float)Math.random()*5000+1000)*sign, 40, resManager.road_background_desert_bush_region, vbom);
+		return new RoadObject(((float)Math.random()*5000+1000)*sign, 40, resManager.road_background_desert_b_region, vbom);
 	}
 	
 	public RoadObject createBackgroundPart(VertexBufferObjectManager vbom, ResourcesManager resManager)
 	{
-		RoadObject obj = new RoadObject(0, 156, resManager.road_background_desert_region, vbom);
+		RoadObject obj = new RoadObject(0, 156, resManager.road_background_fon_region, vbom);
 		return obj;
 	}
 	
@@ -60,6 +60,7 @@ public class ObjectsFactory {
 			obj = new ObstacleTramp(-380, 128, resManager.tramp_a_region, vbom);
 			obj.initObject(0, 200, 600, obj.getY(), 1, obj.getHeight(), obj.getWidth(), 250);
 			obj.setDislocation(50);
+			obj.setSpeed(5);
 		}
 		else
 		if(randomValue>7)
@@ -74,6 +75,7 @@ public class ObjectsFactory {
 			obj = new ObstacleTramp(380, 128, resManager.tramp_a_region, vbom);
 			obj.initObject(2, 200, 600, obj.getY(), 1, obj.getHeight(), obj.getWidth(), 250);
 			obj.setDislocation(50);
+			obj.setSpeed(-5);
 		}
 		else
 		if(randomValue>5)

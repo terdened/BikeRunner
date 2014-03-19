@@ -25,12 +25,13 @@ public class Obstacle extends AnimatedSprite {
 	protected float mRealHeight;
 	protected float mRealWidth;
 	protected float mSize;
-	protected float speed;
+	protected float pSpeed;
 	
 	public void initObject(int line, int height, float z, float y, float size, float realHeight, float realWidth, float length)
 	{
 		pHeight=height;
 		mDislocationX=0;
+		pSpeed=0;
 		mZ=z;
 		mRealY=y;
 		mSize=size;
@@ -81,6 +82,11 @@ public class Obstacle extends AnimatedSprite {
 		mDislocationX = dislocation;
 	}
 	
+	public void setSpeed(float speed)
+	{
+		pSpeed = speed;
+	}
+	
 	public void setAction(String action)
 	{
 		pAction=action;
@@ -121,7 +127,7 @@ public class Obstacle extends AnimatedSprite {
 			this.setAlpha(this.getAlpha()+0.1f);
 		}
 		
-		mZ-=speed;
+		mZ-=speed-pSpeed;
 		mSize=(150.0f)/(mZ+2000);
 
 		this.setWidth(mSize*mRealWidth);

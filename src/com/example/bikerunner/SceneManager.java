@@ -131,7 +131,7 @@ public class SceneManager
         //disposeSplashScene();*/
     }
     
-    public void loadGameScene(final Engine mEngine)
+    public void loadGameScene(final Engine mEngine, final String stage)
     {
     	
         setScene(loadingScene);
@@ -143,7 +143,7 @@ public class SceneManager
             	String tempElement = element;
             	String tempLevel = level;
                 mEngine.unregisterUpdateHandler(pTimerHandler);
-                ResourcesManager.getInstance().loadGameResources();
+                ResourcesManager.getInstance().loadGameResources(stage);
                 gameScene = new GameScene();
                 menuScene.disposeScene();
                 setScene(gameScene);

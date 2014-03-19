@@ -2,6 +2,7 @@ package com.example.bikerunner;
 
 import java.util.LinkedList;
 
+import org.andengine.entity.Entity;
 import org.andengine.entity.sprite.AnimatedSprite;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.opengl.texture.region.ITextureRegion;
@@ -9,60 +10,93 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 public class MenuBackground extends Sprite{
 	
-	public Sprite mCurrentFrame;
-	public Sprite mNextFrame;
-	public Sprite mCurrentFarFrame;
-	public Sprite mNextFarFrame;
+	public LinkedList<Sprite> mCurrentFrame;
 	
 	public LinkedList<String> mLevelList;
+	public LinkedList<String> mLevelCostList;
+	
 	public int mCurrentLevel;
 	private final ResourcesManager pResourcesManager;
 	private final VertexBufferObjectManager pVbom;
+	public boolean mIsChanged;
+	private int pSpeed;
 	
 	public MenuBackground(float pX, float pY, ResourcesManager resourcesManager,
 			VertexBufferObjectManager pVertexBufferObjectManager) {
 		super(pX, pY, resourcesManager.empty_region, pVertexBufferObjectManager);
 		
+		pSpeed=0;
+		mIsChanged=false;
 		pVbom = pVertexBufferObjectManager;
 		pResourcesManager=resourcesManager;
 		mLevelList= new LinkedList<String>();
+		mLevelCostList= new LinkedList<String>();
 		mLevelList.add("Desert");
-		mLevelList.add("Coming soon");
-		mCurrentFrame=new Sprite(0, 0, resourcesManager.level_background_region[0], pVertexBufferObjectManager);
-		mNextFrame=new Sprite(1280, 0, resourcesManager.level_background_region[0], pVertexBufferObjectManager);
-		this.attachChild(mCurrentFrame);
-		this.attachChild(mNextFrame);
+		mLevelCostList.add("1500");
+		mLevelList.add("Countriside");
+		mLevelCostList.add("2500");
 		
-		mCurrentFarFrame=new Sprite(0, 0, resourcesManager.level_background_far_region[0], pVertexBufferObjectManager);
-		mNextFarFrame=new Sprite(1280, 0, resourcesManager.level_background_far_region[0], pVertexBufferObjectManager);
-		this.attachChild(mCurrentFarFrame);
-		this.attachChild(mNextFarFrame);
+		mCurrentFrame=new LinkedList<Sprite>();
+		mCurrentFrame.add(new Sprite(0, 0, resourcesManager.level_background_region[0], pVertexBufferObjectManager));
+		this.attachChild(mCurrentFrame.getLast());
+
+		mCurrentFrame.add(new Sprite(1280, 0, resourcesManager.level_background_region[1], pVertexBufferObjectManager));
+		this.attachChild(mCurrentFrame.getLast());
+
 	}
 	
-	public void update(int speed)
+	public void next()
 	{
-		mCurrentFrame.setX(mCurrentFrame.getX()-speed);
-		mNextFrame.setX(mNextFrame.getX()-speed);
-		
-		if(mCurrentFrame.getX()<=-1280)
+		if(mCurrentLevel<mLevelList.size()-1)
 		{
-			this.detachChild(mCurrentFrame);
-			mCurrentFrame.dispose();
-			mCurrentFrame = mNextFrame;
-			mNextFrame=new Sprite(1280, 0, pResourcesManager.level_background_region[mCurrentLevel], pVbom);
-			this.attachChild(mNextFrame);
+			mCurrentLevel++;
+			mIsChanged=true;
+		}
+	}
+	
+	public void prev()
+	{
+		if(mCurrentLevel>0)
+		{
+			mCurrentLevel--;
+			mIsChanged=true;
+		}
+	}
+	
+	public void update()
+	{
+		if(mCurrentFrame.getFirst().getX()!=-mCurrentLevel*1280)
+		{
+			if(Math.abs(Math.abs(mCurrentFrame.getFirst().getX())-Math.abs(mCurrentLevel*1280))<Math.abs(pSpeed))
+			{
+				for(int i=0;i<mCurrentFrame.size();i++)
+				{
+					mCurrentFrame.get(i).setX(-mCurrentLevel*1280+i*1280);
+				}
+				pSpeed=0;
+			}else
+			if(mCurrentFrame.getFirst().getX()>-mCurrentLevel*1280)
+			{
+				pSpeed--;
+				moveAllStages();
+			}else
+			{
+				pSpeed++;
+				moveAllStages();
+			}
+		}
+		else
+		{
+			pSpeed=0;
 		}
 		
-		mCurrentFarFrame.setX(mCurrentFarFrame.getX()-speed/2);
-		mNextFarFrame.setX(mNextFarFrame.getX()-speed/2);
-		
-		if(mCurrentFarFrame.getX()<=-1280)
+	}
+	
+	private void moveAllStages()
+	{
+		for(int i=0;i<mCurrentFrame.size();i++)
 		{
-			this.detachChild(mCurrentFarFrame);
-			mCurrentFarFrame.dispose();
-			mCurrentFarFrame = mNextFarFrame;
-			mNextFarFrame=new Sprite(1280, 0, pResourcesManager.level_background_far_region[mCurrentLevel], pVbom);
-			this.attachChild(mNextFarFrame);
+			mCurrentFrame.get(i).setX(mCurrentFrame.get(i).getX()+pSpeed);
 		}
 	}
 }

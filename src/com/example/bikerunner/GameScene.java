@@ -187,8 +187,8 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener
     
     public void createBackground()
     {
-    	Sprite back = new Sprite(0,320, resourcesManager.road_background_desert_region, vbom);
-    	mBackground = new Background(0, 0, resourcesManager.background_desert_region, vbom);
+    	Sprite back = new Sprite(0,320, resourcesManager.road_background_fon_region, vbom);
+    	mBackground = new Background(0, 0, resourcesManager.background_region, vbom);
     	mBackground.attachChild(back);
     	this.attachChild(mBackground);
     }
