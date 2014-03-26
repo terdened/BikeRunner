@@ -27,6 +27,45 @@ public class PlayerDataManager {
 		
 	}
 	
+	public void setSoundAvailable(boolean music)
+	{
+		String key = "com.example.brutal.musicavailable";
+		pPrefs.edit().putBoolean(key, music).commit();
+	}
+	
+	public boolean getSoundAvailable()
+	{
+		String key = "com.example.brutal.musicavailable";
+		boolean music = pPrefs.getBoolean(key, true);
+		return music;
+	}
+	
+	public void setMusicVolume(float volume)
+	{
+		String key = "com.example.brutal.musicvolume";
+		pPrefs.edit().putFloat(key, volume).commit();
+	}
+	
+	public float getMusicVolume()
+	{
+		String key = "com.example.brutal.musicvolume";
+		float volume = pPrefs.getFloat(key, 1);
+		return volume;
+	}
+	
+	public void setSoundVolume(float volume)
+	{
+		String key = "com.example.brutal.soundvolume";
+		pPrefs.edit().putFloat(key, volume).commit();
+	}
+	
+	public float getSoundVolume()
+	{
+		String key = "com.example.brutal.soundvolume";
+		float volume = pPrefs.getFloat(key, 1);
+		return volume;
+	}
+	
 	public boolean getLevelAccess(String level)
 	{
 		boolean result=false;

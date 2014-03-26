@@ -1,6 +1,7 @@
 package com.example.brutal;
 
 import org.andengine.opengl.texture.region.ITextureRegion;
+import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 public class TripCacheItem {

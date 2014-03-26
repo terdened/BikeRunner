@@ -195,23 +195,23 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
     public void playMusic()
     {
 
-    	//pMusicManager.playMusic();
+    	pMusicManager.playMusic();
     }
     
     public void resumeMusic()
     {
 
-    	//pMusicManager.resumeMusic();
+    	pMusicManager.resumeMusic();
     }
     
     public void lowerMusic()
     {
-    	//pMusicManager.lowerMusic();
+    	pMusicManager.lowerMusic();
     }
     
     public void stopMusic()
     {
-    	//pMusicManager.stopMusic();
+    	pMusicManager.stopMusic();
     }
     
     public void resetGame()

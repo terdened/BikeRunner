@@ -42,7 +42,8 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 	private PlayerDataManager pPlayerDataManager;
 	private float pStartTapY=0;
 	private float pStartTapX=0;
-	
+	private boolean isOptionsOpen=false;
+	private OptionsMenu pOptionsMenu;
 	
     @Override
     public void createScene()
@@ -80,62 +81,64 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
     
     public boolean onSceneTouchEvent(Scene pScene, TouchEvent pSceneTouchEvent)
     {
-    	
-    	if (pSceneTouchEvent.isActionDown())
-        {
-        	pStartTapX=pSceneTouchEvent.getX();
-        	pStartTapY=pSceneTouchEvent.getY();
-        }
-    	
-        if (pSceneTouchEvent.isActionUp())
-        {
-        	Vector2 tap = new Vector2(pStartTapX-pSceneTouchEvent.getX(),pStartTapY-pSceneTouchEvent.getY());
-        	if(tap.len()>50)
-        	{
-        		if(pStartTapY<400)
-        		{
-	        		if(tap.x>0)
-	            	{
-	        			pMenuBackground.next();
-	        			pMenuInfo.setBikeName(pMenuBiker.mLevelList.get(pMenuBiker.mCurrentLevel));
-	        	    	pMenuInfo.setLevelName(pMenuBackground.mLevelList.get(pMenuBackground.mCurrentLevel));
-	        	    	pMenuInfo.update();
-	        	    	updateMenuChildScene();
-	            	}else
-	            	{
-	            		pMenuBackground.prev();
-	            		pMenuInfo.setBikeName(pMenuBiker.mLevelList.get(pMenuBiker.mCurrentLevel));
-	                	pMenuInfo.setLevelName(pMenuBackground.mLevelList.get(pMenuBackground.mCurrentLevel));
-	                	pMenuInfo.update();
-	                	updateMenuChildScene();
-	            	}
-        		}else
-        		{
-        			if(tap.x>0)
-	            	{
-        				pMenuBiker.next();
-        				pMenuInfo.setBikeName(pMenuBiker.mLevelList.get(pMenuBiker.mCurrentLevel));
-        				pMenuInfo.setLevelName(pMenuBackground.mLevelList.get(pMenuBackground.mCurrentLevel));
-        				pMenuInfo.update();
-        				updateMenuChildScene();
-	        	    	
-	            	}else
-	            	{
-	            		pMenuBiker.prev();
-	            		pMenuInfo.setBikeName(pMenuBiker.mLevelList.get(pMenuBiker.mCurrentLevel));
-	            		pMenuInfo.setLevelName(pMenuBackground.mLevelList.get(pMenuBackground.mCurrentLevel));
-	            		pMenuInfo.update();
-	            		updateMenuChildScene();
-	            	}	
-        		}
-        	}
-        	else
-        	{
-        		if(pPlayerDataManager.getLevelAccess(pMenuBackground.mLevelList.get(pMenuBackground.mCurrentLevel))&&
-        				pPlayerDataManager.getBikeAccess(pMenuBiker.mLevelList.get(pMenuBiker.mCurrentLevel)))
-        			SceneManager.getInstance().loadGameScene(engine,pMenuBackground.mLevelList.get(pMenuBackground.mCurrentLevel));
-        	}
-        }
+    	if(!isOptionsOpen)
+    	{
+	    	if (pSceneTouchEvent.isActionDown())
+	        {
+	        	pStartTapX=pSceneTouchEvent.getX();
+	        	pStartTapY=pSceneTouchEvent.getY();
+	        }
+	    	
+	        if (pSceneTouchEvent.isActionUp())
+	        {
+	        	Vector2 tap = new Vector2(pStartTapX-pSceneTouchEvent.getX(),pStartTapY-pSceneTouchEvent.getY());
+	        	if(tap.len()>50)
+	        	{
+	        		if(pStartTapY<400)
+	        		{
+		        		if(tap.x>0)
+		            	{
+		        			pMenuBackground.next();
+		        			pMenuInfo.setBikeName(pMenuBiker.mLevelList.get(pMenuBiker.mCurrentLevel));
+		        	    	pMenuInfo.setLevelName(pMenuBackground.mLevelList.get(pMenuBackground.mCurrentLevel));
+		        	    	pMenuInfo.update();
+		        	    	updateMenuChildScene();
+		            	}else
+		            	{
+		            		pMenuBackground.prev();
+		            		pMenuInfo.setBikeName(pMenuBiker.mLevelList.get(pMenuBiker.mCurrentLevel));
+		                	pMenuInfo.setLevelName(pMenuBackground.mLevelList.get(pMenuBackground.mCurrentLevel));
+		                	pMenuInfo.update();
+		                	updateMenuChildScene();
+		            	}
+	        		}else
+	        		{
+	        			if(tap.x>0)
+		            	{
+	        				pMenuBiker.next();
+	        				pMenuInfo.setBikeName(pMenuBiker.mLevelList.get(pMenuBiker.mCurrentLevel));
+	        				pMenuInfo.setLevelName(pMenuBackground.mLevelList.get(pMenuBackground.mCurrentLevel));
+	        				pMenuInfo.update();
+	        				updateMenuChildScene();
+		        	    	
+		            	}else
+		            	{
+		            		pMenuBiker.prev();
+		            		pMenuInfo.setBikeName(pMenuBiker.mLevelList.get(pMenuBiker.mCurrentLevel));
+		            		pMenuInfo.setLevelName(pMenuBackground.mLevelList.get(pMenuBackground.mCurrentLevel));
+		            		pMenuInfo.update();
+		            		updateMenuChildScene();
+		            	}	
+	        		}
+	        	}
+	        	else
+	        	{
+	        		if(pPlayerDataManager.getLevelAccess(pMenuBackground.mLevelList.get(pMenuBackground.mCurrentLevel))&&
+	        				pPlayerDataManager.getBikeAccess(pMenuBiker.mLevelList.get(pMenuBiker.mCurrentLevel)))
+	        			SceneManager.getInstance().loadGameScene(engine,pMenuBackground.mLevelList.get(pMenuBackground.mCurrentLevel));
+	        	}
+	        }
+    	}
     	
     	return true;
     }
@@ -151,11 +154,15 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 	    final IMenuItem buyBikeMenuItem = new ScaleMenuItemDecorator(new SpriteMenuItem(MENU_BUY_BIKE, resourcesManager.buy_button_region, vbom), 0.8f, 1);
 	    menuChildScene.addMenuItem(buyBikeMenuItem);
 	    
+	    final IMenuItem optionsMenuItem = new ScaleMenuItemDecorator(new SpriteMenuItem(MENU_OPTIONS, resourcesManager.options_button_region, vbom), 0.8f, 1);
+	    menuChildScene.addMenuItem(optionsMenuItem);
+	    
 	    menuChildScene.buildAnimations();
 	    menuChildScene.setBackgroundEnabled(false);
 	    
 	    buyMenuItem.setPosition(50, 10);
 	    buyBikeMenuItem.setPosition(50, 650);
+	    optionsMenuItem.setPosition(1170, 650);
 	    
 	    menuChildScene.setOnMenuItemClickListener(this);
 	    
@@ -197,10 +204,33 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
             	buyBike();
                 return true;
             case MENU_OPTIONS:
+            	optionsClick();
                 return true;
             default:
                 return false;
         }
+    }
+    
+    public void optionsClick()
+    {
+    	if(isOptionsOpen)
+    	{
+    		isOptionsOpen=false;
+    		createMenuChildScene();
+    	}
+    	else
+    	{
+    		isOptionsOpen=true;
+    		createOptionsMenu();
+    	}
+    }
+    
+    private void createOptionsMenu()
+    {
+    	pOptionsMenu = new OptionsMenu(camera, vbom, pPlayerDataManager, resourcesManager, this);
+    	pOptionsMenu.createMenuChildScene(camera);
+    	pOptionsMenu.setPosition(400,100);
+    	this.setChildScene(pOptionsMenu);
     }
     
     private void buyLevel()

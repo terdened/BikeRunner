@@ -1,32 +1,31 @@
 package com.example.brutal;
 
+import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
+import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 public class ObjectsFactory {
-	
-	public RoadObject createGrass(VertexBufferObjectManager vbom, ResourcesManager resManager)
-	{
-		int sign=1;
-		if(Math.random()*2>1)
-		{
-			sign=-1;
-		}
-		return new RoadObject(((float)Math.random()*5000+1000)*sign, 40, resManager.road_background_desert_a_region, vbom);
-	}
-	
+
 	public RoadObject createBlink(VertexBufferObjectManager vbom, ResourcesManager resManager)
 	{
-		return new RoadObject((float)Math.random()*1000-500, 40, resManager.road_background_blink_region, vbom);
+		int rand=(int)(Math.random()*resManager.road_background_blink_region.length);
+		RoadObject result= new RoadObject((float)Math.random()*1000-500, 40, resManager.road_background_blink_region[rand], vbom);
+		
+		return result;
 	}
 	
-	public RoadObject createBush(VertexBufferObjectManager vbom, ResourcesManager resManager)
+	public RoadObject createBackgroundObject(VertexBufferObjectManager vbom, ResourcesManager resManager)
 	{
 		int sign=1;
 		if(Math.random()*2>1)
 		{
 			sign=-1;
 		}
-		return new RoadObject(((float)Math.random()*5000+1000)*sign, 40, resManager.road_background_desert_b_region, vbom);
+		
+		int rand=(int)(Math.random()*resManager.road_background_object.length);
+		RoadObject result= new RoadObject(((float)Math.random()*5000+1000)*sign, 40, resManager.road_background_object[rand], vbom);
+		
+		return result;
 	}
 	
 	public RoadObject createBackgroundPart(VertexBufferObjectManager vbom, ResourcesManager resManager)

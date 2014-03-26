@@ -41,17 +41,9 @@ public class WorldControllerHell extends WorldController{
 			mRoad.sortChildren("front");
 		}
 		
-		if(mCounter%20==0)
-		{			
-			RoadObject obj = objFactory.createGrass(mVbom, mResManager);
-			obj.initObject(-1000, obj.getX(), obj.getY(), 1, obj.getHeight(), obj.getWidth());
-			obj.setAlpha(0);
-			mRoad.addObject(obj,"middle");
-		}
-		
 		if(mCounter%50==0)
 		{			
-			RoadObject obj = objFactory.createBush(mVbom, mResManager);
+			RoadObject obj = objFactory.createBackgroundObject(mVbom, mResManager);
 			obj.initObject(-0, obj.getX(), obj.getY(), 1, obj.getHeight(), obj.getWidth());
 			obj.setAlpha(0);
 			mRoad.addObject(obj,"middle");
