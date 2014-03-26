@@ -34,7 +34,7 @@ public class Biker extends AnimatedSprite {
 		mHeight = 0;
 		pDeltaY = 0;
 		pAnimationList = new LinkedList<Animation>();
-		final long[] PLAYER_ANIMATE = new long[] { 200, 0, 0 };
+		final long[] PLAYER_ANIMATE = new long[] { 0, 200, 0 };
 		animate(PLAYER_ANIMATE, 0, 2, true);
 		updateObject(0);
 	}
@@ -107,7 +107,7 @@ public class Biker extends AnimatedSprite {
 		mHeight = 0;
 		pDeltaY = 0;
 		pAnimationList = new LinkedList<Animation>();
-		final long[] PLAYER_ANIMATE = new long[] { 200, 0, 0 };
+		final long[] PLAYER_ANIMATE = new long[] {  0, 200,0 };
 		animate(PLAYER_ANIMATE, 0, 2, true);
 		updateObject(0);
 	}
@@ -147,14 +147,46 @@ public class Biker extends AnimatedSprite {
 		}
 	}
 	
-	public void moveLeft()
+	public boolean moveLeft()
 	{
-		mLine--;
+		boolean result=false;
+		int[] linesHeight=pRoad.getLinesHeight();
+		
+		if(linesHeight[mLine-1]-mHeight<30)
+    	{
+			mLine--;
+			result=true;
+    	}
+		
+		return result;
 	}
 	
-	public void moveRight()
+	public boolean moveRight()
 	{
-		mLine++;
+		boolean result=false;
+		int[] linesHeight=pRoad.getLinesHeight();
+		
+		if(linesHeight[mLine+1]-mHeight<30)
+    	{
+			mLine++;
+			result=true;
+    	}
+		
+		return result;
+	}
+	
+	public void returnLeft()
+	{
+		pAnimationList=new LinkedList<Animation>();
+		pAnimationList.add(new ReturnLeftAnimation(this));
+		pAnimationList.getLast().initAnimation("return_left", 5);
+	}
+	
+	public void returnRight()
+	{
+		pAnimationList=new LinkedList<Animation>();
+		pAnimationList.add(new ReturnRightAnimation(this));
+		pAnimationList.getLast().initAnimation("return_right", 5);
 	}
 	
 	public boolean isMovingAnimation()
@@ -169,6 +201,8 @@ public class Biker extends AnimatedSprite {
 		
 		return result;
 	}
+	
+
 	
 	private void checkGround()
 	{

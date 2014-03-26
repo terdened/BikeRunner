@@ -19,8 +19,7 @@ public class WorldControllerHell extends WorldController{
 		{
 			RoadObject obj = objFactory.createSign(mVbom, mResManager);
 			obj.setAlpha(0);
-			mRoad.addObject(obj,"front");
-			mRoad.sortChildren("front");
+			mRoad.addObject(obj,"middle");
 			
 		}
 		
@@ -58,7 +57,7 @@ public class WorldControllerHell extends WorldController{
 			mRoad.addObject(obj,"middle");
 		}
 		
-		if(mCounter%10==0)
+		if(mCounter%100==0)
 		{			
 			RoadObject obj = objFactory.createBlink(mVbom, mResManager);
 			obj.initObject(-1000, obj.getX(), obj.getY(), 1, obj.getHeight(), obj.getWidth());

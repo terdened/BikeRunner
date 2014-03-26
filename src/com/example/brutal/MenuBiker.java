@@ -46,8 +46,9 @@ public class MenuBiker extends Entity {
 		mCurrentFrame.getLast().animate(PLAYER_ANIMATE, 0, 1, true);
 		this.attachChild(mCurrentFrame.getLast());
 		
-		mBiker=new AnimatedSprite(380, 50, resourcesManager.biker_menu_region, pVertexBufferObjectManager);
-		mBiker.animate(PLAYER_ANIMATE, 0, 1, true);
+		final long[] ANIMATE = new long[] { 200, 200, 200 };
+		mBiker=new AnimatedSprite(390, -30, resourcesManager.biker_menu_region, pVertexBufferObjectManager);
+		mBiker.animate(ANIMATE, 0, 2, true);
 		this.attachChild(mBiker);
 	}
 	

@@ -3,6 +3,7 @@ package com.example.brutal;
 import java.util.LinkedList;
 
 import org.andengine.entity.Entity;
+import org.andengine.entity.IEntityMatcher;
 
 public class Road {
 	
@@ -63,11 +64,8 @@ public class Road {
 		}else
 		if(scene=="front")
 		{
+			sortObstacles();
 			this.pFrontScene.sortChildren();
-			for(int i=0;i<pFrontScene.getChildCount();i++)
-			{
-				this.pFrontScene.getChildByIndex(i).setZIndex(i);
-			}
 		}else
 		if(scene=="middle")
 		{
@@ -76,6 +74,24 @@ public class Road {
 			{
 				this.pMiddleScene.getChildByIndex(i).setZIndex(i);
 			}
+		}
+			
+	}
+	
+	public void sortObstacles()
+	{
+		LinkedList<Obstacle> obstacles=new LinkedList<Obstacle>();
+		
+		obstacles.addAll(obstacleList);
+		obstacles.addAll(coinsList);
+
+		int lastValue=-10000;
+		
+		for(int i=0;i<this.pFrontScene.getChildCount();i++)
+		{
+			Obstacle temp =(Obstacle)(pFrontScene.getChildByIndex(i));
+			lastValue=(int)temp.getZ();
+			this.pFrontScene.getChildByIndex(i).setZIndex(10000-lastValue);
 		}
 			
 	}
@@ -277,7 +293,7 @@ public class Road {
 		LinkedList<Obstacle> toRemove = new LinkedList<Obstacle>();
 		for(int i=0;i<obstacleList.size();i++)
 		{
-				toRemove.add(obstacleList.get(i));
+			toRemove.add(obstacleList.get(i));
 		}
 		
 		while(toRemove.size()>0)
@@ -285,6 +301,33 @@ public class Road {
 			this.removeObstacle(toRemove.getFirst());
 			toRemove.removeFirst();
 		}
+		
+		LinkedList<RoadObject> toRemoveObject = new LinkedList<RoadObject>();
+		for(int i=0;i<objectList.size();i++)
+		{
+			toRemoveObject.add(objectList.get(i));
+		}
+		
+		while(toRemoveObject.size()>0)
+		{
+			this.removeObject(toRemoveObject.getFirst());
+			toRemoveObject.removeFirst();
+		}
+		
+		LinkedList<Obstacle> toRemoveCoin = new LinkedList<Obstacle>();
+		for(int i=0;i<coinsList.size();i++)
+		{
+			toRemoveCoin.add(coinsList.get(i));
+		}
+		
+		while(toRemoveCoin.size()>0)
+		{
+			this.removeObstacle(toRemoveCoin.getFirst());
+			toRemoveCoin.removeFirst();
+		}
+		
+		coinsList=new LinkedList<ObstacleCoin>();
+		
 	}
 
 }

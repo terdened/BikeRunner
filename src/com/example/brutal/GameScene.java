@@ -323,6 +323,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
     	pDistance=0;
     	pCoins=0;
     	updateMenuChildScene();
+    	createTripManager();
 	}
 	
 	private void resume()

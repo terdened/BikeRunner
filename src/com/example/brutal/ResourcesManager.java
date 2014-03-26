@@ -132,7 +132,7 @@ public class ResourcesManager
     	level_background_region[0] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "level_background_a.png");
     	level_background_region[1] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "level_background_b.png");
 
-    	biker_menu_region = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(menuTextureAtlas, activity, "biker_a.png", 1, 2);
+    	biker_menu_region = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(menuTextureAtlas, activity, "biker_a.png", 3, 1);
 
     	bike_region =  new ITiledTextureRegion[2];
     	bike_region[0]= BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(menuTextureAtlas, activity, "bike_a.png", 1, 2);
@@ -198,7 +198,7 @@ public class ResourcesManager
 	    fence_region = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "road/fence.png", 3, 1);
 	    bus_a_region= BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "road/bus_b.png", 3, 1);
 	    tramp_a_region= BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "road/tramp_a.png", 3, 1);
-	    biker_region = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "biker/biker_a.png", 3, 1);
+	    biker_region = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "biker/biker_b.png", 3, 1);
 	    
 	    coin_region = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "road/coin.png", 4, 2);
 	    
