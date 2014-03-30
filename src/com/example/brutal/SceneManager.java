@@ -135,18 +135,27 @@ public class SceneManager
     {
     	
         setScene(loadingScene);
-        ResourcesManager.getInstance().unloadMenuTextures();
+        ResourcesManager.getInstance().unloadMenuResources();
         mEngine.registerUpdateHandler(new TimerHandler(0.1f, new ITimerCallback() 
         {
             public void onTimePassed(final TimerHandler pTimerHandler) 
             {
-            	String tempElement = element;
-            	String tempLevel = level;
-                mEngine.unregisterUpdateHandler(pTimerHandler);
+
                 ResourcesManager.getInstance().loadGameResources(stage);
-                gameScene = new GameScene();
-                menuScene.disposeScene();
-                setScene(gameScene);
+                mEngine.registerUpdateHandler(new TimerHandler(0.1f, new ITimerCallback() 
+                {
+                    public void onTimePassed(final TimerHandler pTimerHandler) 
+                    {
+		            	String tempElement = element;
+		            	String tempLevel = level;
+		                mEngine.unregisterUpdateHandler(pTimerHandler);
+		                
+		
+		                menuScene.disposeScene();
+		                gameScene = new GameScene();
+		                setScene(gameScene);
+                    }
+                }));
             }
         }));
     }
@@ -154,13 +163,17 @@ public class SceneManager
     public void loadMenuScene(final Engine mEngine)
     {
         setScene(loadingScene);
-        ResourcesManager.getInstance().unloadGame();
+        
+        if(gameScene!=null)
+        	ResourcesManager.getInstance().soundManager.setState("stop");
+        
+        ResourcesManager.getInstance().unloadGameResources();
         mEngine.registerUpdateHandler(new TimerHandler(0.1f, new ITimerCallback() 
         {
             public void onTimePassed(final TimerHandler pTimerHandler) 
             {
                 mEngine.unregisterUpdateHandler(pTimerHandler);
-                ResourcesManager.getInstance().loadMenuTextures();
+                ResourcesManager.getInstance().loadMenuResources();                
                 menuScene = new MainMenuScene();
                 setScene(menuScene);
             }

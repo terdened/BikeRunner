@@ -24,7 +24,6 @@ public class GameActivity extends BaseGameActivity
 	private BoundCamera camera;
 	private ResourcesManager resourcesManager;
 	
-	
 	@Override
 	protected void onDestroy()
 	{

@@ -18,6 +18,7 @@ public class Biker extends AnimatedSprite {
 	private int mLine;
 	private int mHeight;
 	private int pDeltaY;
+	private int pDeltaTrampY;
 	
 	private LinkedList<Animation> pAnimationList;
 	private final Road pRoad;
@@ -33,6 +34,7 @@ public class Biker extends AnimatedSprite {
 		mLine = 1;
 		mHeight = 0;
 		pDeltaY = 0;
+		pDeltaTrampY = 0;
 		pAnimationList = new LinkedList<Animation>();
 		final long[] PLAYER_ANIMATE = new long[] { 0, 200, 0 };
 		animate(PLAYER_ANIMATE, 0, 2, true);
@@ -42,9 +44,9 @@ public class Biker extends AnimatedSprite {
 	public String updateObject(int speed)
 	{
 		updateHeight();
+		checkGround();
 		String result = collisionControl();
 		coinCollisionControl();
-		checkGround();
 		
 		if((mLine==0)&&(pAnimationList.size()==0))
 			this.setX(350-128);
@@ -77,6 +79,7 @@ public class Biker extends AnimatedSprite {
 			else
 			{
 				moveBiker("right");
+				
 			}
 		}else
 		{
@@ -120,6 +123,10 @@ public class Biker extends AnimatedSprite {
 			{
 				pAnimationList.add(new MoveLeftAnimation(this));
 				pAnimationList.getLast().initAnimation("left", 10);
+				if(this.thereIsGround())
+				{
+					pScene.resourcesManager.soundManager.moveLeft();
+				}
 			}
 		}else
 		if(direction=="right")
@@ -128,6 +135,10 @@ public class Biker extends AnimatedSprite {
 			{
 				pAnimationList.add(new MoveRightAnimation(this));
 				pAnimationList.getLast().initAnimation("right", 10);
+				if(this.thereIsGround())
+				{
+					pScene.resourcesManager.soundManager.moveRight();
+				}
 			}
 		}else
 		if(direction=="up")
@@ -224,15 +235,24 @@ public class Biker extends AnimatedSprite {
 			
 			if(linesHeight[mLine]<mHeight)
 	    	{
+				if(pDeltaTrampY>0)
+				{
+					pDeltaY+=pDeltaTrampY;
+					pDeltaTrampY=0;
+				}
 				return false;
 	    	}
 			else
 			{
+				pDeltaTrampY=0;
 				return true;
 			}
 		}
 		else
-		return true;
+		{
+			pDeltaTrampY=0;
+			return true;
+		}
 	}
 	
 	public String collisionControl()
@@ -253,6 +273,7 @@ public class Biker extends AnimatedSprite {
     	else
     	if(linesHeight[mLine]-mHeight>0)
     	{
+    		pDeltaTrampY=Math.abs(linesHeight[mLine]-mHeight);
     		mHeight=linesHeight[mLine];
     	}
     	

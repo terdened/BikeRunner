@@ -55,12 +55,13 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
     	createTripManager();
     	createBiker();
     	createScore();
-    	pMusicManager = new MusicManager(resourcesManager);
-    	playMusic();
+    	
+    	resourcesManager.soundManager.setState("game");
+    	//pMusicManager = new MusicManager(resourcesManager);
+    	//playMusic();
 
     	pGameState = "game";
     	createMenuChildScene();
-    	
     	
     	this.setOnSceneTouchListener(this);
     	this.registerUpdateHandler(new IUpdateHandler() {
@@ -85,6 +86,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 	            	if(pGameState=="die")
 	            	{
 	            		pGameState="die";
+	            		resourcesManager.soundManager.crash();
 	            		updateMenuChildScene();
 	            	}
             	}
@@ -96,8 +98,13 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
     @Override
     public void onBackKeyPressed()
     {
-    	disposeScene();
-    	SceneManager.getInstance().loadMenuScene(engine);
+    	if(pGameState=="game")
+    		pause();
+    	else
+    	{
+        	disposeScene();
+        	SceneManager.getInstance().loadMenuScene(engine);
+    	}
     }
 
     @Override
@@ -110,12 +117,14 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
     public void disposeScene()
     {
     	die();
+    	this.resourcesManager.soundManager.setState("stop");
         this.detachSelf();
         this.dispose();
     }
     
     public void collectCoin(ObstacleCoin coin)
     {
+        this.resourcesManager.soundManager.collectCoin();
         mRoad.deleteCoin(coin);
         pCoins++;
     }
@@ -194,24 +203,24 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
     
     public void playMusic()
     {
-
-    	pMusicManager.playMusic();
+    	//pMusicManager.playMusic();
     }
     
     public void resumeMusic()
     {
-
-    	pMusicManager.resumeMusic();
+    	
+    	//pMusicManager.resumeMusic();
     }
     
     public void lowerMusic()
     {
-    	pMusicManager.lowerMusic();
+    	
+    	//pMusicManager.lowerMusic();
     }
     
     public void stopMusic()
     {
-    	pMusicManager.stopMusic();
+    	//pMusicManager.stopMusic();
     }
     
     public void resetGame()
@@ -313,10 +322,8 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 	
 	private void die()
 	{
-
 		updatePlayerData();
 		resetGame();
-    	stopMusic();
     	speed=15;
     	this.mWorldManager.reset();
     	pGameState="die";
@@ -335,6 +342,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 	
 	private void restart()
 	{
+    	resourcesManager.soundManager.restart();
 		die();
 		pGameState="game";
 		updateMenuChildScene();

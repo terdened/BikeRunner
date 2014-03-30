@@ -54,7 +54,9 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
         //createMenuChildScene();
         createInfoText();
         createMenuChildScene();
-
+        resourcesManager.initSoundManager();
+        resourcesManager.soundManager.setState("menu");
+        
     	this.setOnSceneTouchListener(this);
         this.registerUpdateHandler(new IUpdateHandler() {
       		 
@@ -302,6 +304,7 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
     @Override
     public void disposeScene()
     {
+    	this.resourcesManager.soundManager.setState("stop");
         this.detachSelf();
         this.dispose();
     }

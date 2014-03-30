@@ -44,26 +44,85 @@ public class PlayerDataManager {
 	{
 		String key = "com.example.brutal.musicvolume";
 		pPrefs.edit().putFloat(key, volume).commit();
+		setSoundAvailable(true);
 	}
 	
 	public float getMusicVolume()
 	{
-		String key = "com.example.brutal.musicvolume";
-		float volume = pPrefs.getFloat(key, 1);
+		float volume =0;
+		if(getSoundAvailable())
+		{
+			String key = "com.example.brutal.musicvolume";
+			volume = pPrefs.getFloat(key, 1);
+			
+		}
+		
 		return volume;
+		
+		
 	}
 	
 	public void setSoundVolume(float volume)
 	{
 		String key = "com.example.brutal.soundvolume";
 		pPrefs.edit().putFloat(key, volume).commit();
+		setSoundAvailable(true);
+	}
+	
+	public void increaseSoundVolume()
+	{
+		String key = "com.example.brutal.soundvolume";
+		float volume = pPrefs.getFloat(key, 1);
+		if(volume<1)
+		{
+			volume+=0.1f;
+			pPrefs.edit().putFloat(key, volume).commit();
+		}
+		setSoundAvailable(true);
+	}
+	
+	public void decreaseSoundVolume()
+	{
+		
+		String key = "com.example.brutal.soundvolume";
+		float volume = pPrefs.getFloat(key, 1);
+		volume-=0.1f;
+		pPrefs.edit().putFloat(key, volume).commit();
+		setSoundAvailable(true);
+	}
+	
+	public void increaseMusicVolume()
+	{
+		String key = "com.example.brutal.musicvolume";
+		float volume = pPrefs.getFloat(key, 1);
+		if(volume<1)
+		{
+			volume+=0.1f;
+			pPrefs.edit().putFloat(key, volume).commit();
+		}
+		setSoundAvailable(true);
+	}
+	
+	public void decreaseMusicVolume()
+	{
+		String key = "com.example.brutal.musicvolume";
+		float volume = pPrefs.getFloat(key, 1);
+		volume-=0.1f;
+		pPrefs.edit().putFloat(key, volume).commit();
+		setSoundAvailable(true);
 	}
 	
 	public float getSoundVolume()
 	{
-		String key = "com.example.brutal.soundvolume";
-		float volume = pPrefs.getFloat(key, 1);
-		return volume;
+		if(getSoundAvailable())
+		{
+			String key = "com.example.brutal.soundvolume";
+			float volume = pPrefs.getFloat(key, 1);
+			return volume;
+		}else
+		{
+			return 0;
+		}
 	}
 	
 	public boolean getLevelAccess(String level)

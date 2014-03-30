@@ -6,6 +6,7 @@ import java.util.LinkedList;
 
 import org.andengine.audio.music.Music;
 import org.andengine.audio.music.MusicFactory;
+import org.andengine.audio.sound.Sound;
 import org.andengine.audio.sound.SoundFactory;
 import org.andengine.engine.Engine;
 import org.andengine.engine.camera.BoundCamera;
@@ -75,12 +76,17 @@ public class ResourcesManager
 	
 	public ITextureRegion[] road_background_region;
 	
-	public Music intro;
-	public Music main;
-	public Music solo;
+
+	public Music game;
+	public Music menu;
 	
 	public Music motorSound;
+	public Music crashSound;
+	public Music coinSound;
+	public Music moveLeftSound;
+	public Music moveRightSound;
 	
+	public SoundManager soundManager;
 	public LinkedList<ITextureRegion> objectsList=new LinkedList <ITextureRegion>();
 	private BuildableBitmapTextureAtlas gameTextureAtlas;
 	
@@ -101,7 +107,12 @@ public class ResourcesManager
     // CLASS LOGIC
     //---------------------------------------------
 
-    
+    public void initSoundManager()
+    {
+    	if(soundManager==null)
+    	 soundManager = new SoundManager(this,this.activity.getSharedPreferences("com.example.bikerunner", Context.MODE_PRIVATE));
+    		
+    }
 
     private void loadMenuFonts()
     {
@@ -119,7 +130,21 @@ public class ResourcesManager
         loadMenuFonts();
     }
     
-    public void loadGameResources(String stage)
+    public void unloadMenuResources()
+    {
+        unloadMenuAudio();
+        unloadMenuGraphics();
+    }
+    
+    public void unloadGameResources()
+    {
+        unloadGameGraphics();
+        unloadGameAudio();
+    }
+    
+    
+
+	public void loadGameResources(String stage)
     {
         loadGameGraphics(stage);
         loadGameFonts();
@@ -167,7 +192,13 @@ public class ResourcesManager
     
     private void loadMenuAudio()
     {
-        
+	    try {
+			menu = MusicFactory.createMusicFromAsset(this.engine.getMusicManager(), this.activity ,"mfx/menu.mp3");
+	    } catch (IllegalStateException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
     }
 
     private void loadGameGraphics(String stage)
@@ -254,10 +285,13 @@ public class ResourcesManager
     
     private void loadGameAudio()
     {
-    	MusicFactory mf=new MusicFactory();
 	    try {
-			main = MusicFactory.createMusicFromAsset(this.engine.getMusicManager(), this.activity ,"mfx/music.mp3");
 			motorSound = MusicFactory.createMusicFromAsset(this.engine.getMusicManager(), this.activity ,"mfx/motor.mp3");
+			crashSound = MusicFactory.createMusicFromAsset(this.engine.getMusicManager(), this.activity ,"mfx/crash.mp3");
+			coinSound = MusicFactory.createMusicFromAsset(this.engine.getMusicManager(), this.activity ,"mfx/coin.mp3");
+			moveLeftSound = MusicFactory.createMusicFromAsset(this.engine.getMusicManager(), this.activity ,"mfx/move_left.mp3");
+			moveRightSound= MusicFactory.createMusicFromAsset(this.engine.getMusicManager(), this.activity ,"mfx/move_right.mp3");
+			game = MusicFactory.createMusicFromAsset(this.engine.getMusicManager(), this.activity ,"mfx/game.mp3");
 	    } catch (IllegalStateException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -267,19 +301,67 @@ public class ResourcesManager
     
     public void unloadGame()
     {
-        main.stop();
-        motorSound.stop();
+    	
     }
     
     public void unloadMenuTextures()
     {
         
     }
-        
-    public void loadMenuTextures()
+    
+    public void unloadMenuAudio()
     {
-        
+        menu = null;
     }
+    
+    public void unloadMenuGraphics()
+    {
+    	menuTextureAtlas.unload();
+    	level_background_region = null;
+    	biker_menu_region = null;
+    	bike_region  = null;
+    	coin_region = null;
+    	lock_region  = null;
+    	buy_button_region  = null;
+    	options_button_region = null;
+    	pause_background_region = null;
+    	mute_button_region = null;
+    	close_button_region = null;
+    	volume_up_button_region = null;
+    	volume_down_button_region = null;
+    	empty_region  = null;
+    }
+    
+    public void unloadGameGraphics()
+    {
+    	gameTextureAtlas.unload(); 
+    	objectsList=null;
+    	road_background_fon_region=null;
+    	road_background_object=null;
+    	road_background_blink_region=null;
+    	background_region=null;
+    	sign_speed_region=null;
+    	fence_region=null;
+    	bus_a_region=null;
+    	tramp_a_region=null;
+    	biker_region=null;
+    	coin_region=null;
+    	road_background_region=null;
+    	pause_background_region=null;
+    	pause_button_region=null;
+    	restart_button_region=null;
+    	resume_button_region=null;
+    	main_menu_button_region=null;
+    }
+    
+    private void unloadGameAudio() {
+		motorSound = null;
+		crashSound = null;
+		coinSound = null;
+		moveLeftSound = null;
+		moveRightSound = null;
+		game= null;
+	}
     
     public void loadSplashScreen()
     {
@@ -296,18 +378,6 @@ public class ResourcesManager
     	splashTextureAtlas.unload();
     	splash_region = null;
     }
-    
-    public void unloadPlayerMenuTextures()
-    {
-        
-    }
-        
-    private void loadPlayerMenuAudio()
-    {
-        
-    }
-    
-    
     
     
     /**

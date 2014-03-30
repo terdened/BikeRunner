@@ -13,7 +13,7 @@ public class MusicManager {
 	MusicManager(final ResourcesManager resourcesManager)
 	{
 		pResourcesManager=resourcesManager;
-		pCurrentMusic=pResourcesManager.main;
+		pCurrentMusic=pResourcesManager.game;
 		pCurrentMusic.setLooping(false);
 		pCurrentMusic.setOnCompletionListener(new OnCompletionListener()
         {

@@ -118,6 +118,8 @@ public class OptionsMenu extends MenuScene implements IOnMenuItemClickListener{
 	        {
 	        	pDataManager.setSoundAvailable(!pDataManager.getSoundAvailable());
 	        	updateText();
+	        	pResourcesManager.soundManager.updateVolume();
+	        	pResourcesManager.soundManager.updateVolume();
 	            return true;
 	        }
 	        case 1:
@@ -127,23 +129,29 @@ public class OptionsMenu extends MenuScene implements IOnMenuItemClickListener{
 	        }
 	        case 2:
 	        	if(pDataManager.getMusicVolume()>0.1)
-	        		pDataManager.setMusicVolume(pDataManager.getMusicVolume()-0.1f);
+	        		pDataManager.decreaseMusicVolume();
 	        	updateText();
+	        	pResourcesManager.soundManager.updateVolume();
+	        	pResourcesManager.soundManager.updateVolume();
 	        	return true;
 	        case 3:
-	        	if(pDataManager.getMusicVolume()<1)
-	        		pDataManager.setMusicVolume(pDataManager.getMusicVolume()+0.1f);
+	        	pDataManager.increaseMusicVolume();
 	        	updateText();
+	        	pResourcesManager.soundManager.updateVolume();
+	        	pResourcesManager.soundManager.updateVolume();
 	        	return true;
 	        case 4:
 	        	if(pDataManager.getSoundVolume()>0.1)
-	        		pDataManager.setSoundVolume(pDataManager.getSoundVolume()-0.1f);
+	        		pDataManager.decreaseSoundVolume();
 	        	updateText();
+	        	pResourcesManager.soundManager.updateVolume();
+	        	pResourcesManager.soundManager.updateVolume();
 	        	return true;
 	        case 5:
-	        	if(pDataManager.getSoundVolume()<1)
-	        		pDataManager.setSoundVolume(pDataManager.getSoundVolume()+0.1f);
+	        	pDataManager.increaseSoundVolume();
 	        	updateText();
+	        	pResourcesManager.soundManager.updateVolume();
+	        	pResourcesManager.soundManager.updateVolume();
 	        	return true;
 	        default:
 	            return false;
