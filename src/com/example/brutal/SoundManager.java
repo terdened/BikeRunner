@@ -6,6 +6,8 @@ import org.andengine.audio.music.Music;
 import org.andengine.audio.sound.Sound;
 
 import android.content.SharedPreferences;
+import android.media.MediaPlayer;
+import android.media.MediaPlayer.OnCompletionListener;
 
 public class SoundManager {
 
@@ -117,8 +119,8 @@ public class SoundManager {
 	public void crash()
 	{
 		clearSoundlist();
-		pPlayngSound.add(pResourcesManager.crashSound);
-		//pResourcesManager.crashSound.play();
+		if(pPlayngSound.indexOf(pResourcesManager.crashSound)==-1)
+			pPlayngSound.add(pResourcesManager.crashSound);
 		pResourcesManager.crashSound.seekTo(0);
 		pResourcesManager.crashSound.resume();
 		updateVolume();
@@ -137,25 +139,61 @@ public class SoundManager {
 	
 	public void collectCoin()
 	{
-		pPlayngSound.add(pResourcesManager.coinSound);
+		if(pPlayngSound.indexOf(pResourcesManager.coinSound)==-1)
+			pPlayngSound.add(pResourcesManager.coinSound);
+		
 		pResourcesManager.coinSound.seekTo(0);
 		pResourcesManager.coinSound.resume();
+		pResourcesManager.coinSound.setOnCompletionListener(new OnCompletionListener()
+		{
+
+			@Override
+			public void onCompletion(MediaPlayer arg0) {
+				pPlayngSound.remove(this);
+				
+			}
+			
+		});
 		updateVolume();
 	}
 	
 	public void moveRight()
 	{
-		pPlayngSound.add(pResourcesManager.moveRightSound);
-		pPlayngSound.getLast().seekTo(0);
-		pPlayngSound.getLast().resume();
+		if(pPlayngSound.indexOf(pResourcesManager.moveRightSound)==-1)
+			pPlayngSound.add(pResourcesManager.moveRightSound);
+		
+		pResourcesManager.moveRightSound.seekTo(0);
+		pResourcesManager.moveRightSound.resume();
+		pResourcesManager.moveRightSound.setOnCompletionListener(new OnCompletionListener()
+		{
+
+			@Override
+			public void onCompletion(MediaPlayer arg0) {
+				pPlayngSound.remove(this);
+				
+			}
+			
+		});
+		
 		updateVolume();
 	}
 	
 	public void moveLeft()
 	{
-		pPlayngSound.add(pResourcesManager.moveLeftSound);
-		pPlayngSound.getLast().seekTo(0);
-		pPlayngSound.getLast().resume();
+		if(pPlayngSound.indexOf(pResourcesManager.moveLeftSound)==-1)
+			pPlayngSound.add(pResourcesManager.moveLeftSound);
+		pResourcesManager.moveLeftSound.seekTo(0);
+		pResourcesManager.moveLeftSound.resume();
+		pResourcesManager.moveLeftSound.setOnCompletionListener(new OnCompletionListener()
+		{
+
+			@Override
+			public void onCompletion(MediaPlayer arg0) {
+				pPlayngSound.remove(this);
+				
+			}
+			
+		});
 		updateVolume();
 	}
 	

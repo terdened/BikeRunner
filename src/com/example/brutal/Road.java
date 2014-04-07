@@ -271,6 +271,21 @@ public class Road {
 		return result;
 	}
 	
+	public int[] getLinesHeightByDeep(float deep)
+	{
+		int[] result = new int[]{0,0,0};
+		
+		for(int i=0;i<obstacleList.size();i++)
+		{
+			if(obstacleList.get(i).getObstacleHeightByDeep(deep)>0)
+			{
+				result[obstacleList.get(i).getLine()]=obstacleList.get(i).getObstacleHeightByDeep(deep);
+			}
+		}
+		
+		return result;
+	}
+	
 	public ObstacleCoin[] getLineCoins()
 	{
 		ObstacleCoin[] result = new ObstacleCoin[]{null,null,null};

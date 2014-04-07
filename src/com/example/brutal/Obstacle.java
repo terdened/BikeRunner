@@ -76,6 +76,11 @@ public class Obstacle extends AnimatedSprite {
 		updateObject(0);
 	}
 	
+	public void setRealHeight(int height)
+	{
+		pHeight += height;
+		mRealY += height;
+	}
 	
 	public void setDislocation(float dislocation)
 	{
@@ -115,6 +120,14 @@ public class Obstacle extends AnimatedSprite {
 	public int getObstacleHeight()
 	{
 		if((mZ<-1700)&&(mZ>-1700-this.pLength))
+			return pHeight;
+		else
+			return 0;
+	}
+	
+	public int getObstacleHeightByDeep(float deep)
+	{
+		if((mZ<deep)&&(mZ>deep-this.pLength))
 			return pHeight;
 		else
 			return 0;

@@ -12,7 +12,7 @@ public class WorldControllerVeryHard extends WorldController{
 	@Override
 	public void updateWorld(int speed)
 	{
-		ObjectsFactory objFactory = new ObjectsFactory();
+		ObjectsFactory objFactory = new ObjectsFactory(mResManager);
 		mCounter += speed;
 		
 		if(mCounter%450==0)

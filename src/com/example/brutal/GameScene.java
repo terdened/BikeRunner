@@ -231,7 +231,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
     
     public void updateComplex()
     {
-    	if((pDistance>0)&&(pDistance%2000==0))
+    	if((pDistance>0)&&(pDistance%1000==0))
     	{
     		mWorldManager.increaseLevelComplex();
     		speed++;

@@ -19,14 +19,27 @@ public class WorldManager {
 		mCounter=0;
 		mVbom = vbom;
 		mResManager = resManager;
-		currentController=0;
 		
+		generateLevels();
+	}
+	
+	private void generateLevels()
+	{
+		currentController=0;
 		worldControllers = new LinkedList<WorldController>();
-		worldControllers.add(new WorldControllerEasy(road, vbom, resManager));
-		worldControllers.add(new WorldControllerMedium(road, vbom, resManager));
-		worldControllers.add(new WorldControllerHard(road, vbom, resManager));
-		worldControllers.add(new WorldControllerVeryHard(road, vbom, resManager));
-		worldControllers.add(new WorldControllerHell(road, vbom, resManager));
+		
+		for(int i=0;i<4;i++)
+		{
+			int random=(int) (Math.random()*2);
+			
+			if(random<1)
+				worldControllers.add(new WorldControllerTemplate(mRoad, mVbom, mResManager));
+			else
+				worldControllers.add(new WorldControllerRandom(mRoad, mVbom, mResManager));
+		}
+		
+		worldControllers.add(new WorldControllerBonus(mRoad, mVbom, mResManager));
+		
 	}
 	
 	public void updateWorld(int speed)
@@ -38,6 +51,8 @@ public class WorldManager {
 	{
 		if(currentController<worldControllers.size()-1)
 			currentController++;
+		else
+			generateLevels();
 	}
 	
 	public void decreaseLevelComplex()
@@ -48,6 +63,6 @@ public class WorldManager {
 	
 	public void reset()
 	{
-		currentController=0;
+		generateLevels();
 	}
 }
