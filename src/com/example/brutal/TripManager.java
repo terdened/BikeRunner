@@ -34,7 +34,8 @@ public class TripManager {
 		{
 			if(mScript.get(i).isAppear(distance))
 			{
-				mRoad.addObject(mScript.get(i).getObject(), "back");
+				mRoad.addObject(mScript.get(i).getObject(), "middle");
+				mScript.get(i).getObject().setAlpha(0);
 				toRemove.add(mScript.get(i));
 			}
 		}

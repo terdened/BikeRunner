@@ -151,9 +151,9 @@ public class Biker extends AnimatedSprite {
 		}else
 		if(direction=="down")
 		{
-			if(pAnimationList.size()==0)
+			if(!this.thereIsGround())
 			{
-			
+				pDeltaY-=15;
 			}
 		}
 	}
@@ -258,11 +258,12 @@ public class Biker extends AnimatedSprite {
 	public String collisionControl()
     {
     	int[] linesHeight=pRoad.getLinesHeight();
+    	int[] prevLinesHeight=pRoad.getLinesHeightByPosition(-20);
     	String gameState="game";
     	
     	if(linesHeight[mLine]-mHeight>30)
     	{
-    		if(linesHeight[mLine]-mHeight>Math.abs(pDeltaY))
+    		if(linesHeight[mLine]-mHeight>Math.abs(pDeltaY)+30)
     		{
     			gameState="die";
     		}

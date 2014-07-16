@@ -55,6 +55,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
     	createTripManager();
     	createBiker();
     	createScore();
+    	//createFog();
     	
     	resourcesManager.soundManager.setState("game");
     	//pMusicManager = new MusicManager(resourcesManager);
@@ -102,8 +103,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
     		pause();
     	else
     	{
-        	disposeScene();
-        	SceneManager.getInstance().loadMenuScene(engine);
+        	resume();
     	}
     }
 
@@ -199,6 +199,19 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
     {
     	mTripManager = new TripManagerDesert(mRoad, vbom, resourcesManager);
     	mTripManager.initTripManager();
+    }
+    
+    public void createFog()
+    {
+    	Fog fogs[] = new Fog[4];
+    	
+    	for(int i=0;i<4;i++)
+    	{
+    		fogs[i] = new Fog(0,0, resourcesManager.fog_region[i], vbom);
+    		fogs[i].initObject(1100-i*100, 0, 0, 1, 256, 1280);
+    		
+    		this.mRoad.addObject(fogs[i], "middle");
+    	}
     }
     
     public void playMusic()

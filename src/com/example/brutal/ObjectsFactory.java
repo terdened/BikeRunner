@@ -78,62 +78,54 @@ public class ObjectsFactory {
 		if(randomValue>8)
 		{
 			obj = new ObstacleTramp(-380, 128, resManager.tramp_a_region, vbom);
-			obj.initObject(0, 200, 600, obj.getY(), 1, obj.getHeight(), obj.getWidth(), 250);
-			obj.setDislocation(50);
-			obj.setSpeed(5);
+			obj.initLine(0);
 		}
 		else
 		if(randomValue>7)
 		{
 			obj = new ObstacleTramp(0, 128, resManager.tramp_a_region, vbom);
-			obj.initObject(1, 200, 600, obj.getY(), 1, obj.getHeight(), obj.getWidth(), 250);
-			obj.setDislocation(50);
+			obj.initLine(1);
 		}
 		else
 		if(randomValue>6)
 		{
 			obj = new ObstacleTramp(380, 128, resManager.tramp_a_region, vbom);
-			obj.initObject(2, 200, 600, obj.getY(), 1, obj.getHeight(), obj.getWidth(), 250);
-			obj.setDislocation(50);
-			obj.setSpeed(-5);
+			obj.initLine(2);
 		}
 		else
 		if(randomValue>5)
 		{
-			obj = new Obstacle(-380, 128, resManager.bus_a_region, vbom);
-			obj.initObject(0, 200, 600, obj.getY(), 1, obj.getHeight(), obj.getWidth(), 250);
-			obj.setDislocation(50);
+			obj = new ObstacleBus(-380, 128, resManager.bus_region, vbom);
+			obj.initLine(0);
 		}
 		else
 		if(randomValue>4)
 		{
-			obj = new Obstacle(0, 128, resManager.bus_a_region, vbom);
-			obj.initObject(1, 200, 600, obj.getY(), 1, obj.getHeight(), obj.getWidth(), 250);
-			
+			obj = new ObstacleBus(0, 128, resManager.bus_region, vbom);
+			obj.initLine(1);
 		}
 		else 
 		if(randomValue>3)
 		{
-			obj = new Obstacle(380, 128, resManager.bus_a_region, vbom);
-			obj.initObject(2, 200, 600, obj.getY(), 1, obj.getHeight(), obj.getWidth(), 250);
-			obj.setDislocation(-50);
+			obj = new ObstacleBus(380, 128, resManager.bus_region, vbom);
+			obj.initLine(2);
 		}
 		else 
 		if(randomValue>2)
 		{
-			obj = new Obstacle(-380, 128, resManager.fence_region, vbom);
-			obj.initObject(0, 100, 600, obj.getY(), 1, obj.getHeight(), obj.getWidth(), 50);
+			obj = new ObstacleFency(-380, 128, resManager.fence_region, vbom);
+			obj.initLine(0);
 		}
 		else 
 		if(randomValue>1)
 		{
-			obj = new Obstacle(0, 128, resManager.fence_region, vbom);
-			obj.initObject(1, 100, 600, obj.getY(), 1, obj.getHeight(), obj.getWidth(), 50);
+			obj = new ObstacleFency(0, 128, resManager.fence_region, vbom);
+			obj.initLine(1);
 		}
 		else
 		{
-			obj = new Obstacle(380, 128, resManager.fence_region, vbom);
-			obj.initObject(2, 100, 600, obj.getY(), 1, obj.getHeight(), obj.getWidth(), 50);
+			obj = new ObstacleFency(380, 128, resManager.fence_region, vbom);
+			obj.initLine(2);
 		}
 		
 		return obj; 
@@ -142,28 +134,14 @@ public class ObjectsFactory {
 	public Obstacle[] createTemplate(VertexBufferObjectManager vbom, ResourcesManager resManager)
 	{
 		
-		int randomValue=(int)((float)Math.random()*18);
+		int randomValue=(int)((float)Math.random()*12);
 		
-		Template template =  new Template(randomValue,resManager);
+		Template template =  new Template(randomValue,resManager,vbom);
 		Obstacle[] obj=new Obstacle[template.objects.size()];
 		
 		for(int i=0;i<template.objects.size();i++)
 		{
-			TemplateObject temp=template.objects.get(i);
-			if(temp.type=="box")
-			{
-				obj[i] = new Obstacle(temp.x, temp.y, temp.region, vbom);
-			}else
-			if(temp.type=="tramp")
-			{
-				obj[i] = new ObstacleTramp(temp.x, temp.y, temp.region, vbom);
-			}else
-			{
-				obj[i] = new ObstacleTramp(temp.x, temp.y, temp.region, vbom);
-			}
-			
-			obj[i].initObject(temp.line, temp.height, temp.z, temp.realY, temp.size,
-							obj[i].getHeight(),obj[i].getWidth(), temp.length);
+			obj[i] = template.objects.get(i);
 		}
 		
 		return obj; 
@@ -237,14 +215,14 @@ public class ObjectsFactory {
 	}
 	
 	
-	public Obstacle createLift(VertexBufferObjectManager vbom, ResourcesManager resManager)
+	/*public Obstacle createLift(VertexBufferObjectManager vbom, ResourcesManager resManager)
 	{
-		Obstacle obj= new Obstacle(-380, 128, resManager.bus_a_region, vbom);
+		Obstacle obj= new Obstacle(-380, 128, resManager.bus_region[0], vbom);
 		obj.initObject(0, 0, 400, obj.getY(), 1, obj.getHeight(), obj.getWidth(), 110);
 		obj.setDislocation(50);
 		
 		return obj; 
-	}
+	}*/
 }
 
 

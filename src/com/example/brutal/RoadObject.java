@@ -36,6 +36,7 @@ public class RoadObject extends Sprite{
 		mRealWidth=realWidth;
 		updateObject(0);
 		pDeltaY=0;
+		setAlpha(0);
 	}
 	
 	public void initDeltaY(float delta)
@@ -47,7 +48,11 @@ public class RoadObject extends Sprite{
 	{
 		if(this.getAlpha()<1)
 		{
-			this.setAlpha(this.getAlpha()+0.1f);
+			this.setAlpha(this.getAlpha()+0.02f);
+		}
+		if(this.getAlpha()>1)
+		{
+			this.setAlpha(1);
 		}
 		
 		mZ-=speed;

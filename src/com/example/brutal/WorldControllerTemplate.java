@@ -73,9 +73,10 @@ public class WorldControllerTemplate extends WorldController{
 		if(mCounter%25==0)
 		{			
 			RoadObject obj = objFactory.createBackgroundObject(mVbom, mResManager);
-			obj.initObject(-0, obj.getX(), obj.getY(), 1, obj.getHeight(), obj.getWidth());
+			obj.initObject(1200, obj.getX(), obj.getY()*0.8f, 1, obj.getHeight()*2, obj.getWidth()*2);
 			obj.setAlpha(0);
 			mRoad.addObject(obj,"middle");
+			mRoad.sortChildren("middle");
 		}
 		
 		if(mCounter%10==0)
@@ -84,6 +85,7 @@ public class WorldControllerTemplate extends WorldController{
 			obj.initObject(-1000, obj.getX(), obj.getY(), 1, obj.getHeight(), obj.getWidth());
 			obj.setAlpha(0);
 			mRoad.addObject(obj,"middle");
+			mRoad.sortChildren("middle");
 		}
 	}
 	

@@ -76,6 +76,13 @@ public class Obstacle extends AnimatedSprite {
 		updateObject(0);
 	}
 	
+
+	
+	public void initLine(int line)
+	{
+		this.pLine=line;
+	}
+	
 	public void setRealHeight(int height)
 	{
 		pHeight += height;
@@ -95,6 +102,11 @@ public class Obstacle extends AnimatedSprite {
 	public void setAction(String action)
 	{
 		pAction=action;
+	}
+	
+	public void setDepth(int z)
+	{
+		mZ=z;
 	}
 	
 	public String getAction()
@@ -120,6 +132,14 @@ public class Obstacle extends AnimatedSprite {
 	public int getObstacleHeight()
 	{
 		if((mZ<-1700)&&(mZ>-1700-this.pLength))
+			return pHeight;
+		else
+			return 0;
+	}
+	
+	public int getObstacleHeightByPosition(int position)
+	{
+		if((mZ<-1700+position)&&(mZ>-1700+position-this.pLength))
 			return pHeight;
 		else
 			return 0;

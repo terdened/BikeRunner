@@ -69,22 +69,14 @@ public class Road {
 		}else
 		if(scene=="middle")
 		{
+			sortObjects();
 			this.pMiddleScene.sortChildren();
-			for(int i=0;i<objectList.size();i++)
-			{
-				this.pMiddleScene.getChildByIndex(i).setZIndex(i);
-			}
 		}
 			
 	}
 	
 	public void sortObstacles()
 	{
-		LinkedList<Obstacle> obstacles=new LinkedList<Obstacle>();
-		
-		obstacles.addAll(obstacleList);
-		obstacles.addAll(coinsList);
-
 		int lastValue=-10000;
 		
 		for(int i=0;i<this.pFrontScene.getChildCount();i++)
@@ -92,6 +84,18 @@ public class Road {
 			Obstacle temp =(Obstacle)(pFrontScene.getChildByIndex(i));
 			lastValue=(int)temp.getZ();
 			this.pFrontScene.getChildByIndex(i).setZIndex(10000-lastValue);
+		}
+			
+	}
+	
+	public void sortObjects()
+	{
+		
+		for(int i=0;i<this.pMiddleScene.getChildCount();i++)
+		{
+			RoadObject temp =(RoadObject)(pMiddleScene.getChildByIndex(i));
+			int depth=(int)temp.getZ();
+			this.pMiddleScene.getChildByIndex(i).setZIndex(10000-depth);
 		}
 			
 	}
@@ -265,6 +269,21 @@ public class Road {
 			if(obstacleList.get(i).getObstacleHeight()>0)
 			{
 				result[obstacleList.get(i).getLine()]=obstacleList.get(i).getObstacleHeight();
+			}
+		}
+		
+		return result;
+	}
+	
+	public int[] getLinesHeightByPosition(int position)
+	{
+		int[] result = new int[]{0,0,0};
+		
+		for(int i=0;i<obstacleList.size();i++)
+		{
+			if(obstacleList.get(i).getObstacleHeightByPosition(position)>0)
+			{
+				result[obstacleList.get(i).getLine()]=obstacleList.get(i).getObstacleHeightByPosition(position);
 			}
 		}
 		

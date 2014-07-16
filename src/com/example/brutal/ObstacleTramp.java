@@ -9,6 +9,7 @@ public class ObstacleTramp extends Obstacle {
 			ITiledTextureRegion pTiledTextureRegion,
 			VertexBufferObjectManager pVertexBufferObjectManager) {
 		super(pX, pY, pTiledTextureRegion, pVertexBufferObjectManager);
+		this.initObject(0, 200, 600, this.getY(), 1, this.getHeight()*1.3f, this.getWidth()*1.3f, 250);
 	}
 	
 	@Override
@@ -18,6 +19,18 @@ public class ObstacleTramp extends Obstacle {
 			return (int)(pHeight*((Math.abs(1700+mZ))/pLength));
 		else
 			return 0;
+	}
+	
+	@Override
+	public void initLine(int line)
+	{
+		this.initObject(line, pHeight, mZ, mRealY, mSize, mRealHeight, mRealWidth, pLength);
+		
+		if(line==0)
+			setDislocation(50);
+		if(line==2)
+			setDislocation(-50);
+		
 	}
 
 }

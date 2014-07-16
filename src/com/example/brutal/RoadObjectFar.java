@@ -20,16 +20,21 @@ public class RoadObjectFar extends RoadObject {
 		mRealWidth=realWidth;
 		pDeltaY=10;
 		updateObject(0);
+		setAlpha(0);
 	}
 	
 	public void updateObject(int speed)
 	{
 		if(this.getAlpha()<1)
 		{
-			this.setAlpha(this.getAlpha()+0.1f);
+			this.setAlpha(this.getAlpha()+0.02f);
+		}
+		if(this.getAlpha()>1)
+		{
+			this.setAlpha(1);
 		}
 		
-		mZ-=speed/4;
+		mZ-=speed;
 		mSize=(150.0f)/(mZ+2000);
 
 		this.setWidth(mSize*mRealWidth);
