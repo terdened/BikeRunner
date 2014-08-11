@@ -13,7 +13,7 @@ public class WorldControllerTemplateCountriside extends WorldController{
 	
 	private int obstacleCounter=0;
 	
-	private void generateObstacle(int complexity)
+	private void generateObstacle(int complexity, int speed)
 	{
 		int maxObstacleCounter=0;
 		
@@ -36,16 +36,65 @@ public class WorldControllerTemplateCountriside extends WorldController{
 		if(obstacleCounter==maxObstacleCounter)
 		{
 			LinkedList<String> ids = new LinkedList<String>();
-			ids.add("12");
-			ids.add("13");
-			ids.add("14");
-			ids.add("15");
-			ids.add("16");
-			ids.add("23");
-			ids.add("24");
-			ids.add("25");
-			ids.add("26");
-			ids.add("27");
+			
+			if(speed<19)
+			{
+				ids.add("14");
+				ids.add("15");
+				ids.add("16");
+				ids.add("23");
+				ids.add("24");
+				ids.add("25");
+			}
+			else
+			if(speed<24)
+			{
+				ids.add("12");
+				ids.add("13");
+				ids.add("14");
+				ids.add("15");
+				ids.add("16");
+				ids.add("23");
+				ids.add("24");
+				ids.add("25");
+				ids.add("26");
+				ids.add("27");
+			}
+			else
+			if(speed<29)
+			{
+				ids.add("12");
+				ids.add("13");
+				ids.add("14");
+				ids.add("15");
+				ids.add("16");
+				ids.add("23");
+				ids.add("24");
+				ids.add("25");
+				ids.add("26");
+				ids.add("27");
+				ids.add("36");
+				ids.add("37");
+				ids.add("38");
+			}
+			else
+			{
+				ids.add("12");
+				ids.add("13");
+				ids.add("14");
+				ids.add("15");
+				ids.add("16");
+				ids.add("23");
+				ids.add("24");
+				ids.add("25");
+				ids.add("26");
+				ids.add("27");
+				ids.add("36");
+				ids.add("37");
+				ids.add("38");
+			}
+			
+			
 			
 			Obstacle[] obj = objFactory.createTemplate(mVbom, mResManager, ids);
 			for(int i=0;i<obj.length;i++)
@@ -109,7 +158,7 @@ public class WorldControllerTemplateCountriside extends WorldController{
 		mCounter++;
 		int complexity =this.getComplexityBySpeed(speed);
 		
-		generateObstacle(complexity);
+		generateObstacle(complexity,speed);
 		generateCoin();
 		generateObject();
 		

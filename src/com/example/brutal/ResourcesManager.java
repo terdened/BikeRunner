@@ -242,9 +242,9 @@ public class ResourcesManager
     private void loadMenuAudio()
     {
 	    try {
-			menu_1 = MusicFactory.createMusicFromAsset(this.engine.getMusicManager(), this.activity ,"mfx/menu_1.wav");
-			menu_2 = MusicFactory.createMusicFromAsset(this.engine.getMusicManager(), this.activity ,"mfx/menu_2.wav");
-			menu_3 = MusicFactory.createMusicFromAsset(this.engine.getMusicManager(), this.activity ,"mfx/menu_3.wav");
+			menu_1 = MusicFactory.createMusicFromAsset(this.engine.getMusicManager(), this.activity ,"mfx/menu_1.MP3");
+			menu_2 = MusicFactory.createMusicFromAsset(this.engine.getMusicManager(), this.activity ,"mfx/menu_2.MP3");
+			menu_3 = MusicFactory.createMusicFromAsset(this.engine.getMusicManager(), this.activity ,"mfx/menu_3.MP3");
 	    } catch (IllegalStateException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -424,12 +424,12 @@ public class ResourcesManager
 			moveRightSound= MusicFactory.createMusicFromAsset(this.engine.getMusicManager(), this.activity ,"mfx/move_right.mp3");
 			
 			if(level == "Desert")
-				game = MusicFactory.createMusicFromAsset(this.engine.getMusicManager(), this.activity ,"mfx/game_1.wav");
+				game = MusicFactory.createMusicFromAsset(this.engine.getMusicManager(), this.activity ,"mfx/game_1.MP3");
 			else
 			if(level == "Countriside")
-				game = MusicFactory.createMusicFromAsset(this.engine.getMusicManager(), this.activity ,"mfx/game_2.wav");
+				game = MusicFactory.createMusicFromAsset(this.engine.getMusicManager(), this.activity ,"mfx/game_2.MP3");
 			else
-				game = MusicFactory.createMusicFromAsset(this.engine.getMusicManager(), this.activity ,"mfx/game_1.wav");
+				game = MusicFactory.createMusicFromAsset(this.engine.getMusicManager(), this.activity ,"mfx/game_1.MP3");
 	    } catch (IllegalStateException e) {
 			e.printStackTrace();
 		} catch (IOException e) {

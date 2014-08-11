@@ -62,7 +62,7 @@ public class Template {
 				}
 				
 				if(!symbol.equals("z"))
-					objects.getLast().setDepth(1100-250*i);
+					objects.getLast().setDepth(1100-260*i);
 			}
 		}
 	}
@@ -283,6 +283,24 @@ public class Template {
 	        case 35:
 	        	template=new String[1];
 	        	template[0]="pzz";
+				TemplateGenerator(template,resourcesManager,pVertexBufferObjectManager);
+		        break;
+	        case 36:
+	        	template[0]="zpz";
+	        	template[1]="zpz";
+	        	template[2]="hth";
+				TemplateGenerator(template,resourcesManager,pVertexBufferObjectManager);
+		        break;
+	        case 37:
+	        	template[0]="pzz";
+	        	template[1]="pzz";
+	        	template[2]="tfh";
+				TemplateGenerator(template,resourcesManager,pVertexBufferObjectManager);
+		        break;
+	        case 38:
+	        	template[0]="zzp";
+	        	template[1]="zzp";
+	        	template[2]="hft";
 				TemplateGenerator(template,resourcesManager,pVertexBufferObjectManager);
 		        break;
 	        default:

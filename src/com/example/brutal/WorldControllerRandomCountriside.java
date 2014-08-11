@@ -60,6 +60,9 @@ public class WorldControllerRandomCountriside extends WorldController{
 			else
 			if(speed<29)
 			{
+				ids.add("14");
+				ids.add("15");
+				ids.add("16");
 				ids.add("20");
 				ids.add("21");
 				ids.add("22");
@@ -72,6 +75,9 @@ public class WorldControllerRandomCountriside extends WorldController{
 			}
 			else
 			{
+				ids.add("14");
+				ids.add("15");
+				ids.add("16");
 				ids.add("20");
 				ids.add("21");
 				ids.add("22");
