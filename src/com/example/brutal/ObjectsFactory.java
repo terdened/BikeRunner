@@ -1,5 +1,7 @@
 package com.example.brutal;
 
+import java.util.LinkedList;
+
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
@@ -131,12 +133,13 @@ public class ObjectsFactory {
 		return obj; 
 	}
 	
-	public Obstacle[] createTemplate(VertexBufferObjectManager vbom, ResourcesManager resManager)
+	public Obstacle[] createTemplate(VertexBufferObjectManager vbom, ResourcesManager resManager,
+			LinkedList<String> ids)
 	{
 		
-		int randomValue=(int)((float)Math.random()*12);
+		int randomValue=(int)((float)Math.random()*ids.size());
 		
-		Template template =  new Template(randomValue,resManager,vbom);
+		Template template =  new Template(Integer.parseInt(ids.get(randomValue)),resManager,vbom);
 		Obstacle[] obj=new Obstacle[template.objects.size()];
 		
 		for(int i=0;i<template.objects.size();i++)

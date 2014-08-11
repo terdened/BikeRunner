@@ -35,12 +35,17 @@ public class MenuBackground extends Sprite{
 		mLevelCostList.add("1500");
 		mLevelList.add("Countriside");
 		mLevelCostList.add("2500");
+		mLevelList.add("Coming soon");
+		mLevelCostList.add("0");
 		
 		mCurrentFrame=new LinkedList<Sprite>();
-		mCurrentFrame.add(new Sprite(0, 0, resourcesManager.level_background_region[0], pVertexBufferObjectManager));
+		mCurrentFrame.add(new Sprite(0, 0, 1280, 960, resourcesManager.level_background_region[0], pVertexBufferObjectManager));
 		this.attachChild(mCurrentFrame.getLast());
 
-		mCurrentFrame.add(new Sprite(1280, 0, resourcesManager.level_background_region[1], pVertexBufferObjectManager));
+		mCurrentFrame.add(new Sprite(1280, 0, 1280, 960, resourcesManager.level_background_region[1], pVertexBufferObjectManager));
+		this.attachChild(mCurrentFrame.getLast());
+		
+		mCurrentFrame.add(new Sprite(2560, 0, 1280, 960, resourcesManager.level_background_region[2], pVertexBufferObjectManager));
 		this.attachChild(mCurrentFrame.getLast());
 
 	}

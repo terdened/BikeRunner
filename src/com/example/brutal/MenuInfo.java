@@ -89,8 +89,8 @@ public class MenuInfo extends Entity {
 		if(pPlayerDataManager.getLevelAccess(pLevelNameString)&&pPlayerDataManager.getBikeAccess(pBikeNameString))
 		{
 			pTapToPlay = new Text(0, 0, pResourcesManager.font,"Tap to play!", 10, pVbom);
-			pTapToPlay.setX(pWidth/2-pTapToPlay.getWidth()/2 -100);
-			pTapToPlay.setY(pHeight/2-pCoins.getHeight()/2+140);
+			pTapToPlay.setX(pWidth/2-pTapToPlay.getWidth()/2);
+			pTapToPlay.setY(500);
 			this.attachChild(pTapToPlay);
 		}
 		
@@ -163,13 +163,13 @@ public class MenuInfo extends Entity {
 		
 		pBikeName = new Text(0, 0, pResourcesManager.font, pBikeNameString, pBikeNameString.length(), pVbom);
 		pBikeName.setX(pWidth/2-pBikeName.getWidth()/2);
-		pBikeName.setY(pHeight-130);
+		pBikeName.setY(pHeight-70);
 		
 		if(pPlayerDataManager.getLevelAccess(pLevelNameString)&&pPlayerDataManager.getBikeAccess(pBikeNameString))
 		{
 			pTapToPlay = new Text(0, 0, pResourcesManager.font,"Tap to play!", 10, pVbom);
-			pTapToPlay.setX(pWidth/2-pCoins.getWidth()/2 - 100);
-			pTapToPlay.setY(pHeight/2-pCoins.getHeight()/2+140);
+			pTapToPlay.setX(pWidth/2-pTapToPlay.getWidth()/2);
+			pTapToPlay.setY(500);
 			this.attachChild(pTapToPlay);
 		}
 		

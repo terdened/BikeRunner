@@ -1,5 +1,7 @@
 package com.example.brutal;
 
+import java.util.LinkedList;
+
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 public class WorldControllerTemplate extends WorldController{
@@ -11,7 +13,7 @@ public class WorldControllerTemplate extends WorldController{
 	
 	private int obstacleCounter=0;
 	
-	private void generateObstacle(int complexity)
+	private void generateObstacle(int complexity, int speed)
 	{
 		int maxObstacleCounter=0;
 		
@@ -33,7 +35,69 @@ public class WorldControllerTemplate extends WorldController{
 		
 		if(obstacleCounter==maxObstacleCounter)
 		{
-			Obstacle[] obj = objFactory.createTemplate(mVbom, mResManager);
+			LinkedList<String> ids = new LinkedList<String>();
+			
+			if(speed<19)
+			{
+				ids.add("1");
+				ids.add("2");
+				ids.add("3");
+				ids.add("4");
+				ids.add("5");
+			}
+			else
+			if(speed<24)
+			{
+				ids.add("1");
+				ids.add("2");
+				ids.add("3");
+				ids.add("4");
+				ids.add("5");
+				ids.add("9");
+				ids.add("10");
+				ids.add("11");
+				ids.add("20");
+				ids.add("21");
+				ids.add("22");
+			}
+			else
+			if(speed<29)
+			{
+				ids.add("1");
+				ids.add("2");
+				ids.add("3");
+				ids.add("7");
+				ids.add("8");
+				ids.add("9");
+				ids.add("10");
+				ids.add("11");
+				ids.add("17");
+				ids.add("18");
+				ids.add("19");
+				ids.add("20");
+				ids.add("21");
+				ids.add("22");
+			}
+			else
+			{
+				ids.add("1");
+				ids.add("2");
+				ids.add("3");
+				ids.add("4");
+				ids.add("5");
+				ids.add("6");
+				ids.add("7");
+				ids.add("8");
+				ids.add("9");
+				ids.add("10");
+				ids.add("11");
+				ids.add("20");
+				ids.add("21");
+				ids.add("22");
+			}
+			
+			
+			Obstacle[] obj = objFactory.createTemplate(mVbom, mResManager, ids);
 			for(int i=0;i<obj.length;i++)
 			{
 				obj[i].setAlpha(0);
@@ -95,7 +159,7 @@ public class WorldControllerTemplate extends WorldController{
 		mCounter++;
 		int complexity =this.getComplexityBySpeed(speed);
 		
-		generateObstacle(complexity);
+		generateObstacle(complexity,speed);
 		generateCoin();
 		generateObject();
 		

@@ -27,6 +27,20 @@ public class PlayerDataManager {
 		
 	}
 	
+	public void updateFirstStart()
+	{
+		String key = "com.example.brutal.firststart";
+		pPrefs.edit().putBoolean(key, true).commit();
+	}
+	
+	public Boolean getFirstStart()
+	{
+		String key = "com.example.brutal.firststart";
+		boolean firstStart = pPrefs.getBoolean(key, false);
+		return firstStart;
+		
+	}
+	
 	public void setSoundAvailable(boolean music)
 	{
 		String key = "com.example.brutal.musicavailable";
@@ -140,6 +154,11 @@ public class PlayerDataManager {
 			String key = "com.example.brutal.countrisideaccess";
 			result = pPrefs.getBoolean(key, false);
 		}
+		else
+		if(level=="Coming soon")
+		{
+			result = false;
+		}
 		
 		return result;
 	}
@@ -169,9 +188,9 @@ public class PlayerDataManager {
 			result = pPrefs.getBoolean(key, true);
 		}
 		else
-		if(bike=="Blue Harley")
+		if(bike=="Black Harley")
 		{
-			String key = "com.example.brutal.blueharleyaccess";
+			String key = "com.example.brutal.blackharleyaccess";
 			result = pPrefs.getBoolean(key, false);
 		}
 		
@@ -186,9 +205,9 @@ public class PlayerDataManager {
 			pPrefs.edit().putBoolean(key, true).commit();
 		}
 		else
-		if(bike=="Blue Harley")
+		if(bike=="Black Harley")
 		{
-			String key = "com.example.brutal.blueharleyaccess";
+			String key = "com.example.brutal.blackharleyaccess";
 			pPrefs.edit().putBoolean(key, true).commit();
 		}
 	}

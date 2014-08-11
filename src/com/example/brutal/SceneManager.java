@@ -6,6 +6,8 @@ import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.ui.IGameInterface.OnCreateSceneCallback;
 
+import android.util.DisplayMetrics;
+
 import com.example.brutal.BaseScene;
 import com.example.brutal.SplashScene;
 
@@ -21,7 +23,7 @@ public class SceneManager
     private BaseScene gameScene;
     private BaseScene loadingScene;
     
-    private String element;
+    private String bike;
     private String level;
     //---------------------------------------------
     // VARIABLES
@@ -34,6 +36,20 @@ public class SceneManager
     private BaseScene currentScene;
     
     private Engine engine = ResourcesManager.getInstance().engine;
+    
+    private int EstimateHeight()
+    {
+    	DisplayMetrics displaymetrics = new DisplayMetrics();
+    	ResourcesManager.getInstance().activity.getWindowManager().getDefaultDisplay().getMetrics(displaymetrics); 
+    	double width = displaymetrics.widthPixels;
+    	double height = displaymetrics.heightPixels;
+		
+		double ratio = 1280/width;
+		width*=ratio;
+		height*=ratio;	
+    	
+    	return (int)engine.getEngineOptions().getCamera().getHeight();
+    }
     
     public enum SceneType
     {
@@ -116,22 +132,14 @@ public class SceneManager
     public void createMenuScene()
     {        
         ResourcesManager.getInstance().loadMenuResources();
-        menuScene = new MainMenuScene();
+        menuScene = new MainMenuScene(EstimateHeight());
+        ResourcesManager.getInstance().loadLoadingResources();
         loadingScene = new LoadingScene();
         SceneManager.getInstance().setScene(menuScene);
         disposeSplashScene();
     }
     
-    public void createPlayerMenuScene()
-    {        
-        /*ResourcesManager.getInstance().loadPlayerMenuResources();
-        playerMenuScene = new PlayerMenuScene();
-        loadingScene = new LoadingScene();
-        SceneManager.getInstance().setScene(playerMenuScene);
-        //disposeSplashScene();*/
-    }
-    
-    public void loadGameScene(final Engine mEngine, final String stage)
+    public void loadGameScene(final Engine mEngine, final String stage, final String bike)
     {
     	
         setScene(loadingScene);
@@ -141,18 +149,17 @@ public class SceneManager
             public void onTimePassed(final TimerHandler pTimerHandler) 
             {
 
-                ResourcesManager.getInstance().loadGameResources(stage);
+                ResourcesManager.getInstance().loadGameResources(stage,bike);
                 mEngine.registerUpdateHandler(new TimerHandler(0.1f, new ITimerCallback() 
                 {
                     public void onTimePassed(final TimerHandler pTimerHandler) 
                     {
-		            	String tempElement = element;
-		            	String tempLevel = level;
 		                mEngine.unregisterUpdateHandler(pTimerHandler);
-		                
-		
 		                menuScene.disposeScene();
-		                gameScene = new GameScene();
+		                GameScene tempScene=new GameScene();
+		                tempScene.initScene(stage);
+		                gameScene = tempScene;
+		                
 		                setScene(gameScene);
                     }
                 }));
@@ -174,7 +181,7 @@ public class SceneManager
             {
                 mEngine.unregisterUpdateHandler(pTimerHandler);
                 ResourcesManager.getInstance().loadMenuResources();                
-                menuScene = new MainMenuScene();
+                menuScene = new MainMenuScene(EstimateHeight());
                 setScene(menuScene);
             }
         }));

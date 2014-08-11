@@ -19,13 +19,13 @@ public class MoveRightAnimation extends Animation{
 			{
 				if(pTarget.getLine()==2)
 				{
-					final long[] PLAYER_ANIMATE = new long[] { 0, 0, 200 };
-					pTarget.animate(PLAYER_ANIMATE, 0, 2, true);
+					final long[] PLAYER_ANIMATE = new long[] { 0, 0, 200, 0, 0, 200 };
+					pTarget.animate(PLAYER_ANIMATE, 0, 5, true);
 				}else
 				if(pTarget.getLine()==1)
 				{
-					final long[] PLAYER_ANIMATE = new long[] { 0, 200, 0 };
-					pTarget.animate(PLAYER_ANIMATE, 0, 2, true);
+					final long[] PLAYER_ANIMATE = new long[] { 0, 200, 0, 0, 200, 0 };
+					pTarget.animate(PLAYER_ANIMATE, 0, 5, true);
 				}
 			}else
 			{

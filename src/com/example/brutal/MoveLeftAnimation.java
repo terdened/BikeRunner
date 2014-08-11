@@ -19,13 +19,13 @@ public class MoveLeftAnimation extends Animation{
 			{
 				if(pTarget.getLine()==0)
 				{
-					final long[] PLAYER_ANIMATE = new long[] {200, 0,  0 };
-					pTarget.animate(PLAYER_ANIMATE, 0, 2, true);
+					final long[] PLAYER_ANIMATE = new long[] {200, 0,  0, 200, 0, 0 };
+					pTarget.animate(PLAYER_ANIMATE, 0, 5, true);
 				}else
 				if(pTarget.getLine()==1)
 				{
-					final long[] PLAYER_ANIMATE = new long[] {  0,200,0  };
-					pTarget.animate(PLAYER_ANIMATE, 0, 2, true);
+					final long[] PLAYER_ANIMATE = new long[] {  0,200,0, 0, 200, 0  };
+					pTarget.animate(PLAYER_ANIMATE, 0, 5, true);
 				}
 			}else
 			{

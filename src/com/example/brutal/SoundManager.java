@@ -98,13 +98,17 @@ public class SoundManager {
 		if(pState=="menu")
 		{
 			clearPlaylist();
-			pPlayngMusic.add(pResourcesManager.menu);
+			pPlayngMusic.add(pResourcesManager.menu_1);
+			pResourcesManager.menu_1.setLooping(true);
+			pResourcesManager.menu_2.setLooping(true);
+			pResourcesManager.menu_3.setLooping(true);
 			playPlaylist();
 		}else
 		if(pState=="game")
 		{
 			clearPlaylist();
 			pPlayngMusic.add(pResourcesManager.game);
+			pResourcesManager.game.setLooping(true);
 			pPlayngSound.add(pResourcesManager.motorSound);
 			pPlayngSound.getLast().setLooping(true);
 			playPlaylist();
@@ -126,6 +130,23 @@ public class SoundManager {
 		updateVolume();
 		
 		pPlayngMusic.getFirst().setVolume(pDataManager.getMusicVolume()/2);
+	}
+	
+	public void pause()
+	{
+		clearSoundlist();
+		updateVolume();
+		
+		pPlayngMusic.getFirst().setVolume(pDataManager.getMusicVolume()/2);
+	}
+	
+	public void resume()
+	{
+		clearSoundlist();
+		pPlayngMusic.getFirst().setVolume(pDataManager.getMusicVolume());
+		pPlayngSound.add(pResourcesManager.motorSound);
+		pResourcesManager.motorSound.seekTo(0);
+		pResourcesManager.motorSound.resume();
 	}
 	
 	public void restart()
@@ -155,6 +176,33 @@ public class SoundManager {
 			
 		});
 		updateVolume();
+	}
+	
+	public void changeStage(String stage)
+	{
+		if(stage=="Desert")
+		{
+			clearPlaylist();
+			pPlayngMusic.add(pResourcesManager.menu_1);
+			playPlaylist();
+		}else
+		if(stage=="Countriside")
+		{
+			clearPlaylist();
+			pPlayngMusic.add(pResourcesManager.menu_2);
+			playPlaylist();
+		}else
+		if(stage=="Coming soon")
+		{
+			clearPlaylist();
+			pPlayngMusic.add(pResourcesManager.menu_3);
+			playPlaylist();
+		}else
+		{
+			clearPlaylist();
+			pPlayngMusic.add(pResourcesManager.menu_1);
+			playPlaylist();
+		}
 	}
 	
 	public void moveRight()
@@ -208,6 +256,11 @@ public class SoundManager {
 		{
 			pPlayngSound.get(i).setVolume(pDataManager.getSoundVolume());
 		}
+	}
+	
+	public String getState()
+	{
+		return this.pState;
 	}
 	
 }

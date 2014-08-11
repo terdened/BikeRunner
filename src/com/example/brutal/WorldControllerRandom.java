@@ -1,5 +1,7 @@
 package com.example.brutal;
 
+import java.util.LinkedList;
+
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 public class WorldControllerRandom extends WorldController{
@@ -11,33 +13,84 @@ public class WorldControllerRandom extends WorldController{
 	
 	private int obstacleCounter=0;
 	
-	private void generateObstacle(int complexity)
+	private void generateObstacle(int complexity, int speed)
 	{
 		int maxObstacleCounter=0;
 		
 		if(complexity==1)
 		{
-			maxObstacleCounter=50;
+			maxObstacleCounter=90;
 		}
 		else
 		if(complexity==2)	
 		{
-			maxObstacleCounter=30;
-		}else
+			maxObstacleCounter=70;
+		}
+		else
 		{
-			maxObstacleCounter=20;
+			maxObstacleCounter=50;
 		}
 		
 		obstacleCounter++;
 		
 		if(obstacleCounter==maxObstacleCounter)
 		{
-			Obstacle obj = objFactory.createObstacle(mVbom, mResManager);
+			LinkedList<String> ids = new LinkedList<String>();
 			
-			obj.setAlpha(0);
-			obj.setAction("crash");
-			mRoad.addObstacle(obj,"front");
+			if(speed<19)
+			{
+				ids.add("28");
+				ids.add("29");
+				ids.add("30");
+				ids.add("31");
+				ids.add("32");
+			}
+			else
+			if(speed<24)
+			{
+				ids.add("20");
+				ids.add("21");
+				ids.add("22");
+				ids.add("28");
+				ids.add("29");
+				ids.add("30");
+				ids.add("31");
+				ids.add("32");
+			}
+			else
+			if(speed<29)
+			{
+				ids.add("20");
+				ids.add("21");
+				ids.add("22");
+				ids.add("28");
+				ids.add("29");
+				ids.add("30");
+				ids.add("31");
+				ids.add("31");
+				ids.add("32");
+			}
+			else
+			{
+				ids.add("20");
+				ids.add("21");
+				ids.add("22");
+				ids.add("28");
+				ids.add("29");
+				ids.add("30");
+				ids.add("31");
+				ids.add("31");
+				ids.add("32");
+			}
 			
+			
+			Obstacle[] obj = objFactory.createTemplate(mVbom, mResManager, ids);
+			for(int i=0;i<obj.length;i++)
+			{
+				obj[i].setAlpha(0);
+				obj[i].setAction("crash");
+				mRoad.addObstacle(obj[i],"front");
+			}
 			mRoad.sortChildren("front");
 		}
 		
@@ -93,7 +146,7 @@ public class WorldControllerRandom extends WorldController{
 	{
 		mCounter++;
 		int complexity = this.getComplexityBySpeed(speed);
-		generateObstacle(complexity);
+		generateObstacle(complexity,speed);
 		generateCoin();
 		generateObject();
 		

@@ -44,6 +44,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 	private PlayerDataManager pPlayerDataManager;
 	
 	private String pGameState;
+	private String pLevel="";
 	
     @Override
     public void createScene()
@@ -51,8 +52,6 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
     	createPlayerDataManager();
     	createBackground();
     	createRoad();
-    	createWorldManager();
-    	createTripManager();
     	createBiker();
     	createScore();
     	//createFog();
@@ -96,6 +95,13 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
         });
     }
     
+    public void initScene(String level)
+	{
+		pLevel = level;
+    	createTripManager();
+    	createWorldManager();
+	}
+    
     @Override
     public void onBackKeyPressed()
     {
@@ -103,7 +109,10 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
     		pause();
     	else
     	{
-        	resume();
+    		if(pGameState!="die")
+    			resume();
+    		else
+    			restart();
     	}
     }
 
@@ -192,12 +201,24 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
     
     public void createWorldManager()
     {
-    	mWorldManager = new WorldManager(mRoad, vbom, resourcesManager);
+    	mWorldManager = new WorldManager(mRoad, vbom, resourcesManager, this.pLevel);
     }
     
     public void createTripManager()
     {
-    	mTripManager = new TripManagerDesert(mRoad, vbom, resourcesManager);
+    	if(this.pLevel=="Desert")
+    	{
+    		mTripManager = new TripManagerDesert(mRoad, vbom, resourcesManager);
+    	}
+    	else
+		if(this.pLevel=="Countriside")
+    	{
+    		mTripManager = new TripManagerCountriside(mRoad, vbom, resourcesManager);
+    	}
+    	else
+    	{
+    		mTripManager = new TripManagerDesert(mRoad, vbom, resourcesManager);
+    	}
     	mTripManager.initTripManager();
     }
     
@@ -313,15 +334,15 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 		{
 			menuChildScene.getChildByIndex(0).setPosition(400, 100);
 			menuChildScene.getChildByIndex(1).setPosition(1200, -2000);
-			menuChildScene.getChildByIndex(2).setPosition(650, 450);
-			menuChildScene.getChildByIndex(3).setPosition(750, 450);
-			menuChildScene.getChildByIndex(4).setPosition(550, 450);
+			menuChildScene.getChildByIndex(2).setPosition(605, 450);
+			menuChildScene.getChildByIndex(3).setPosition(705, 450);
+			menuChildScene.getChildByIndex(4).setPosition(505, 450);
 		}
 		if(pGameState=="die")
 		{
 			menuChildScene.getChildByIndex(0).setPosition(400, 100);
 			menuChildScene.getChildByIndex(1).setPosition(1200, -2000);
-			menuChildScene.getChildByIndex(2).setPosition(700, 450);
+			menuChildScene.getChildByIndex(2).setPosition(660, 450);
 			menuChildScene.getChildByIndex(3).setPosition(700, -2000);
 			menuChildScene.getChildByIndex(4).setPosition(550, 450);
 		}
@@ -330,7 +351,9 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 	private void pause()
 	{
 		pGameState="pause";
+		this.mBiker.pause();
 		updateMenuChildScene();
+		resourcesManager.soundManager.pause();
 	}
 	
 	private void die()
@@ -349,7 +372,9 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 	private void resume()
 	{
 		pGameState="game";
+		this.mBiker.resume();
 		updateMenuChildScene();
+		resourcesManager.soundManager.resume();
 		
 	}
 	

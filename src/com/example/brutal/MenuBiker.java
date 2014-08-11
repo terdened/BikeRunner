@@ -33,7 +33,7 @@ public class MenuBiker extends Entity {
 		mLevelCostList= new LinkedList<String>();
 		mLevelList.add("Red Harley");
 		mLevelCostList.add("1500");
-		mLevelList.add("Blue Harley");
+		mLevelList.add("Black Harley");
 		mLevelCostList.add("2500");
 		
 		mCurrentFrame=new LinkedList<AnimatedSprite>();

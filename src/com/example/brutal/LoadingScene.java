@@ -1,8 +1,11 @@
 package com.example.brutal;
 
 
+import org.andengine.engine.camera.Camera;
 import org.andengine.entity.scene.background.Background;
+import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
+import org.andengine.opengl.util.GLState;
 import org.andengine.util.color.*;
 
 import com.example.brutal.BaseScene;
@@ -10,13 +13,25 @@ import com.example.brutal.SceneManager.SceneType;
 
 public class LoadingScene extends BaseScene
 {
+	private Sprite loading;
+	
     @Override
     public void createScene()
     {
         setBackground(new Background(Color.BLACK));
-        Text textHolder=new Text(260, 350, resourcesManager.font, "Loading...", vbom);
-    	textHolder.setColor(Color.GREEN);
-        attachChild(textHolder);
+        loading = new Sprite(0, 0, resourcesManager.loading_region, vbom)
+    	{
+    	    @Override
+    	    protected void preDraw(GLState pGLState, Camera pCamera) 
+    	    {
+    	       super.preDraw(pGLState, pCamera);
+    	       pGLState.enableDither();
+    	    }
+    	};
+    	float height = this.engine.getEngineOptions().getCamera().getHeight();
+    	loading.setScale(1.5f);
+    	loading.setPosition(256, (height-320)/2);
+    	attachChild(loading);
     }
 
     @Override

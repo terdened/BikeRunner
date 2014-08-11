@@ -33,6 +33,7 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 	private final int MENU_BUY = 0;
 	private final int MENU_OPTIONS = 1;
 	private final int MENU_BUY_BIKE = 2;
+	private final int MENU_HELP = 3;
 	
 	private int pSpeed=10;
 
@@ -44,6 +45,21 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 	private float pStartTapX=0;
 	private boolean isOptionsOpen=false;
 	private OptionsMenu pOptionsMenu;
+	private int DisplayHeight=800;
+	private Boolean isTutorial = false;
+	private Tutorial tutorial;
+	
+	public MainMenuScene(int DisplayHeight)
+	{
+		this.DisplayHeight=DisplayHeight;
+		createInfoText();
+        createMenuChildScene();
+        if(!pPlayerDataManager.getFirstStart())
+        {
+        	ShowTutorial();
+        	pPlayerDataManager.updateFirstStart();
+        }
+	}
 	
     @Override
     public void createScene()
@@ -52,8 +68,7 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
     	createBackground();
     	createBike();
         //createMenuChildScene();
-        createInfoText();
-        createMenuChildScene();
+        
         resourcesManager.initSoundManager();
         resourcesManager.soundManager.setState("menu");
         
@@ -74,13 +89,30 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
             		pSpeed=10;
             	}
             	
+            	if(tutorial!=null)
+            	{
+            		if(tutorial.canDelete())
+            		{
+            			tutorial.dispose();
+            			tutorial = null;
+            		}
+            	}
+            	
             	pMenuBackground.update();
             	pMenuBiker.update();
             }
             	
         });
+        
     }
     
+    private void ShowTutorial()
+    {
+    	tutorial = new Tutorial(512, (DisplayHeight-256)/2,
+    			this.resourcesManager.tutorial_region, vbom);
+    	this.attachChild(tutorial);
+    }
+     
     public boolean onSceneTouchEvent(Scene pScene, TouchEvent pSceneTouchEvent)
     {
     	if(!isOptionsOpen)
@@ -96,7 +128,7 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 	        	Vector2 tap = new Vector2(pStartTapX-pSceneTouchEvent.getX(),pStartTapY-pSceneTouchEvent.getY());
 	        	if(tap.len()>50)
 	        	{
-	        		if(pStartTapY<400)
+	        		if(pStartTapY<DisplayHeight/2)
 	        		{
 		        		if(tap.x>0)
 		            	{
@@ -113,6 +145,8 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 		                	pMenuInfo.update();
 		                	updateMenuChildScene();
 		            	}
+		        		this.resourcesManager.soundManager.changeStage(
+	        	    			pMenuBackground.mLevelList.get(pMenuBackground.mCurrentLevel));
 	        		}else
 	        		{
 	        			if(tap.x>0)
@@ -137,7 +171,9 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 	        	{
 	        		if(pPlayerDataManager.getLevelAccess(pMenuBackground.mLevelList.get(pMenuBackground.mCurrentLevel))&&
 	        				pPlayerDataManager.getBikeAccess(pMenuBiker.mLevelList.get(pMenuBiker.mCurrentLevel)))
-	        			SceneManager.getInstance().loadGameScene(engine,pMenuBackground.mLevelList.get(pMenuBackground.mCurrentLevel));
+	        			SceneManager.getInstance().loadGameScene(engine,
+	        					pMenuBackground.mLevelList.get(pMenuBackground.mCurrentLevel), 
+	        					pMenuBiker.mLevelList.get(pMenuBiker.mCurrentLevel));
 	        	}
 	        }
     	}
@@ -159,12 +195,16 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 	    final IMenuItem optionsMenuItem = new ScaleMenuItemDecorator(new SpriteMenuItem(MENU_OPTIONS, resourcesManager.options_button_region, vbom), 0.8f, 1);
 	    menuChildScene.addMenuItem(optionsMenuItem);
 	    
+	    final IMenuItem helpMenuItem = new ScaleMenuItemDecorator(new SpriteMenuItem(MENU_HELP, resourcesManager.help_button_region, vbom), 0.8f, 1);
+	    menuChildScene.addMenuItem(helpMenuItem);
+	    
 	    menuChildScene.buildAnimations();
 	    menuChildScene.setBackgroundEnabled(false);
 	    
 	    buyMenuItem.setPosition(50, 10);
-	    buyBikeMenuItem.setPosition(50, 650);
-	    optionsMenuItem.setPosition(1170, 650);
+	    buyBikeMenuItem.setPosition(50, DisplayHeight-100);
+	    optionsMenuItem.setPosition(1170, DisplayHeight-100);
+	    helpMenuItem.setPosition(1070, DisplayHeight-100);
 	    
 	    menuChildScene.setOnMenuItemClickListener(this);
 	    
@@ -179,13 +219,16 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
     	else
     		menuChildScene.getChildByIndex(0).setY(-1000);
     	
+    	if(pMenuBackground.mLevelList.get(pMenuBackground.mCurrentLevel)=="Coming soon")
+    		menuChildScene.getChildByIndex(0).setY(-1000);
+    	
     	menuChildScene.getChildByIndex(0).detachChildren();
     	Entity scene = pMenuInfo.showLevelCost(pMenuBackground.mLevelCostList.get(pMenuBackground.mCurrentLevel));
     	scene.setX(30);
     	menuChildScene.getChildByIndex(0).attachChild(scene);
     	
     	if(!pPlayerDataManager.getBikeAccess(pMenuBiker.mLevelList.get(pMenuBiker.mCurrentLevel)))
-    		menuChildScene.getChildByIndex(1).setY(650);
+    		menuChildScene.getChildByIndex(1).setY(DisplayHeight-100);
     	else
     		menuChildScene.getChildByIndex(1).setY(-1000);
     	
@@ -193,6 +236,8 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
     	Entity scene1 = pMenuInfo.showLevelCost(pMenuBiker.mLevelCostList.get(pMenuBiker.mCurrentLevel));
     	scene1.setX(30);
     	menuChildScene.getChildByIndex(1).attachChild(scene1);
+    	
+    	
 	}
     
     public boolean onMenuItemClicked(MenuScene pMenuScene, IMenuItem pMenuItem, float pMenuItemLocalX, float pMenuItemLocalY)
@@ -207,6 +252,9 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
                 return true;
             case MENU_OPTIONS:
             	optionsClick();
+                return true;
+            case MENU_HELP:
+            	ShowTutorial();
                 return true;
             default:
                 return false;
@@ -231,7 +279,7 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
     {
     	pOptionsMenu = new OptionsMenu(camera, vbom, pPlayerDataManager, resourcesManager, this);
     	pOptionsMenu.createMenuChildScene(camera);
-    	pOptionsMenu.setPosition(400,100);
+    	pOptionsMenu.setPosition(400,(DisplayHeight-512)/2);
     	this.setChildScene(pOptionsMenu);
     }
     
@@ -259,7 +307,6 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
     	}
     }
     
-
     private void createBackground()
     {
     	pMenuBackground = new MenuBackground(0,0,this.resourcesManager, this.vbom);
@@ -281,14 +328,13 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
     
     private void createInfoText()
     {
-    	pMenuInfo = new MenuInfo(1280, 800, resourcesManager, vbom, pPlayerDataManager);
+    	pMenuInfo = new MenuInfo(1280, DisplayHeight, resourcesManager, vbom, pPlayerDataManager);
     	pMenuInfo.setBikeName(pMenuBiker.mLevelList.get(pMenuBiker.mCurrentLevel));
     	pMenuInfo.setLevelName(pMenuBackground.mLevelList.get(pMenuBackground.mCurrentLevel));
     	pMenuInfo.update();
     	this.attachChild(pMenuInfo);
     }
    
-    
     @Override
     public void onBackKeyPressed()
     {

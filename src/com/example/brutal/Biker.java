@@ -19,6 +19,8 @@ public class Biker extends AnimatedSprite {
 	private int mHeight;
 	private int pDeltaY;
 	private int pDeltaTrampY;
+	private boolean isJump=false;
+	private int jumpCounter=100;
 	
 	private LinkedList<Animation> pAnimationList;
 	private final Road pRoad;
@@ -36,17 +38,18 @@ public class Biker extends AnimatedSprite {
 		pDeltaY = 0;
 		pDeltaTrampY = 0;
 		pAnimationList = new LinkedList<Animation>();
-		final long[] PLAYER_ANIMATE = new long[] { 0, 200, 0 };
-		animate(PLAYER_ANIMATE, 0, 2, true);
+		final long[] PLAYER_ANIMATE = new long[] { 0, 200, 0, 0, 200, 0 };
+		animate(PLAYER_ANIMATE, 0, 5, true);
 		updateObject(0);
 	}
 	
 	public String updateObject(int speed)
 	{
 		updateHeight();
-		checkGround();
+		
 		String result = collisionControl();
 		coinCollisionControl();
+		
 		
 		if((mLine==0)&&(pAnimationList.size()==0))
 			this.setX(350-128);
@@ -110,8 +113,8 @@ public class Biker extends AnimatedSprite {
 		mHeight = 0;
 		pDeltaY = 0;
 		pAnimationList = new LinkedList<Animation>();
-		final long[] PLAYER_ANIMATE = new long[] {  0, 200,0 };
-		animate(PLAYER_ANIMATE, 0, 2, true);
+		final long[] PLAYER_ANIMATE = new long[] {  0, 200, 0, 0, 200, 0 };
+		animate(PLAYER_ANIMATE, 0, 5, true);
 		updateObject(0);
 	}
 	
@@ -145,7 +148,8 @@ public class Biker extends AnimatedSprite {
 		{
 			if((pAnimationList.size()==0)&&(this.thereIsGround()))
 			{
-				pDeltaY=15;
+				pDeltaY=17;
+				initJump();
 			}
 			
 		}else
@@ -154,6 +158,7 @@ public class Biker extends AnimatedSprite {
 			if(!this.thereIsGround())
 			{
 				pDeltaY-=15;
+				resetJump();
 			}
 		}
 	}
@@ -219,12 +224,37 @@ public class Biker extends AnimatedSprite {
 	{
 		if(!thereIsGround())
 		{
-			pDeltaY--;
+			if(!isJump)
+				pDeltaY--;
+			else
+			{
+				if((jumpCounter>0)&&(pDeltaY<2))
+				{
+					jumpCounter--;
+				}
+				else
+				{
+					pDeltaY--;
+					resetJump();
+				}
+			}
 		}else
 		{
 			pDeltaY=0;
+			resetJump();
 		}
 		
+	}
+	
+	private void resetJump()
+	{
+		isJump=false;
+	}
+	
+	private void initJump()
+	{
+		isJump=true;
+		jumpCounter=100;
 	}
 	
 	public boolean thereIsGround()
@@ -257,8 +287,9 @@ public class Biker extends AnimatedSprite {
 	
 	public String collisionControl()
     {
+		
     	int[] linesHeight=pRoad.getLinesHeight();
-    	int[] prevLinesHeight=pRoad.getLinesHeightByPosition(-20);
+    	//int[] prevLinesHeight=pRoad.getLinesHeightByPosition(-20);
     	String gameState="game";
     	
     	if(linesHeight[mLine]-mHeight>30)
@@ -266,16 +297,24 @@ public class Biker extends AnimatedSprite {
     		if(linesHeight[mLine]-mHeight>Math.abs(pDeltaY)+30)
     		{
     			gameState="die";
+    			pause();
     		}
     		else
 	    	if(linesHeight[mLine]-mHeight>0)
 	    		mHeight=linesHeight[mLine];
+    		
+    		checkGround();
     	}
     	else
     	if(linesHeight[mLine]-mHeight>0)
     	{
+    		checkGround();
     		pDeltaTrampY=Math.abs(linesHeight[mLine]-mHeight);
     		mHeight=linesHeight[mLine];
+    	}
+    	else
+    	{
+    		checkGround();
     	}
     	
     	return gameState;
@@ -298,6 +337,32 @@ public class Biker extends AnimatedSprite {
 	{
 		mHeight+=pDeltaY;
 		this.setY(400-mHeight);
+	}
+	
+	public void pause()
+	{
+		this.stopAnimation();
+	}
+	
+	public void resume()
+	{
+		if(mLine==0)
+		{
+			final long[] PLAYER_ANIMATE = new long[] { 200, 0, 0, 200, 0, 0 };
+			animate(PLAYER_ANIMATE, 0, 5, true);
+		}
+		else
+		if(mLine==1)
+		{
+			final long[] PLAYER_ANIMATE = new long[] { 0, 200, 0, 0, 200, 0 };
+			animate(PLAYER_ANIMATE, 0, 5, true);
+		}
+		else
+		if(mLine==2)
+		{
+			final long[] PLAYER_ANIMATE = new long[] { 0, 0, 200, 0, 0, 200 };
+			animate(PLAYER_ANIMATE, 0, 5, true);
+		}
 	}
 
 }

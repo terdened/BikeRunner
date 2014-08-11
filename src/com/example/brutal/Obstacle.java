@@ -131,7 +131,7 @@ public class Obstacle extends AnimatedSprite {
 	
 	public int getObstacleHeight()
 	{
-		if((mZ<-1700)&&(mZ>-1700-this.pLength))
+		if((mZ<-1700-25)&&(mZ>-1700-this.pLength-25))
 			return pHeight;
 		else
 			return 0;
@@ -139,7 +139,7 @@ public class Obstacle extends AnimatedSprite {
 	
 	public int getObstacleHeightByPosition(int position)
 	{
-		if((mZ<-1700+position)&&(mZ>-1700+position-this.pLength))
+		if((mZ<-1700+position-25)&&(mZ>-1700+position-this.pLength-25))
 			return pHeight;
 		else
 			return 0;

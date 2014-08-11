@@ -3,6 +3,12 @@
 	<name>BikeRunner</name>
 	<comment></comment>
 	<projects>
+		<project>AndEngine</project>
+		<project>AndEngineCocosBuilderExtension</project>
+		<project>AndEngineLiveWallpaperExtension</project>
+		<project>AndEngineMultiplayerExtension</project>
+		<project>AndEngineSVGTextureRegionExtension</project>
+		<project>AndEngineTexturePackerExtension</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

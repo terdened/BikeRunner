@@ -25,9 +25,9 @@ public class SplashScene extends BaseScene
     	       pGLState.enableDither();
     	    }
     	};
-    	        
+    	float height = this.engine.getEngineOptions().getCamera().getHeight();
     	splash.setScale(1.5f);
-    	splash.setPosition(260, 500);
+    	splash.setPosition(384, (height-320)/2);
     	attachChild(splash);
     }
 

@@ -15,8 +15,8 @@ public class ObstacleTramp extends Obstacle {
 	@Override
 	public int getObstacleHeight()
 	{
-		if((mZ<-1700)&&(mZ>-1700-this.pLength))
-			return (int)(pHeight*((Math.abs(1700+mZ))/pLength));
+		if((mZ<-1725)&&(mZ>-1725-this.pLength))
+			return (int)(pHeight*((Math.abs(1725+mZ))/pLength));
 		else
 			return 0;
 	}

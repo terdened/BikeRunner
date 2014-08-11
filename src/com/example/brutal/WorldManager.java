@@ -12,13 +12,16 @@ public class WorldManager {
 	private final VertexBufferObjectManager mVbom;
 	private final ResourcesManager mResManager;
 	private LinkedList<WorldController> worldControllers; 
+	private String pLevel;
 	
-	public WorldManager(Road road, VertexBufferObjectManager vbom, ResourcesManager resManager)
+	public WorldManager(Road road, VertexBufferObjectManager vbom, 
+			ResourcesManager resManager, String level)
 	{
 		mRoad = road;
 		mCounter=0;
 		mVbom = vbom;
 		mResManager = resManager;
+		pLevel = level;
 		
 		generateLevels();
 	}
@@ -28,17 +31,37 @@ public class WorldManager {
 		currentController=0;
 		worldControllers = new LinkedList<WorldController>();
 		
-		for(int i=0;i<4;i++)
+		if(pLevel=="Desert")
 		{
-			int random=(int) (Math.random()*2);
+			worldControllers.add(new WorldControllerRandom(mRoad, mVbom, mResManager));	
+			worldControllers.add(new WorldControllerTemplate(mRoad, mVbom, mResManager));
+			worldControllers.add(new WorldControllerRandom(mRoad, mVbom, mResManager));
+			worldControllers.add(new WorldControllerTemplate(mRoad, mVbom, mResManager));
 			
-			if(random<1)
-				worldControllers.add(new WorldControllerTemplate(mRoad, mVbom, mResManager));
-			else
-				worldControllers.add(new WorldControllerRandom(mRoad, mVbom, mResManager));
+			
+			worldControllers.add(new WorldControllerBonus(mRoad, mVbom, mResManager));
 		}
-		
-		worldControllers.add(new WorldControllerBonus(mRoad, mVbom, mResManager));
+		else
+		if(pLevel=="Countriside")
+		{
+			
+			worldControllers.add(new WorldControllerRandomCountriside(mRoad, mVbom, mResManager));	
+			worldControllers.add(new WorldControllerTemplateCountriside(mRoad, mVbom, mResManager));
+			worldControllers.add(new WorldControllerRandomCountriside(mRoad, mVbom, mResManager));
+			worldControllers.add(new WorldControllerTemplateCountriside(mRoad, mVbom, mResManager));
+			
+			worldControllers.add(new WorldControllerBonus(mRoad, mVbom, mResManager));
+		}
+		else
+		{
+			worldControllers.add(new WorldControllerRandom(mRoad, mVbom, mResManager));	
+			worldControllers.add(new WorldControllerTemplate(mRoad, mVbom, mResManager));
+			worldControllers.add(new WorldControllerRandom(mRoad, mVbom, mResManager));
+			worldControllers.add(new WorldControllerTemplate(mRoad, mVbom, mResManager));
+			
+			
+			worldControllers.add(new WorldControllerBonus(mRoad, mVbom, mResManager));
+		}
 		
 	}
 	
