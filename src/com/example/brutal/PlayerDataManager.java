@@ -67,7 +67,7 @@ public class PlayerDataManager {
 		if(getSoundAvailable())
 		{
 			String key = "com.example.brutal.musicvolume";
-			volume = pPrefs.getFloat(key, 1);
+			volume = pPrefs.getFloat(key, 0.7f);
 			
 		}
 		
@@ -86,7 +86,7 @@ public class PlayerDataManager {
 	public void increaseSoundVolume()
 	{
 		String key = "com.example.brutal.soundvolume";
-		float volume = pPrefs.getFloat(key, 1);
+		float volume = pPrefs.getFloat(key, 0.4f);
 		if(volume<1)
 		{
 			volume+=0.1f;
@@ -99,7 +99,7 @@ public class PlayerDataManager {
 	{
 		
 		String key = "com.example.brutal.soundvolume";
-		float volume = pPrefs.getFloat(key, 1);
+		float volume = pPrefs.getFloat(key, 0.4f);
 		volume-=0.1f;
 		pPrefs.edit().putFloat(key, volume).commit();
 		setSoundAvailable(true);
@@ -108,7 +108,7 @@ public class PlayerDataManager {
 	public void increaseMusicVolume()
 	{
 		String key = "com.example.brutal.musicvolume";
-		float volume = pPrefs.getFloat(key, 1);
+		float volume = pPrefs.getFloat(key, 0.7f);
 		if(volume<1)
 		{
 			volume+=0.1f;
@@ -120,7 +120,7 @@ public class PlayerDataManager {
 	public void decreaseMusicVolume()
 	{
 		String key = "com.example.brutal.musicvolume";
-		float volume = pPrefs.getFloat(key, 1);
+		float volume = pPrefs.getFloat(key, 0.7f);
 		volume-=0.1f;
 		pPrefs.edit().putFloat(key, volume).commit();
 		setSoundAvailable(true);
@@ -131,7 +131,7 @@ public class PlayerDataManager {
 		if(getSoundAvailable())
 		{
 			String key = "com.example.brutal.soundvolume";
-			float volume = pPrefs.getFloat(key, 1);
+			float volume = pPrefs.getFloat(key, 0.4f);
 			return volume;
 		}else
 		{
@@ -230,7 +230,7 @@ public class PlayerDataManager {
 	public int getCoins()
 	{
 		String key = "com.example.brutal.coins";
-		int coins = pPrefs.getInt(key, 9999);
+		int coins = pPrefs.getInt(key, 0);
 		return coins;
 		
 	}

@@ -15,8 +15,10 @@ public class Tutorial extends AnimatedSprite
 		
 		this.setScale(2);
 		final long[] PLAYER_ANIMATE = new long[] { 1500, 1500, 2500,
-												   2500, 2000, 2500};
-		animate(PLAYER_ANIMATE, 0, 5, false);
+												   2500, 2000, 2500,
+												   1500, 2500, 2500,
+												   2500, 2500, 1500};
+		animate(PLAYER_ANIMATE, 0, 11, false);
 		counter = 0;
 	}
 	
@@ -24,9 +26,9 @@ public class Tutorial extends AnimatedSprite
 	{
 		counter++;
 		
-		if(counter<750)
+		if(this.isAnimationRunning())
 			return false;
-		else 
+		else
 		{
 			this.detachSelf();
 			return true;

@@ -32,9 +32,9 @@ public class MenuBackground extends Sprite{
 		mLevelList= new LinkedList<String>();
 		mLevelCostList= new LinkedList<String>();
 		mLevelList.add("Desert");
-		mLevelCostList.add("1500");
+		mLevelCostList.add("10");
 		mLevelList.add("Countriside");
-		mLevelCostList.add("2500");
+		mLevelCostList.add("2000");
 		mLevelList.add("Coming soon");
 		mLevelCostList.add("0");
 		

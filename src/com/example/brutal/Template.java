@@ -62,7 +62,7 @@ public class Template {
 				}
 				
 				if(!symbol.equals("z"))
-					objects.getLast().setDepth(1100-260*i);
+					objects.getLast().setDepth(1100-280*i);
 			}
 		}
 	}

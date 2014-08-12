@@ -206,7 +206,7 @@ public class ResourcesManager
     	}
     	
     	menuTutorialTextureAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 2048, 2048, TextureOptions.NEAREST);
-    	tutorial_region = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(menuTutorialTextureAtlas, activity, "tutorial.png", 3, 2);
+    	tutorial_region = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(menuTutorialTextureAtlas, activity, "tutorial.png", 3, 4);
     	
     	
     	
