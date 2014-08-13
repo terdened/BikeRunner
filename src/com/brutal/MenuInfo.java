@@ -13,18 +13,18 @@ public class MenuInfo extends Entity {
     //---------------------------------------------
 	
 	private int mHeight;
-	private int mWidth;
+	private int mWidth;	
 	private Text mHighScore;
 	private Text mBikeName;
 	private Text mLevelName;
 	private Text mCoins;
 	private Text mTapToPlay;
-	private Text mLevelCost;
+	private Text mLevelCost;	
 	private String mLevelNameString;
 	private String mBikeNameString;
 	private AnimatedSprite mCoinIcon;
 	private Sprite mLockIcon;
-	
+	private Sprite mBikeLockIcon;
 	private final ResourcesManager mResourcesManager;
 	private final VertexBufferObjectManager mVbom;
 	private final PlayerDataManager mPlayerDataManager;
@@ -50,12 +50,12 @@ public class MenuInfo extends Entity {
     // PUBLIC METHODS
     //---------------------------------------------
 	
-	public void setLevelName(String pName)
+	void setLevelName(String pName)
 	{
 		mLevelNameString=pName;
 	}
 	
-	public void setBikeName(String pName)
+	void setBikeName(String pName)
 	{
 		mBikeNameString=pName;
 	}
@@ -64,7 +64,7 @@ public class MenuInfo extends Entity {
 	{
 		Entity layer = new Entity();
 		
-		mLevelCost = new Text(60, 10, mResourcesManager.font, pCost, pCost.length(), mVbom);
+		mLevelCost = new Text(60, 10, mResourcesManager.font,pCost, pCost.length(), mVbom);
 		
 		mCoinIcon = new AnimatedSprite(0, 25, mResourcesManager.coin_region, mVbom);
 		final long[] PLAYER_ANIMATE = new long[] { 200, 0, 0, 0, 0, 0, 0, 0 };
@@ -97,8 +97,8 @@ public class MenuInfo extends Entity {
 		if(mPlayerDataManager.getLevelAccess(mLevelNameString)&&mPlayerDataManager.getBikeAccess(mBikeNameString))
 		{
 			mTapToPlay = new Text(0, 0, mResourcesManager.font,"Tap to play!", 10, mVbom);
-			mTapToPlay.setX(mWidth/2-mTapToPlay.getWidth()/2);
-			mTapToPlay.setY(500);
+			mTapToPlay.setX(mWidth/2-mTapToPlay.getWidth()/2 -100);
+			mTapToPlay.setY(mHeight/2-mCoins.getHeight()/2+140);
 			this.attachChild(mTapToPlay);
 		}
 		
@@ -114,8 +114,8 @@ public class MenuInfo extends Entity {
 		
 		if(!mPlayerDataManager.getBikeAccess(mBikeNameString))
 		{
-			mLockIcon = new Sprite(mBikeName.getX()-50, mBikeName.getY()+10, mResourcesManager.lock_region, mVbom);
-			this.attachChild(mLockIcon);
+			mBikeLockIcon = new Sprite(mBikeName.getX()-50, mBikeName.getY()+10, mResourcesManager.lock_region, mVbom);
+			this.attachChild(mBikeLockIcon);
 		}
 		
 		this.attachChild(mBikeName);
@@ -135,8 +135,9 @@ public class MenuInfo extends Entity {
 		{
 		}
 		
+
 		try{
-			this.detachChild(mLockIcon);
+			this.detachChild(mBikeLockIcon);
 		}
 		finally
 		{
@@ -175,8 +176,8 @@ public class MenuInfo extends Entity {
 		if(mPlayerDataManager.getLevelAccess(mLevelNameString)&&mPlayerDataManager.getBikeAccess(mBikeNameString))
 		{
 			mTapToPlay = new Text(0, 0, mResourcesManager.font,"Tap to play!", 10, mVbom);
-			mTapToPlay.setX(mWidth/2-mTapToPlay.getWidth()/2);
-			mTapToPlay.setY(500);
+			mTapToPlay.setX(mWidth/2-mCoins.getWidth()/2 - 100);
+			mTapToPlay.setY(mHeight/2-mCoins.getHeight()/2+200);
 			this.attachChild(mTapToPlay);
 		}
 		
@@ -192,8 +193,8 @@ public class MenuInfo extends Entity {
 		
 		if(!mPlayerDataManager.getBikeAccess(mBikeNameString))
 		{
-			mLockIcon = new Sprite(mBikeName.getX()-50, mBikeName.getY()+10, mResourcesManager.lock_region, mVbom);
-			this.attachChild(mLockIcon);
+			mBikeLockIcon = new Sprite(mBikeName.getX()-50, mBikeName.getY()+10, mResourcesManager.lock_region, mVbom);
+			this.attachChild(mBikeLockIcon);
 		}
 		
 		this.attachChild(mBikeName);
