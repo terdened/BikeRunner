@@ -149,7 +149,7 @@ public class PlayerDataManager {
 			result = pPrefs.getBoolean(key, true);
 		}
 		else
-		if(level=="Countriside")
+		if(level=="Countryside")
 		{
 			String key = "com.example.brutal.countrisideaccess";
 			result = pPrefs.getBoolean(key, false);
@@ -171,7 +171,7 @@ public class PlayerDataManager {
 			pPrefs.edit().putBoolean(key, true).commit();
 		}
 		else
-		if(level=="Countriside")
+		if(level=="Countryside")
 		{
 			String key = "com.example.brutal.countrisideaccess";
 			pPrefs.edit().putBoolean(key, true).commit();

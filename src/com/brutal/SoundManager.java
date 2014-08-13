@@ -186,7 +186,7 @@ public class SoundManager {
 			pPlayngMusic.add(pResourcesManager.menu_1);
 			playPlaylist();
 		}else
-		if(stage=="Countriside")
+		if(stage=="Countryside")
 		{
 			clearPlaylist();
 			pPlayngMusic.add(pResourcesManager.menu_2);

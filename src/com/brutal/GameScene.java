@@ -220,7 +220,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
     		mTripManager = new TripManagerDesert(mRoad, vbom, resourcesManager);
     	}
     	else
-		if(this.pLevel=="Countriside")
+		if(this.pLevel=="Countryside")
     	{
     		mTripManager = new TripManagerCountriside(mRoad, vbom, resourcesManager);
     	}

@@ -295,7 +295,7 @@ public class ResourcesManager
 		    background_region= BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameBackgroundTextureAtlas, activity, "background/background_desert.png");
 	    }
 	    else
-    	if(stage=="Countriside")
+    	if(stage=="Countryside")
 	    {
     		road_background_region=new ITextureRegion[3];
     	    road_background_region[0]= BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameBackgroundTextureAtlas, activity, "background/house_a_countreside.png");
@@ -426,7 +426,7 @@ public class ResourcesManager
 			if(level == "Desert")
 				game = MusicFactory.createMusicFromAsset(this.engine.getMusicManager(), this.activity ,"mfx/game_1.MP3");
 			else
-			if(level == "Countriside")
+			if(level == "Countryside")
 				game = MusicFactory.createMusicFromAsset(this.engine.getMusicManager(), this.activity ,"mfx/game_2.MP3");
 			else
 				game = MusicFactory.createMusicFromAsset(this.engine.getMusicManager(), this.activity ,"mfx/game_1.MP3");

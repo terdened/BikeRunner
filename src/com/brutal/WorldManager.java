@@ -42,7 +42,7 @@ public class WorldManager {
 			worldControllers.add(new WorldControllerBonus(mRoad, mVbom, mResManager));
 		}
 		else
-		if(pLevel=="Countriside")
+		if(pLevel=="Countryside")
 		{
 			
 			worldControllers.add(new WorldControllerRandomCountriside(mRoad, mVbom, mResManager));	
