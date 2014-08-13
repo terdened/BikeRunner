@@ -1,96 +1,48 @@
 package com.brutal;
 
-import android.app.Activity;
-import android.content.Context;
 import android.content.SharedPreferences;
 
 public class PlayerDataManager {
 	
-	private SharedPreferences pPrefs;
+	//---------------------------------------------
+    // VARIABLES
+    //---------------------------------------------
 	
-	public PlayerDataManager(SharedPreferences prefs) 
+	private SharedPreferences mPrefs;
+	
+	//---------------------------------------------
+    // CONSTRUCTOR
+    //---------------------------------------------
+	
+	public PlayerDataManager(SharedPreferences pPrefs) 
 	{
-		pPrefs = prefs;
+		mPrefs = pPrefs;
 	}
 
-	public void updateHighScore(int newHighScore)
-	{
-		String key = "com.example.brutal.highscore";
-		pPrefs.edit().putInt(key, newHighScore).commit();
-	}
+	//---------------------------------------------
+    // PUBLIC METHODS
+    //---------------------------------------------
 	
-	public int getHighScore()
+	public void updateHighScore(int pNewHighScore)
 	{
 		String key = "com.example.brutal.highscore";
-		int highScore = pPrefs.getInt(key, 0);
-		return highScore;
-		
+		mPrefs.edit().putInt(key, pNewHighScore).commit();
 	}
 	
 	public void updateFirstStart()
 	{
 		String key = "com.example.brutal.firststart";
-		pPrefs.edit().putBoolean(key, true).commit();
-	}
-	
-	public Boolean getFirstStart()
-	{
-		String key = "com.example.brutal.firststart";
-		boolean firstStart = pPrefs.getBoolean(key, false);
-		return firstStart;
-		
-	}
-	
-	public void setSoundAvailable(boolean music)
-	{
-		String key = "com.example.brutal.musicavailable";
-		pPrefs.edit().putBoolean(key, music).commit();
-	}
-	
-	public boolean getSoundAvailable()
-	{
-		String key = "com.example.brutal.musicavailable";
-		boolean music = pPrefs.getBoolean(key, true);
-		return music;
-	}
-	
-	public void setMusicVolume(float volume)
-	{
-		String key = "com.example.brutal.musicvolume";
-		pPrefs.edit().putFloat(key, volume).commit();
-		setSoundAvailable(true);
-	}
-	
-	public float getMusicVolume()
-	{
-		float volume =0;
-		if(getSoundAvailable())
-		{
-			String key = "com.example.brutal.musicvolume";
-			volume = pPrefs.getFloat(key, 0.7f);
-			
-		}
-		
-		return volume;
-		
-		
-	}
-	
-	public void setSoundVolume(float volume)
-	{
-		String key = "com.example.brutal.soundvolume";
-		pPrefs.edit().putFloat(key, volume).commit();
-		setSoundAvailable(true);
+		mPrefs.edit().putBoolean(key, true).commit();
 	}
 	
 	public void increaseSoundVolume()
 	{
 		String key = "com.example.brutal.soundvolume";
-		float volume = pPrefs.getFloat(key, 0.4f);
+		float volume = mPrefs.getFloat(key, 0.4f);
 		if(volume<1)
 		{
 			volume+=0.1f;
-			pPrefs.edit().putFloat(key, volume).commit();
+			mPrefs.edit().putFloat(key, volume).commit();
 		}
 		setSoundAvailable(true);
 	}
@@ -99,20 +51,20 @@ public class PlayerDataManager {
 	{
 		
 		String key = "com.example.brutal.soundvolume";
-		float volume = pPrefs.getFloat(key, 0.4f);
+		float volume = mPrefs.getFloat(key, 0.4f);
 		volume-=0.1f;
-		pPrefs.edit().putFloat(key, volume).commit();
+		mPrefs.edit().putFloat(key, volume).commit();
 		setSoundAvailable(true);
 	}
 	
 	public void increaseMusicVolume()
 	{
 		String key = "com.example.brutal.musicvolume";
-		float volume = pPrefs.getFloat(key, 0.7f);
+		float volume = mPrefs.getFloat(key, 0.7f);
 		if(volume<1)
 		{
 			volume+=0.1f;
-			pPrefs.edit().putFloat(key, volume).commit();
+			mPrefs.edit().putFloat(key, volume).commit();
 		}
 		setSoundAvailable(true);
 	}
@@ -120,10 +72,121 @@ public class PlayerDataManager {
 	public void decreaseMusicVolume()
 	{
 		String key = "com.example.brutal.musicvolume";
-		float volume = pPrefs.getFloat(key, 0.7f);
+		float volume = mPrefs.getFloat(key, 0.7f);
 		volume-=0.1f;
-		pPrefs.edit().putFloat(key, volume).commit();
+		mPrefs.edit().putFloat(key, volume).commit();
 		setSoundAvailable(true);
+	}
+	
+	public void addCoins(int pCoins)
+	{
+		String key = "com.example.brutal.coins";
+		mPrefs.edit().putInt(key, pCoins+getCoins()).commit();
+	}
+	
+	public void removeCoins(int pCoins)
+	{
+		if(pCoins<=getCoins())
+		{
+			String key = "com.example.brutal.coins";
+			mPrefs.edit().putInt(key, getCoins()-pCoins).commit();
+		}
+	}
+	
+	//---------------------------------------------
+    // SETTERS
+    //---------------------------------------------
+
+
+	public void setSoundAvailable(boolean pMusic)
+	{
+		String key = "com.example.brutal.musicavailable";
+		mPrefs.edit().putBoolean(key, pMusic).commit();
+	}
+	
+	public void setMusicVolume(float pVolume)
+	{
+		String key = "com.example.brutal.musicvolume";
+		mPrefs.edit().putFloat(key, pVolume).commit();
+		setSoundAvailable(true);
+	}
+	
+	public void setSoundVolume(float pVolume)
+	{
+		String key = "com.example.brutal.soundvolume";
+		mPrefs.edit().putFloat(key, pVolume).commit();
+		setSoundAvailable(true);
+	}
+	
+	public void setLevelAccess(String pLevel)
+	{		
+		if(pLevel=="Desert")
+		{
+			String key = "com.example.brutal.desertaccess";
+			mPrefs.edit().putBoolean(key, true).commit();
+		}
+		else
+		if(pLevel=="Countryside")
+		{
+			String key = "com.example.brutal.countrisideaccess";
+			mPrefs.edit().putBoolean(key, true).commit();
+		}
+	}
+	
+	public void setBikeAccess(String pBike)
+	{		
+		if(pBike=="Red Harley")
+		{
+			String key = "com.example.brutal.redharleyaccess";
+			mPrefs.edit().putBoolean(key, true).commit();
+		}
+		else
+		if(pBike=="Black Harley")
+		{
+			String key = "com.example.brutal.blackharleyaccess";
+			mPrefs.edit().putBoolean(key, true).commit();
+		}
+	}
+	
+	//---------------------------------------------
+    // GETTERS
+    //---------------------------------------------
+
+	
+	public int getHighScore()
+	{
+		String key = "com.example.brutal.highscore";
+		int highScore = mPrefs.getInt(key, 0);
+		return highScore;
+		
+	}
+	
+	public Boolean getFirstStart()
+	{
+		String key = "com.example.brutal.firststart";
+		boolean firstStart = mPrefs.getBoolean(key, false);
+		return firstStart;
+		
+	}
+	
+	public boolean getSoundAvailable()
+	{
+		String key = "com.example.brutal.musicavailable";
+		boolean music = mPrefs.getBoolean(key, true);
+		return music;
+	}
+	
+	public float getMusicVolume()
+	{
+		float volume =0;
+		if(getSoundAvailable())
+		{
+			String key = "com.example.brutal.musicvolume";
+			volume = mPrefs.getFloat(key, 0.7f);
+			
+		}
+		
+		return volume;
 	}
 	
 	public float getSoundVolume()
@@ -131,7 +194,7 @@ public class PlayerDataManager {
 		if(getSoundAvailable())
 		{
 			String key = "com.example.brutal.soundvolume";
-			float volume = pPrefs.getFloat(key, 0.4f);
+			float volume = mPrefs.getFloat(key, 0.4f);
 			return volume;
 		}else
 		{
@@ -139,23 +202,23 @@ public class PlayerDataManager {
 		}
 	}
 	
-	public boolean getLevelAccess(String level)
+	public boolean getLevelAccess(String pLevel)
 	{
 		boolean result=false;
 		
-		if(level=="Desert")
+		if(pLevel=="Desert")
 		{
 			String key = "com.example.brutal.desertaccess";
-			result = pPrefs.getBoolean(key, true);
+			result = mPrefs.getBoolean(key, true);
 		}
 		else
-		if(level=="Countryside")
+		if(pLevel=="Countryside")
 		{
 			String key = "com.example.brutal.countrisideaccess";
-			result = pPrefs.getBoolean(key, false);
+			result = mPrefs.getBoolean(key, false);
 		}
 		else
-		if(level=="Coming soon")
+		if(pLevel=="Coming soon")
 		{
 			result = false;
 		}
@@ -163,75 +226,34 @@ public class PlayerDataManager {
 		return result;
 	}
 	
-	public void setLevelAccess(String level)
-	{		
-		if(level=="Desert")
-		{
-			String key = "com.example.brutal.desertaccess";
-			pPrefs.edit().putBoolean(key, true).commit();
-		}
-		else
-		if(level=="Countryside")
-		{
-			String key = "com.example.brutal.countrisideaccess";
-			pPrefs.edit().putBoolean(key, true).commit();
-		}
-	}
-	
-	public boolean getBikeAccess(String bike)
+	public boolean getBikeAccess(String pBike)
 	{
 		boolean result=false;
 		
-		if(bike=="Red Harley")
+		if(pBike=="Red Harley")
 		{
 			String key = "com.example.brutal.redharleyaccess";
-			result = pPrefs.getBoolean(key, true);
+			result = mPrefs.getBoolean(key, true);
 		}
 		else
-		if(bike=="Black Harley")
+		if(pBike=="Black Harley")
 		{
 			String key = "com.example.brutal.blackharleyaccess";
-			result = pPrefs.getBoolean(key, false);
+			result = mPrefs.getBoolean(key, false);
 		}
 		
 		return result;
 	}
 	
-	public void setBikeAccess(String bike)
-	{		
-		if(bike=="Red Harley")
-		{
-			String key = "com.example.brutal.redharleyaccess";
-			pPrefs.edit().putBoolean(key, true).commit();
-		}
-		else
-		if(bike=="Black Harley")
-		{
-			String key = "com.example.brutal.blackharleyaccess";
-			pPrefs.edit().putBoolean(key, true).commit();
-		}
-	}
-	
-	public void addCoins(int coins)
-	{
-		String key = "com.example.brutal.coins";
-		pPrefs.edit().putInt(key, coins+getCoins()).commit();
-	}
-	
-	public void removeCoins(int coins)
-	{
-		if(coins<=getCoins())
-		{
-			String key = "com.example.brutal.coins";
-			pPrefs.edit().putInt(key, getCoins()-coins).commit();
-		}
-	}
-	
 	public int getCoins()
 	{
 		String key = "com.example.brutal.coins";
-		int coins = pPrefs.getInt(key, 0);
+		int coins = mPrefs.getInt(key, 0);
 		return coins;
 		
 	}
+	
+	
+	
+	
 }

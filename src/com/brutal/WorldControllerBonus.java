@@ -4,14 +4,37 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 public class WorldControllerBonus extends WorldController{
 
-	public WorldControllerBonus(Road road, VertexBufferObjectManager vbom,
-			ResourcesManager resManager) {
-		super(road, vbom, resManager);
+	//---------------------------------------------
+    // CONSTRUCTOR
+    //---------------------------------------------
+
+	public WorldControllerBonus(Road pRoad, VertexBufferObjectManager pVbom,
+			ResourcesManager pResManager) {
+		super(pRoad, pVbom, pResManager);
 	}
 	
-	private int obstacleCounter=0;
+	//---------------------------------------------
+    // OVERLOADED METHODS
+    //---------------------------------------------
 	
-	private void generateObstacle(int complexity)
+	@Override
+	public void updateWorld(int pSpeed)
+	{
+		mCounter++;
+		int complexity = this.getComplexityBySpeed(pSpeed);
+		generateObstacle(complexity);
+		generateCoin();
+		generateObject();
+		
+		if(mCounter>=100)
+			mCounter=0;
+	}
+	
+	//---------------------------------------------
+    // PRIVATE METHODS
+    //---------------------------------------------
+
+	private void generateObstacle(int pComplexity)
 	{
 		
 	}
@@ -20,7 +43,7 @@ public class WorldControllerBonus extends WorldController{
 	{		
 		if(mCounter%5==0)
 		{
-			ObstacleCoin obj = objFactory.createCoin(mVbom, mResManager);
+			ObstacleCoin obj = mObjFactory.createCoin(mVbom, mResManager);
 			
 			if(obj!=null)
 			{
@@ -40,7 +63,7 @@ public class WorldControllerBonus extends WorldController{
 	{		
 		if(mCounter%25==0)
 		{			
-			RoadObject obj = objFactory.createBackgroundObject(mVbom, mResManager);
+			RoadObject obj = mObjFactory.createBackgroundObject(mVbom, mResManager);
 			obj.initObject(1200, obj.getX(), obj.getY()*0.8f, 1, obj.getHeight()*2, obj.getWidth()*2);
 			obj.setAlpha(0);
 			mRoad.addObject(obj,"middle");
@@ -49,7 +72,7 @@ public class WorldControllerBonus extends WorldController{
 		
 		if(mCounter%10==0)
 		{			
-			RoadObject obj = objFactory.createBlink(mVbom, mResManager);
+			RoadObject obj = mObjFactory.createBlink(mVbom, mResManager);
 			obj.initObject(-1000, obj.getX(), obj.getY(), 1, obj.getHeight(), obj.getWidth());
 			obj.setAlpha(0);
 			mRoad.addObject(obj,"middle");
@@ -57,17 +80,4 @@ public class WorldControllerBonus extends WorldController{
 		}
 	}
 	
-	@Override
-	public void updateWorld(int speed)
-	{
-		mCounter++;
-		int complexity = this.getComplexityBySpeed(speed);
-		generateObstacle(complexity);
-		generateCoin();
-		generateObject();
-		
-		if(mCounter>=100)
-			mCounter=0;
-	}
-
 }

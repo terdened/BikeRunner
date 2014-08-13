@@ -6,12 +6,8 @@ import java.util.LinkedList;
 
 import org.andengine.audio.music.Music;
 import org.andengine.audio.music.MusicFactory;
-import org.andengine.audio.sound.Sound;
-import org.andengine.audio.sound.SoundFactory;
 import org.andengine.engine.Engine;
 import org.andengine.engine.camera.BoundCamera;
-import org.andengine.engine.camera.Camera;
-import org.andengine.entity.scene.Scene;
 import org.andengine.opengl.font.Font;
 import org.andengine.opengl.font.FontFactory;
 import org.andengine.opengl.texture.ITexture;
@@ -25,7 +21,6 @@ import org.andengine.opengl.texture.atlas.buildable.builder.ITextureAtlasBuilder
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
-//import org.andengine.util.color.Color;
 import org.andengine.util.debug.Debug;
 
 import android.content.Context;
@@ -39,22 +34,23 @@ public class ResourcesManager
     //---------------------------------------------
     // VARIABLES
     //---------------------------------------------
-    
-	public ITextureRegion splash_region;
-	private BitmapTextureAtlas splashTextureAtlas;	
+
+	private BitmapTextureAtlas mSplashTextureAtlas;
+	private BitmapTextureAtlas mLoadingTextureAtlas;
+	private BuildableBitmapTextureAtlas mMenuTextureAtlas;
+	private BuildableBitmapTextureAtlas mMenuTutorialTextureAtlas;
+	private BuildableBitmapTextureAtlas mMenuBackgroundTextureAtlas;
+	private BuildableBitmapTextureAtlas mGameTextureAtlas;
+	private BuildableBitmapTextureAtlas mGameEnviromentTextureAtlas;
+	private BuildableBitmapTextureAtlas mGameBackgroundTextureAtlas;
+    private static final ResourcesManager INSTANCE = new ResourcesManager();
 	
-	public ITextureRegion loading_region;
-	private BitmapTextureAtlas loadingTextureAtlas;	
-	
+	public ITextureRegion splash_region;	
+	public ITextureRegion loading_region;	
 	public ITextureRegion empty_region;
 	public ITextureRegion[] level_background_region;
 	public ITiledTextureRegion[] bike_region;
 	public ITiledTextureRegion biker_menu_region;
-	
-	private BuildableBitmapTextureAtlas menuTextureAtlas;
-	private BuildableBitmapTextureAtlas menuTutorialTextureAtlas;
-	private BuildableBitmapTextureAtlas menuBackgroundTextureAtlas;
-	
 	public ITextureRegion road_background_fon_region;
 	public ITextureRegion[] road_background_object;
 	public ITextureRegion[] road_background_blink_region;
@@ -77,57 +73,33 @@ public class ResourcesManager
 	public ITextureRegion close_button_region;
 	public ITextureRegion volume_up_button_region;
 	public ITextureRegion volume_down_button_region;
-	
 	public ITextureRegion pause_background_region;
 	public ITextureRegion pause_button_region;
 	public ITextureRegion restart_button_region;
 	public ITextureRegion resume_button_region;
 	public ITextureRegion main_menu_button_region;
-	
 	public ITextureRegion[] road_background_region;
-	
-
 	public Music game;
 	public Music menu_1;
 	public Music menu_2;
 	public Music menu_3;
-	
 	public Music motorSound;
 	public Music crashSound;
 	public Music coinSound;
 	public Music moveLeftSound;
 	public Music moveRightSound;
-	
 	public SoundManager soundManager;
 	public LinkedList<ITextureRegion> objectsList=new LinkedList <ITextureRegion>();
-	private BuildableBitmapTextureAtlas gameTextureAtlas;
-	private BuildableBitmapTextureAtlas gameEnviromentTextureAtlas;
-	private BuildableBitmapTextureAtlas gameBackgroundTextureAtlas;
-	
-    private static final ResourcesManager INSTANCE = new ResourcesManager();
-    
-    public Engine engine;
+	public Engine engine;
     public GameActivity activity;
     public BoundCamera camera;
     public VertexBufferObjectManager vbom;
-    
     public Font font;
     
     //---------------------------------------------
-    // TEXTURES & TEXTURE REGIONS
+    // PRIVATE METHODS
     //---------------------------------------------
     
-    //---------------------------------------------
-    // CLASS LOGIC
-    //---------------------------------------------
-
-    public void initSoundManager()
-    {
-    	if(soundManager==null)
-    	 soundManager = new SoundManager(this,this.activity.getSharedPreferences("com.example.bikerunner", Context.MODE_PRIVATE));
-    		
-    }
-
     private void loadMenuFonts()
     {
     	FontFactory.setAssetBasePath("font/");
@@ -137,101 +109,70 @@ public class ResourcesManager
         font.load();
     }
     
-    public void loadMenuResources()
-    {
-    	loadMenuGraphics();
-        loadMenuAudio();
-        loadMenuFonts();
-    }
-    
-    public void loadLoadingResources()
-    {
-    	loadLoadingGraphics();
-    }
-    
-    public void unloadMenuResources()
-    {
-        unloadMenuAudio();
-        unloadMenuGraphics();
-    }
-    
-    public void unloadGameResources()
-    {
-        unloadGameGraphics();
-        unloadGameAudio();
-    }
-  
-	public void loadGameResources(String stage, String bike)
-    {
-        loadGameGraphics(stage, bike);
-        loadGameFonts();
-        loadGameAudio(stage);
-    }
-    
     private void loadMenuGraphics()
     {
     	BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/menu/");
-    	menuTextureAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 2048, 2048, TextureOptions.DEFAULT);
+    	mMenuTextureAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 2048, 2048, TextureOptions.DEFAULT);
     	    	
     	
-    	biker_menu_region = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(menuTextureAtlas, activity, "biker_a.png", 3, 1);
+    	biker_menu_region = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mMenuTextureAtlas, activity, "biker_a.png", 3, 1);
 
     	bike_region =  new ITiledTextureRegion[2];
-    	bike_region[0]= BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(menuTextureAtlas, activity, "bike_a.png", 1, 2);
-    	bike_region[1]= BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(menuTextureAtlas, activity, "bike_b.png", 1, 2);
+    	bike_region[0]= BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mMenuTextureAtlas, activity, "bike_a.png", 1, 2);
+    	bike_region[1]= BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mMenuTextureAtlas, activity, "bike_b.png", 1, 2);
 	    
-    	coin_region = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(menuTextureAtlas, activity, "coin.png", 4, 2);
+    	coin_region = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mMenuTextureAtlas, activity, "coin.png", 4, 2);
     	
-    	lock_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "lock.png");
-    	buy_button_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "buy_button.png");
-    	options_button_region= BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "options_button.png");
-    	help_button_region= BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "help_button.png");
+    	lock_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mMenuTextureAtlas, activity, "lock.png");
+    	buy_button_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mMenuTextureAtlas, activity, "buy_button.png");
+    	options_button_region= BitmapTextureAtlasTextureRegionFactory.createFromAsset(mMenuTextureAtlas, activity, "options_button.png");
+    	help_button_region= BitmapTextureAtlasTextureRegionFactory.createFromAsset(mMenuTextureAtlas, activity, "help_button.png");
     	
-    	pause_background_region= BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "background.png");
-    	mute_button_region= BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "mute_button.png");
-    	close_button_region= BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "close_button.png");
-    	volume_up_button_region= BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "volume_up_button.png");
-    	volume_down_button_region= BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "volume_down_button.png");
+    	pause_background_region= BitmapTextureAtlasTextureRegionFactory.createFromAsset(mMenuTextureAtlas, activity, "background.png");
+    	mute_button_region= BitmapTextureAtlasTextureRegionFactory.createFromAsset(mMenuTextureAtlas, activity, "mute_button.png");
+    	close_button_region= BitmapTextureAtlasTextureRegionFactory.createFromAsset(mMenuTextureAtlas, activity, "close_button.png");
+    	volume_up_button_region= BitmapTextureAtlasTextureRegionFactory.createFromAsset(mMenuTextureAtlas, activity, "volume_up_button.png");
+    	volume_down_button_region= BitmapTextureAtlasTextureRegionFactory.createFromAsset(mMenuTextureAtlas, activity, "volume_down_button.png");
     	
-    	empty_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuTextureAtlas, activity, "empty.png");
+    	empty_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mMenuTextureAtlas, activity, "empty.png");
     	
     	try
     	{
-    	    this.menuTextureAtlas.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(0, 1, 0));
-    	    this.menuTextureAtlas.load();
+    	    this.mMenuTextureAtlas.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(0, 1, 0));
+    	    this.mMenuTextureAtlas.load();
     	} 
     	catch (final TextureAtlasBuilderException e)
     	{
     	        Debug.e(e);
     	}
     	
-    	menuTutorialTextureAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 2048, 2048, TextureOptions.DEFAULT);
-    	tutorial_region = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(menuTutorialTextureAtlas, activity, "tutorial.png", 3, 4);
+    	mMenuTutorialTextureAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 2048, 2048, TextureOptions.DEFAULT);
+    	tutorial_region = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mMenuTutorialTextureAtlas, activity, "tutorial.png", 3, 4);
     	
     	
     	
     	try
     	{
-    	    this.menuTutorialTextureAtlas.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(0, 1, 0));
-    	    this.menuTutorialTextureAtlas.load();
+    	    this.mMenuTutorialTextureAtlas.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(0, 1, 0));
+    	    this.mMenuTutorialTextureAtlas.load();
     	} 
     	catch (final TextureAtlasBuilderException e)
     	{
     	        Debug.e(e);
     	}
     	
-    	menuBackgroundTextureAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 2048, 2048, TextureOptions.DEFAULT);
+    	mMenuBackgroundTextureAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 2048, 2048, TextureOptions.DEFAULT);
     	
     	level_background_region = new ITextureRegion[3];
-    	level_background_region[0] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuBackgroundTextureAtlas, activity, "level_background_a.png");
-    	level_background_region[1] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuBackgroundTextureAtlas, activity, "level_background_b.png");
-    	level_background_region[2] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(menuBackgroundTextureAtlas, activity, "level_background_c.png");
+    	level_background_region[0] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mMenuBackgroundTextureAtlas, activity, "level_background_a.png");
+    	level_background_region[1] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mMenuBackgroundTextureAtlas, activity, "level_background_b.png");
+    	level_background_region[2] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mMenuBackgroundTextureAtlas, activity, "level_background_c.png");
 
     	
     	try
     	{
-    	    this.menuBackgroundTextureAtlas.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(0, 1, 0));
-    	    this.menuBackgroundTextureAtlas.load();
+    	    this.mMenuBackgroundTextureAtlas.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(0, 1, 0));
+    	    this.mMenuBackgroundTextureAtlas.load();
     	} 
     	catch (final TextureAtlasBuilderException e)
     	{
@@ -255,9 +196,9 @@ public class ResourcesManager
     private void loadGameGraphics(String stage, String bike)
     {
     	BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/game/");
-	    gameTextureAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 2048, 2048, TextureOptions.DEFAULT);
-	    gameEnviromentTextureAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 2048, 2048, TextureOptions.DEFAULT);
-	    gameBackgroundTextureAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 2048, 2048, TextureOptions.DEFAULT);
+	    mGameTextureAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 2048, 2048, TextureOptions.DEFAULT);
+	    mGameEnviromentTextureAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 2048, 2048, TextureOptions.DEFAULT);
+	    mGameBackgroundTextureAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 2048, 2048, TextureOptions.DEFAULT);
 	    
 	    objectsList=new LinkedList <ITextureRegion>();
 	    
@@ -265,119 +206,119 @@ public class ResourcesManager
 	    if(stage=="Desert")
 	    {
 	    	road_background_region=new ITextureRegion[5];
-		    road_background_region[0]= BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameBackgroundTextureAtlas, activity, "background/mountain_a_desert.png");
-		    road_background_region[1]= BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameBackgroundTextureAtlas, activity, "background/mountain_b_desert.png");
-		    road_background_region[2]= BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameBackgroundTextureAtlas, activity, "background/sandcastle_desert.png");
-		    road_background_region[3]= BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameBackgroundTextureAtlas, activity, "background/backgorund_desert_skull_a.png");
-		    road_background_region[4]= BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameBackgroundTextureAtlas, activity, "background/mountain_c_desert.png");
+		    road_background_region[0]= BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameBackgroundTextureAtlas, activity, "background/mountain_a_desert.png");
+		    road_background_region[1]= BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameBackgroundTextureAtlas, activity, "background/mountain_b_desert.png");
+		    road_background_region[2]= BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameBackgroundTextureAtlas, activity, "background/sandcastle_desert.png");
+		    road_background_region[3]= BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameBackgroundTextureAtlas, activity, "background/backgorund_desert_skull_a.png");
+		    road_background_region[4]= BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameBackgroundTextureAtlas, activity, "background/mountain_c_desert.png");
 		    
-		    fence_region = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "road/fence.png", 3, 1);
+		    fence_region = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "road/fence.png", 3, 1);
 		    
 		    bus_region = new ITiledTextureRegion[3];
-		    bus_region[0] = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "road/bus_a.png",  3, 1);
-		    bus_region[1] = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "road/bus_b.png",  3, 1);
-		    bus_region[2] = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "road/bus_c.png",  3, 1);
+		    bus_region[0] = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "road/bus_a.png",  3, 1);
+		    bus_region[1] = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "road/bus_b.png",  3, 1);
+		    bus_region[2] = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "road/bus_c.png",  3, 1);
 		    
 		    
 		    
-	    	road_background_fon_region= BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameEnviromentTextureAtlas, activity, "road/background/background_desert.png");
+	    	road_background_fon_region= BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameEnviromentTextureAtlas, activity, "road/background/background_desert.png");
 	    	road_background_object=new ITextureRegion[7];
-	    	road_background_object[0]= BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameEnviromentTextureAtlas, activity, "road/background/background_desert_grass.png");
-	    	road_background_object[1]= BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameEnviromentTextureAtlas, activity, "road/background/background_desert_bush.png");  
-	    	road_background_object[2]= BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameEnviromentTextureAtlas, activity, "road/background/background_desert_tree_a.png");
-	    	road_background_object[3]= BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameEnviromentTextureAtlas, activity, "road/background/background_desert_tree_b.png");
-	    	road_background_object[4]= BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameEnviromentTextureAtlas, activity, "road/background/background_desert_tree_c.png");
-	    	road_background_object[5]= BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameEnviromentTextureAtlas, activity, "road/background/background_desert_cactus_a.png");
-	    	road_background_object[6]= BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameEnviromentTextureAtlas, activity, "road/background/background_rock_c.png");
+	    	road_background_object[0]= BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameEnviromentTextureAtlas, activity, "road/background/background_desert_grass.png");
+	    	road_background_object[1]= BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameEnviromentTextureAtlas, activity, "road/background/background_desert_bush.png");  
+	    	road_background_object[2]= BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameEnviromentTextureAtlas, activity, "road/background/background_desert_tree_a.png");
+	    	road_background_object[3]= BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameEnviromentTextureAtlas, activity, "road/background/background_desert_tree_b.png");
+	    	road_background_object[4]= BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameEnviromentTextureAtlas, activity, "road/background/background_desert_tree_c.png");
+	    	road_background_object[5]= BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameEnviromentTextureAtlas, activity, "road/background/background_desert_cactus_a.png");
+	    	road_background_object[6]= BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameEnviromentTextureAtlas, activity, "road/background/background_rock_c.png");
 	    	road_background_blink_region=new ITextureRegion[2];
-		    road_background_blink_region[0]= BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameEnviromentTextureAtlas, activity, "road/background/background_blink_a.png");
-		    road_background_blink_region[1]= BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameEnviromentTextureAtlas, activity, "road/background/background_blink_b.png");
-		    background_region= BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameBackgroundTextureAtlas, activity, "background/background_desert.png");
+		    road_background_blink_region[0]= BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameEnviromentTextureAtlas, activity, "road/background/background_blink_a.png");
+		    road_background_blink_region[1]= BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameEnviromentTextureAtlas, activity, "road/background/background_blink_b.png");
+		    background_region= BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameBackgroundTextureAtlas, activity, "background/background_desert.png");
 	    }
 	    else
     	if(stage=="Countryside")
 	    {
     		road_background_region=new ITextureRegion[3];
-    	    road_background_region[0]= BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameBackgroundTextureAtlas, activity, "background/house_a_countreside.png");
-    	    road_background_region[1]= BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameBackgroundTextureAtlas, activity, "background/house_b_countreside.png");
-    	    road_background_region[2]= BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameBackgroundTextureAtlas, activity, "background/backgorund_desert_skull_a.png");
+    	    road_background_region[0]= BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameBackgroundTextureAtlas, activity, "background/house_a_countreside.png");
+    	    road_background_region[1]= BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameBackgroundTextureAtlas, activity, "background/house_b_countreside.png");
+    	    road_background_region[2]= BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameBackgroundTextureAtlas, activity, "background/backgorund_desert_skull_a.png");
     		
-	    	road_background_fon_region= BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "road/background/background_countriside.png");
+	    	road_background_fon_region= BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameTextureAtlas, activity, "road/background/background_countriside.png");
 	    	road_background_object=new ITextureRegion[4];
-	    	road_background_object[0]= BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "road/background/background_desert_grass.png");
-	    	road_background_object[1]= BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "road/background/background_desert_bush.png");  
-	    	road_background_object[2]= BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "road/background/background_countriside_cow_a.png"); 
-	    	road_background_object[3]= BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "road/background/background_countriside_cow_b.png");
+	    	road_background_object[0]= BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameTextureAtlas, activity, "road/background/background_desert_grass.png");
+	    	road_background_object[1]= BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameTextureAtlas, activity, "road/background/background_desert_bush.png");  
+	    	road_background_object[2]= BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameTextureAtlas, activity, "road/background/background_countriside_cow_a.png"); 
+	    	road_background_object[3]= BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameTextureAtlas, activity, "road/background/background_countriside_cow_b.png");
 	    	
-	    	fence_region = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "road/seno.png", 3, 1);
+	    	fence_region = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "road/seno.png", 3, 1);
 	 	    
 	    	building_region = new ITiledTextureRegion[1];
-	    	building_region[0] = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "road/building_a.png",  3, 1);
+	    	building_region[0] = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "road/building_a.png",  3, 1);
 	 	    
 	    	bus_region = new ITiledTextureRegion[1];
-		    bus_region[0] = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "road/bus_a.png",  3, 1);
+		    bus_region[0] = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "road/bus_a.png",  3, 1);
 		   
 		    pickup_region = new ITiledTextureRegion[1];
-		    pickup_region[0] = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "road/pickup_a.png",  3, 1);
+		    pickup_region[0] = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "road/pickup_a.png",  3, 1);
 		   
 		    
 	    	road_background_blink_region=new ITextureRegion[2];
-		    road_background_blink_region[0]= BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "road/background/background_blink_c.png");
-		    road_background_blink_region[1]= BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "road/background/background_blink_d.png");
-		    background_region= BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameBackgroundTextureAtlas, activity, "background/background_desert.png");
+		    road_background_blink_region[0]= BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameTextureAtlas, activity, "road/background/background_blink_c.png");
+		    road_background_blink_region[1]= BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameTextureAtlas, activity, "road/background/background_blink_d.png");
+		    background_region= BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameBackgroundTextureAtlas, activity, "background/background_desert.png");
 		}
     	else
     	{
     		road_background_region=new ITextureRegion[5];
-    	    road_background_region[0]= BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameBackgroundTextureAtlas, activity, "background/mountain_a_desert.png");
-    	    road_background_region[1]= BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameBackgroundTextureAtlas, activity, "background/mountain_b_desert.png");
-    	    road_background_region[2]= BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameBackgroundTextureAtlas, activity, "background/sandcastle_desert.png");
-    	    road_background_region[3]= BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameBackgroundTextureAtlas, activity, "background/backgorund_desert_skull_a.png");
-    	    road_background_region[4]= BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameBackgroundTextureAtlas, activity, "background/mountain_c_desert.png");
+    	    road_background_region[0]= BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameBackgroundTextureAtlas, activity, "background/mountain_a_desert.png");
+    	    road_background_region[1]= BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameBackgroundTextureAtlas, activity, "background/mountain_b_desert.png");
+    	    road_background_region[2]= BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameBackgroundTextureAtlas, activity, "background/sandcastle_desert.png");
+    	    road_background_region[3]= BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameBackgroundTextureAtlas, activity, "background/backgorund_desert_skull_a.png");
+    	    road_background_region[4]= BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameBackgroundTextureAtlas, activity, "background/mountain_c_desert.png");
     		
-    	    fence_region = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "road/fence.png", 3, 1);
+    	    fence_region = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "road/fence.png", 3, 1);
     	    
     	    bus_region = new ITiledTextureRegion[3];
-    	    bus_region[0] = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "road/bus_a.png",  3, 1);
-    	    bus_region[1] = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "road/bus_b.png",  3, 1);
-    	    bus_region[2] = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "road/bus_c.png",  3, 1);
+    	    bus_region[0] = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "road/bus_a.png",  3, 1);
+    	    bus_region[1] = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "road/bus_b.png",  3, 1);
+    	    bus_region[2] = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "road/bus_c.png",  3, 1);
     	    
     	    
     		road_background_object=new ITextureRegion[2];
-	    	road_background_object[0]= BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "road/background/background_desert_grass.png");
-	    	road_background_object[1]= BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "road/background/background_desert_bush.png");  
+	    	road_background_object[0]= BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameTextureAtlas, activity, "road/background/background_desert_grass.png");
+	    	road_background_object[1]= BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameTextureAtlas, activity, "road/background/background_desert_bush.png");  
 		    road_background_blink_region=new ITextureRegion[2];
-		    road_background_blink_region[0]= BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "road/background/background_blink_a.png");
-		    road_background_blink_region[1]= BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "road/background/background_blink_b.png");
-		    background_region= BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameBackgroundTextureAtlas, activity, "background/background_desert.png");
+		    road_background_blink_region[0]= BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameTextureAtlas, activity, "road/background/background_blink_a.png");
+		    road_background_blink_region[1]= BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameTextureAtlas, activity, "road/background/background_blink_b.png");
+		    background_region= BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameBackgroundTextureAtlas, activity, "background/background_desert.png");
     	}
 	    
-	    tramp_a_region= BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "road/tramp_a.png", 3, 1);
+	    tramp_a_region= BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "road/tramp_a.png", 3, 1);
 	    
 	    if(bike=="Red Harley")
-	    	biker_region = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "biker/biker_a.png", 3, 2);
+	    	biker_region = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "biker/biker_a.png", 3, 2);
 	    else
 	    if(bike=="Black Harley")	
-	    	biker_region = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "biker/biker_b.png", 3, 2);
+	    	biker_region = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "biker/biker_b.png", 3, 2);
 	    else
-	    	biker_region = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "biker/biker_a.png", 3, 2);
+	    	biker_region = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "biker/biker_a.png", 3, 2);
 	    
 	   
-	    coin_region = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTextureAtlas, activity, "road/coin.png", 4, 2);
+	    coin_region = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mGameTextureAtlas, activity, "road/coin.png", 4, 2);
 	    
 	    
 	    
 	    
-	    pause_background_region= BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "menu/background.png");
-	    pause_button_region= BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "menu/pause_button.png"); 
-		restart_button_region= BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "menu/restart_button.png");
-		resume_button_region= BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "menu/resume_button.png"); 
-		main_menu_button_region= BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTextureAtlas, activity, "menu/main_menu_button.png"); 
+	    pause_background_region= BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameTextureAtlas, activity, "menu/background.png");
+	    pause_button_region= BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameTextureAtlas, activity, "menu/pause_button.png"); 
+		restart_button_region= BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameTextureAtlas, activity, "menu/restart_button.png");
+		resume_button_region= BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameTextureAtlas, activity, "menu/resume_button.png"); 
+		main_menu_button_region= BitmapTextureAtlasTextureRegionFactory.createFromAsset(mGameTextureAtlas, activity, "menu/main_menu_button.png"); 
 		
 	    try 
 	    {
-	        this.gameTextureAtlas.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(0, 0, 0));
-	        this.gameTextureAtlas.load();
+	        this.mGameTextureAtlas.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(0, 0, 0));
+	        this.mGameTextureAtlas.load();
 	    } 
  	    catch (final TextureAtlasBuilderException e)
 	    {
@@ -386,8 +327,8 @@ public class ResourcesManager
 	    
 	    try 
 	    {
-	        this.gameEnviromentTextureAtlas.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(0, 0, 0));
-	        this.gameEnviromentTextureAtlas.load();
+	        this.mGameEnviromentTextureAtlas.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(0, 0, 0));
+	        this.mGameEnviromentTextureAtlas.load();
 	    } 
  	    catch (final TextureAtlasBuilderException e)
 	    {
@@ -396,8 +337,8 @@ public class ResourcesManager
 	    
 	    try 
 	    {
-	        this.gameBackgroundTextureAtlas.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(0, 0, 0));
-	        this.gameBackgroundTextureAtlas.load();
+	        this.mGameBackgroundTextureAtlas.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(0, 0, 0));
+	        this.mGameBackgroundTextureAtlas.load();
 	    } 
  	    catch (final TextureAtlasBuilderException e)
 	    {
@@ -440,9 +381,67 @@ public class ResourcesManager
     private void loadLoadingGraphics()
     {
     	BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
-    	loadingTextureAtlas = new BitmapTextureAtlas(activity.getTextureManager(), 1024, 1024, TextureOptions.NEAREST);
-    	loading_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(loadingTextureAtlas, activity, "loading.png", 0, 0);
-    	loadingTextureAtlas.load();
+    	mLoadingTextureAtlas = new BitmapTextureAtlas(activity.getTextureManager(), 1024, 1024, TextureOptions.NEAREST);
+    	loading_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mLoadingTextureAtlas, activity, "loading.png", 0, 0);
+    	mLoadingTextureAtlas.load();
+    }
+    
+    private void unloadGameAudio() {
+    	this.engine.getMusicManager().remove(motorSound);
+    	this.engine.getMusicManager().remove(crashSound);
+    	this.engine.getMusicManager().remove(coinSound);
+    	this.engine.getMusicManager().remove(moveLeftSound);
+    	this.engine.getMusicManager().remove(moveRightSound);
+    	this.engine.getMusicManager().remove(game);
+    	
+		motorSound = null;
+		crashSound = null;
+		coinSound = null;
+		moveLeftSound = null;
+		moveRightSound = null;
+		game= null;
+	}
+    
+    //---------------------------------------------
+    // PUBLIC METHODS
+    //---------------------------------------------
+   
+    public void initSoundManager()
+    {
+    	if(soundManager==null)
+    	 soundManager = new SoundManager(this,this.activity.getSharedPreferences("com.example.bikerunner", Context.MODE_PRIVATE));
+    		
+    }
+
+    public void loadMenuResources()
+    {
+    	loadMenuGraphics();
+        loadMenuAudio();
+        loadMenuFonts();
+    }
+    
+    public void loadLoadingResources()
+    {
+    	loadLoadingGraphics();
+    }
+    
+    public void unloadMenuResources()
+    {
+        unloadMenuAudio();
+        unloadMenuGraphics();
+    }
+    
+    public void unloadGameResources()
+    {
+        unloadGameGraphics();
+        unloadGameAudio();
+    }
+  
+	public void loadGameResources(String stage, String bike)
+    {
+        loadGameGraphics(stage, bike);
+        loadGameFonts();
+        loadGameAudio(stage);
     }
     
     public void unloadGame()
@@ -467,9 +466,9 @@ public class ResourcesManager
     
     public void unloadMenuGraphics()
     {
-    	menuTextureAtlas.unload();
-    	menuTutorialTextureAtlas.unload();
-    	menuBackgroundTextureAtlas.unload();
+    	mMenuTextureAtlas.unload();
+    	mMenuTutorialTextureAtlas.unload();
+    	mMenuBackgroundTextureAtlas.unload();
     	
     	level_background_region = null;
     	biker_menu_region = null;
@@ -492,9 +491,9 @@ public class ResourcesManager
     
     public void unloadGameGraphics()
     {
-    	gameTextureAtlas.unload(); 
-    	gameEnviromentTextureAtlas.unload(); 
-    	gameBackgroundTextureAtlas.unload(); 
+    	mGameTextureAtlas.unload(); 
+    	mGameEnviromentTextureAtlas.unload(); 
+    	mGameBackgroundTextureAtlas.unload(); 
     	
     	objectsList=null;
     	road_background_fon_region=null;
@@ -518,47 +517,21 @@ public class ResourcesManager
     	pickup_region = null;
     }
     
-    private void unloadGameAudio() {
-    	this.engine.getMusicManager().remove(motorSound);
-    	this.engine.getMusicManager().remove(crashSound);
-    	this.engine.getMusicManager().remove(coinSound);
-    	this.engine.getMusicManager().remove(moveLeftSound);
-    	this.engine.getMusicManager().remove(moveRightSound);
-    	this.engine.getMusicManager().remove(game);
-    	
-		motorSound = null;
-		crashSound = null;
-		coinSound = null;
-		moveLeftSound = null;
-		moveRightSound = null;
-		game= null;
-	}
-    
     public void loadSplashScreen()
     {
     	BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
-    	splashTextureAtlas = new BitmapTextureAtlas(activity.getTextureManager(), 1024, 1024, TextureOptions.NEAREST);
-    	splash_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(splashTextureAtlas, activity, "splash.png", 0, 0);
-    	splashTextureAtlas.load();
+    	mSplashTextureAtlas = new BitmapTextureAtlas(activity.getTextureManager(), 1024, 1024, TextureOptions.NEAREST);
+    	splash_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mSplashTextureAtlas, activity, "splash.png", 0, 0);
+    	mSplashTextureAtlas.load();
     	//loadLoadingResources();
     }
     
     public void unloadSplashScreen()
     {
-    	splashTextureAtlas.unload();
+    	mSplashTextureAtlas.unload();
     	splash_region = null;
     }
     
-    
-    /**
-     * @param engine
-     * @param activity
-     * @param camera
-     * @param vbom
-     * <br><br>
-     * We use this method at beginning of game loading, to prepare Resources Manager properly,
-     * setting all needed parameters, so we can latter access them from different classes (eg. scenes)
-     */
     public static void prepareManager(Engine engine, GameActivity activity, BoundCamera camera, VertexBufferObjectManager vbom)
     {
         getInstance().engine = engine;
@@ -568,7 +541,7 @@ public class ResourcesManager
     }
     
     //---------------------------------------------
-    // GETTERS AND SETTERS
+    // GETTERS
     //---------------------------------------------
     
     public static ResourcesManager getInstance()

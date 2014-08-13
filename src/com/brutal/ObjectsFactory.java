@@ -150,11 +150,11 @@ public class ObjectsFactory {
 		int randomValue=(int)((float)Math.random()*pIds.size());
 		
 		Template template =  new Template(Integer.parseInt(pIds.get(randomValue)),pResManager,pVbom);
-		Obstacle[] obj=new Obstacle[template.objects.size()];
+		Obstacle[] obj=new Obstacle[template.mObjects.size()];
 		
-		for(int i=0;i<template.objects.size();i++)
+		for(int i=0;i<template.mObjects.size();i++)
 		{
-			obj[i] = template.objects.get(i);
+			obj[i] = template.mObjects.get(i);
 		}
 		
 		return obj; 

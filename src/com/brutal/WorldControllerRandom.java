@@ -6,23 +6,52 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 public class WorldControllerRandom extends WorldController{
 
-	public WorldControllerRandom(Road road, VertexBufferObjectManager vbom,
-			ResourcesManager resManager) {
-		super(road, vbom, resManager);
+	//---------------------------------------------
+    // VARIABLES
+    //---------------------------------------------
+	
+	private int mObstacleCounter=0;
+	
+	//---------------------------------------------
+    // CONSTRUCTOR
+    //---------------------------------------------
+	
+	public WorldControllerRandom(Road pRoad, VertexBufferObjectManager pVbom,
+			ResourcesManager pResManager) {
+		super(pRoad, pVbom, pResManager);
 	}
 	
-	private int obstacleCounter=0;
+	//---------------------------------------------
+    // OVERLOADED METHODS
+    //---------------------------------------------
 	
-	private void generateObstacle(int complexity, int speed)
+	@Override
+	public void updateWorld(int pSpeed)
+	{
+		mCounter++;
+		int complexity = this.getComplexityBySpeed(pSpeed);
+		generateObstacle(complexity,pSpeed);
+		generateCoin();
+		generateObject();
+		
+		if(mCounter>=100)
+			mCounter=0;
+	}
+	
+	//---------------------------------------------
+    // PRIVATE METHODS
+    //---------------------------------------------
+	
+	private void generateObstacle(int pComplexity, int pSpeed)
 	{
 		int maxObstacleCounter=0;
 		
-		if(complexity==1)
+		if(pComplexity==1)
 		{
 			maxObstacleCounter=90;
 		}
 		else
-		if(complexity==2)	
+		if(pComplexity==2)	
 		{
 			maxObstacleCounter=70;
 		}
@@ -31,13 +60,13 @@ public class WorldControllerRandom extends WorldController{
 			maxObstacleCounter=50;
 		}
 		
-		obstacleCounter++;
+		mObstacleCounter++;
 		
-		if(obstacleCounter==maxObstacleCounter)
+		if(mObstacleCounter==maxObstacleCounter)
 		{
 			LinkedList<String> ids = new LinkedList<String>();
 			
-			if(speed<19)
+			if(pSpeed<19)
 			{
 				ids.add("28");
 				ids.add("29");
@@ -46,7 +75,7 @@ public class WorldControllerRandom extends WorldController{
 				ids.add("32");
 			}
 			else
-			if(speed<24)
+			if(pSpeed<24)
 			{
 				ids.add("20");
 				ids.add("21");
@@ -58,7 +87,7 @@ public class WorldControllerRandom extends WorldController{
 				ids.add("32");
 			}
 			else
-			if(speed<29)
+			if(pSpeed<29)
 			{
 				ids.add("20");
 				ids.add("21");
@@ -84,7 +113,7 @@ public class WorldControllerRandom extends WorldController{
 			}
 			
 			
-			Obstacle[] obj = objFactory.createTemplate(mVbom, mResManager, ids);
+			Obstacle[] obj = mObjFactory.createTemplate(mVbom, mResManager, ids);
 			for(int i=0;i<obj.length;i++)
 			{
 				obj[i].setAlpha(0);
@@ -94,9 +123,9 @@ public class WorldControllerRandom extends WorldController{
 			mRoad.sortChildren("front");
 		}
 		
-		if(obstacleCounter==maxObstacleCounter)
+		if(mObstacleCounter==maxObstacleCounter)
 		{
-			obstacleCounter=0;
+			mObstacleCounter=0;
 		}
 	}
 	
@@ -104,7 +133,7 @@ public class WorldControllerRandom extends WorldController{
 	{		
 		if(mCounter%20==0)
 		{
-			ObstacleCoin obj = objFactory.createCoin(mVbom, mResManager);
+			ObstacleCoin obj = mObjFactory.createCoin(mVbom, mResManager);
 			
 			if(obj!=null)
 			{
@@ -124,7 +153,7 @@ public class WorldControllerRandom extends WorldController{
 	{		
 		if(mCounter%25==0)
 		{			
-			RoadObject obj = objFactory.createBackgroundObject(mVbom, mResManager);
+			RoadObject obj = mObjFactory.createBackgroundObject(mVbom, mResManager);
 			obj.initObject(1200, obj.getX(), obj.getY()*0.8f, 1, obj.getHeight()*2, obj.getWidth()*2);
 			obj.setAlpha(0);
 			mRoad.addObject(obj,"middle");
@@ -133,7 +162,7 @@ public class WorldControllerRandom extends WorldController{
 		
 		if(mCounter%10==0)
 		{			
-			RoadObject obj = objFactory.createBlink(mVbom, mResManager);
+			RoadObject obj = mObjFactory.createBlink(mVbom, mResManager);
 			obj.initObject(-1000, obj.getX(), obj.getY(), 1, obj.getHeight(), obj.getWidth());
 			obj.setAlpha(0);
 			mRoad.addObject(obj,"middle");
@@ -141,17 +170,4 @@ public class WorldControllerRandom extends WorldController{
 		}
 	}
 	
-	@Override
-	public void updateWorld(int speed)
-	{
-		mCounter++;
-		int complexity = this.getComplexityBySpeed(speed);
-		generateObstacle(complexity,speed);
-		generateCoin();
-		generateObject();
-		
-		if(mCounter>=100)
-			mCounter=0;
-	}
-
 }

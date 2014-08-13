@@ -3,74 +3,84 @@ package com.brutal;
 import java.util.LinkedList;
 
 import org.andengine.entity.Entity;
-import org.andengine.entity.IEntityMatcher;
 
 public class Road {
 	
-	//private
-	private LinkedList<RoadObject> objectList;
-	private LinkedList<Obstacle> obstacleList;
-	private LinkedList<ObstacleCoin> coinsList;
-	public Entity pBackScene;
-	public Entity pFrontScene;
-	public Entity pMiddleScene;
-	
+	//---------------------------------------------
+    // VARIABLES
+    //---------------------------------------------
+
+	private LinkedList<RoadObject> mObjectList;
+	private LinkedList<Obstacle> mObstacleList;
+	private LinkedList<ObstacleCoin> mCoinsList;
+	public Entity mBackScene;
+	public Entity mFrontScene;
+	public Entity mMiddleScene;
+
+	//---------------------------------------------
+    // CONSTRUCTOR
+    //---------------------------------------------
+
 	public Road()
 	{
-		pBackScene = new Entity();
-		pFrontScene = new Entity();
-		pMiddleScene = new Entity();
-		objectList = new LinkedList<RoadObject>();
-		obstacleList = new LinkedList<Obstacle>();
-		coinsList = new LinkedList<ObstacleCoin>();
+		mBackScene = new Entity();
+		mFrontScene = new Entity();
+		mMiddleScene = new Entity();
+		mObjectList = new LinkedList<RoadObject>();
+		mObstacleList = new LinkedList<Obstacle>();
+		mCoinsList = new LinkedList<ObstacleCoin>();
 	}
 	
-	public void updateRoad(int speed)
+	//---------------------------------------------
+    // PUBLIC METHODS
+    //---------------------------------------------
+	
+	public void updateRoad(int pSpeed)
 	{
-		for(int i=0; i<objectList.size();i++)
+		for(int i=0; i<mObjectList.size();i++)
 		{
-			objectList.get(i).updateObject(speed);
+			mObjectList.get(i).updateObject(pSpeed);
 			
-			if(objectList.get(i).canDelete())
-				this.removeObject(objectList.get(i));
+			if(mObjectList.get(i).canDelete())
+				this.removeObject(mObjectList.get(i));
 		}
 		
-		for(int i=0; i<obstacleList.size();i++)
+		for(int i=0; i<mObstacleList.size();i++)
 		{
-			obstacleList.get(i).updateObject(speed);
+			mObstacleList.get(i).updateObject(pSpeed);
 			
-			if(obstacleList.get(i).canDelete())
-				this.removeObstacle(obstacleList.get(i));
+			if(mObstacleList.get(i).canDelete())
+				this.removeObstacle(mObstacleList.get(i));
 		}
 		
-		for(int i=0; i<coinsList.size();i++)
+		for(int i=0; i<mCoinsList.size();i++)
 		{
-			coinsList.get(i).updateObject(speed);
+			mCoinsList.get(i).updateObject(pSpeed);
 			
-			if(coinsList.get(i).canDelete())
-				this.removeCoin(coinsList.get(i));
+			if(mCoinsList.get(i).canDelete())
+				this.removeCoin(mCoinsList.get(i));
 		}
 	}
 	
-	public void sortChildren(String scene)
+	public void sortChildren(String pScene)
 	{
-		if(scene=="back")
+		if(pScene=="back")
 		{
-			this.pBackScene.sortChildren();
-			for(int i=0;i<objectList.size();i++)
+			this.mBackScene.sortChildren();
+			for(int i=0;i<mObjectList.size();i++)
 			{
-				this.pBackScene.getChildByIndex(i).setZIndex(i);
+				this.mBackScene.getChildByIndex(i).setZIndex(i);
 			}
 		}else
-		if(scene=="front")
+		if(pScene=="front")
 		{
 			sortObstacles();
-			this.pFrontScene.sortChildren();
+			this.mFrontScene.sortChildren();
 		}else
-		if(scene=="middle")
+		if(pScene=="middle")
 		{
 			sortObjects();
-			this.pMiddleScene.sortChildren();
+			this.mMiddleScene.sortChildren();
 		}
 			
 	}
@@ -79,11 +89,11 @@ public class Road {
 	{
 		int lastValue=-10000;
 		
-		for(int i=0;i<this.pFrontScene.getChildCount();i++)
+		for(int i=0;i<this.mFrontScene.getChildCount();i++)
 		{
-			Obstacle temp =(Obstacle)(pFrontScene.getChildByIndex(i));
+			Obstacle temp =(Obstacle)(mFrontScene.getChildByIndex(i));
 			lastValue=(int)temp.getZ();
-			this.pFrontScene.getChildByIndex(i).setZIndex(10000-lastValue);
+			this.mFrontScene.getChildByIndex(i).setZIndex(10000-lastValue);
 		}
 			
 	}
@@ -91,40 +101,40 @@ public class Road {
 	public void sortObjects()
 	{
 		
-		for(int i=0;i<this.pMiddleScene.getChildCount();i++)
+		for(int i=0;i<this.mMiddleScene.getChildCount();i++)
 		{
-			RoadObject temp =(RoadObject)(pMiddleScene.getChildByIndex(i));
+			RoadObject temp =(RoadObject)(mMiddleScene.getChildByIndex(i));
 			int depth=(int)temp.getZ();
-			this.pMiddleScene.getChildByIndex(i).setZIndex(10000-depth);
+			this.mMiddleScene.getChildByIndex(i).setZIndex(10000-depth);
 		}
 			
 	}
 	
-	public void addObject(RoadObject obj, String scene)
+	public void addObject(RoadObject pObj, String pScene)
 	{
-		objectList.add(obj);
+		mObjectList.add(pObj);
 		
-		if(scene=="back")
+		if(pScene=="back")
 		{
-			pBackScene.attachChild(obj);
+			mBackScene.attachChild(pObj);
 		}else
-		if(scene=="front")
+		if(pScene=="front")
 		{
-			pFrontScene.attachChild(obj);
+			mFrontScene.attachChild(pObj);
 		}else
-		if(scene=="middle")
+		if(pScene=="middle")
 		{
-			pMiddleScene.attachChild(obj);
+			mMiddleScene.attachChild(pObj);
 		}
 	}
 	
-	public void removeObject(RoadObject obj)
+	public void removeObject(RoadObject pObj)
 	{
-		objectList.remove(obj);
+		mObjectList.remove(pObj);
 		
 		try
 		{
-			pBackScene.detachChild(obj);
+			mBackScene.detachChild(pObj);
 		}
 		finally
 		{
@@ -133,7 +143,7 @@ public class Road {
 		
 		try
 		{
-			pMiddleScene.detachChild(obj);
+			mMiddleScene.detachChild(pObj);
 		}
 		finally
 		{
@@ -142,7 +152,7 @@ public class Road {
 		
 		try
 		{
-			pFrontScene.detachChild(obj);
+			mFrontScene.detachChild(pObj);
 		}
 		finally
 		{
@@ -150,31 +160,31 @@ public class Road {
 		}
 	}
 	
-	public void addObstacle(Obstacle obj, String scene)
+	public void addObstacle(Obstacle pObj, String pScene)
 	{
-		obstacleList.add(obj);
+		mObstacleList.add(pObj);
 		
-		if(scene=="back")
+		if(pScene=="back")
 		{
-			pBackScene.attachChild(obj);
+			mBackScene.attachChild(pObj);
 		}else
-		if(scene=="front")
+		if(pScene=="front")
 		{
-			pFrontScene.attachChild(obj);
+			mFrontScene.attachChild(pObj);
 		}else
-		if(scene=="middle")
+		if(pScene=="middle")
 		{
-			pMiddleScene.attachChild(obj);
+			mMiddleScene.attachChild(pObj);
 		}
 	}
 	
-	public void removeObstacle(Obstacle obj)
+	public void removeObstacle(Obstacle pObj)
 	{
-		obstacleList.remove(obj);
+		mObstacleList.remove(pObj);
 		
 		try
 		{
-			pBackScene.detachChild(obj);
+			mBackScene.detachChild(pObj);
 		}
 		finally
 		{
@@ -183,7 +193,7 @@ public class Road {
 		
 		try
 		{
-			pMiddleScene.detachChild(obj);
+			mMiddleScene.detachChild(pObj);
 		}
 		finally
 		{
@@ -192,7 +202,7 @@ public class Road {
 		
 		try
 		{
-			pFrontScene.detachChild(obj);
+			mFrontScene.detachChild(pObj);
 		}
 		finally
 		{
@@ -200,41 +210,40 @@ public class Road {
 		}
 	}
 	
-	
-	public void addCoin(ObstacleCoin obj, String scene)
+	public void addCoin(ObstacleCoin pObj, String pScene)
 	{
-		coinsList.add(obj);
+		mCoinsList.add(pObj);
 		
-		if(scene=="back")
+		if(pScene=="back")
 		{
-			pBackScene.attachChild(obj);
+			mBackScene.attachChild(pObj);
 		}else
-		if(scene=="front")
+		if(pScene=="front")
 		{
-			pFrontScene.attachChild(obj);
+			mFrontScene.attachChild(pObj);
 		}else
-		if(scene=="middle")
+		if(pScene=="middle")
 		{
-			pMiddleScene.attachChild(obj);
+			mMiddleScene.attachChild(pObj);
 		}
 	}
 	
-	public void deleteCoin(ObstacleCoin obj)
+	public void deleteCoin(ObstacleCoin pObj)
 	{
-		for(int i=0;i<coinsList.size();i++)
+		for(int i=0;i<mCoinsList.size();i++)
 		{
-			if(coinsList.get(i)==obj)
-				coinsList.get(i).delete();
+			if(mCoinsList.get(i)==pObj)
+				mCoinsList.get(i).delete();
 		}
 	}
 	
-	public void removeCoin(Obstacle obj)
+	public void removeCoin(Obstacle pObj)
 	{
-		coinsList.remove(obj);
+		mCoinsList.remove(pObj);
 		
 		try
 		{
-			pBackScene.detachChild(obj);
+			mBackScene.detachChild(pObj);
 		}
 		finally
 		{
@@ -243,7 +252,7 @@ public class Road {
 		
 		try
 		{
-			pMiddleScene.detachChild(obj);
+			mMiddleScene.detachChild(pObj);
 		}
 		finally
 		{
@@ -252,53 +261,100 @@ public class Road {
 		
 		try
 		{
-			pFrontScene.detachChild(obj);
+			mFrontScene.detachChild(pObj);
 		}
 		finally
 		{
 			
 		}
 	}
+
+	public void resetGame()
+	{
+		LinkedList<Obstacle> toRemove = new LinkedList<Obstacle>();
+		for(int i=0;i<mObstacleList.size();i++)
+		{
+			toRemove.add(mObstacleList.get(i));
+		}
+		
+		while(toRemove.size()>0)
+		{
+			this.removeObstacle(toRemove.getFirst());
+			toRemove.removeFirst();
+		}
+		
+		LinkedList<RoadObject> toRemoveObject = new LinkedList<RoadObject>();
+		for(int i=0;i<mObjectList.size();i++)
+		{
+			toRemoveObject.add(mObjectList.get(i));
+		}
+		
+		while(toRemoveObject.size()>0)
+		{
+			this.removeObject(toRemoveObject.getFirst());
+			toRemoveObject.removeFirst();
+		}
+		
+		LinkedList<Obstacle> toRemoveCoin = new LinkedList<Obstacle>();
+		for(int i=0;i<mCoinsList.size();i++)
+		{
+			toRemoveCoin.add(mCoinsList.get(i));
+		}
+		
+		while(toRemoveCoin.size()>0)
+		{
+			this.removeObstacle(toRemoveCoin.getFirst());
+			toRemoveCoin.removeFirst();
+		}
+		
+		mCoinsList=new LinkedList<ObstacleCoin>();
+		
+	}
+
+	//---------------------------------------------
+    // GETTERS
+    //---------------------------------------------
 	
 	public int[] getLinesHeight()
 	{
 		int[] result = new int[]{0,0,0};
 		
-		for(int i=0;i<obstacleList.size();i++)
+		for(int i=0;i<mObstacleList.size();i++)
 		{
-			if(obstacleList.get(i).getObstacleHeight()>0)
+			if(mObstacleList.get(i).getObstacleHeight()>0)
 			{
-				result[obstacleList.get(i).getLine()]=obstacleList.get(i).getObstacleHeight();
+				result[mObstacleList.get(i).getLine()]=
+						mObstacleList.get(i).getObstacleHeight();
 			}
 		}
 		
 		return result;
 	}
 	
-	public int[] getLinesHeightByPosition(int position)
+	public int[] getLinesHeightByPosition(int pPosition)
 	{
 		int[] result = new int[]{0,0,0};
 		
-		for(int i=0;i<obstacleList.size();i++)
+		for(int i=0;i<mObstacleList.size();i++)
 		{
-			if(obstacleList.get(i).getObstacleHeightByPosition(position)>0)
+			if(mObstacleList.get(i).getObstacleHeightByPosition(pPosition)>0)
 			{
-				result[obstacleList.get(i).getLine()]=obstacleList.get(i).getObstacleHeightByPosition(position);
+				result[mObstacleList.get(i).getLine()]=mObstacleList.get(i).getObstacleHeightByPosition(pPosition);
 			}
 		}
 		
 		return result;
 	}
 	
-	public int[] getLinesHeightByDeep(float deep)
+	public int[] getLinesHeightByDeep(float pDeep)
 	{
 		int[] result = new int[]{0,0,0};
 		
-		for(int i=0;i<obstacleList.size();i++)
+		for(int i=0;i<mObstacleList.size();i++)
 		{
-			if(obstacleList.get(i).getObstacleHeightByDeep(deep)>0)
+			if(mObstacleList.get(i).getObstacleHeightByDeep(pDeep)>0)
 			{
-				result[obstacleList.get(i).getLine()]=obstacleList.get(i).getObstacleHeightByDeep(deep);
+				result[mObstacleList.get(i).getLine()]=mObstacleList.get(i).getObstacleHeightByDeep(pDeep);
 			}
 		}
 		
@@ -309,59 +365,14 @@ public class Road {
 	{
 		ObstacleCoin[] result = new ObstacleCoin[]{null,null,null};
 		
-		for(int i=0;i<coinsList.size();i++)
+		for(int i=0;i<mCoinsList.size();i++)
 		{
-			if(coinsList.get(i).getObstacleHeight()>0)
+			if(mCoinsList.get(i).getObstacleHeight()>0)
 			{
-				result[coinsList.get(i).getLine()]=(ObstacleCoin) coinsList.get(i);
+				result[mCoinsList.get(i).getLine()]=(ObstacleCoin) mCoinsList.get(i);
 			}
 		}
 		
 		return result;
 	}
-	
-	
-	
-	public void resetGame()
-	{
-		LinkedList<Obstacle> toRemove = new LinkedList<Obstacle>();
-		for(int i=0;i<obstacleList.size();i++)
-		{
-			toRemove.add(obstacleList.get(i));
-		}
-		
-		while(toRemove.size()>0)
-		{
-			this.removeObstacle(toRemove.getFirst());
-			toRemove.removeFirst();
-		}
-		
-		LinkedList<RoadObject> toRemoveObject = new LinkedList<RoadObject>();
-		for(int i=0;i<objectList.size();i++)
-		{
-			toRemoveObject.add(objectList.get(i));
-		}
-		
-		while(toRemoveObject.size()>0)
-		{
-			this.removeObject(toRemoveObject.getFirst());
-			toRemoveObject.removeFirst();
-		}
-		
-		LinkedList<Obstacle> toRemoveCoin = new LinkedList<Obstacle>();
-		for(int i=0;i<coinsList.size();i++)
-		{
-			toRemoveCoin.add(coinsList.get(i));
-		}
-		
-		while(toRemoveCoin.size()>0)
-		{
-			this.removeObstacle(toRemoveCoin.getFirst());
-			toRemoveCoin.removeFirst();
-		}
-		
-		coinsList=new LinkedList<ObstacleCoin>();
-		
-	}
-
 }

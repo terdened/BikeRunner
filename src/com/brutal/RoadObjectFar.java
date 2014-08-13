@@ -5,25 +5,34 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 public class RoadObjectFar extends RoadObject {
 
+	//---------------------------------------------
+    // CONSTRUCTOR
+    //---------------------------------------------
+	
 	public RoadObjectFar(float pX, float pY, ITextureRegion pTextureRegion,
 			VertexBufferObjectManager pVertexBufferObjectManager) {
 		super(pX, pY, pTextureRegion, pVertexBufferObjectManager);
 	}
 	
-	public void initObject(float z, float x, float y, float size, float realHeight, float realWidth)
+	//---------------------------------------------
+    // PUBLILC METHODS
+    //---------------------------------------------
+		
+	public void initObject(float pZ, float pX, float pY, float pSize, 
+			float pRealHeight, float pRealWidth)
 	{
-		mZ=z;
-		mRealX=x;
-		mRealY=y;
-		mSize=size;
-		mRealHeight=realHeight;
-		mRealWidth=realWidth;
-		pDeltaY=10;
+		mZ=pZ;
+		mRealX=pX;
+		mRealY=pY;
+		mSize=pSize;
+		mRealHeight=pRealHeight;
+		mRealWidth=pRealWidth;
 		updateObject(0);
+		mDeltaY=10;
 		setAlpha(0);
 	}
 	
-	public void updateObject(int speed)
+	public void updateObject(int pSpeed)
 	{
 		if(this.getAlpha()<1)
 		{
@@ -34,17 +43,16 @@ public class RoadObjectFar extends RoadObject {
 			this.setAlpha(1);
 		}
 		
-		mZ-=speed;
+		mZ-=pSpeed;
 		mSize=(150.0f)/(mZ+2000);
 
 		this.setWidth(mSize*mRealWidth);
 		this.setHeight(mSize*mRealHeight);
 		
 		mX=640.0f-(this.getWidth()/2)+(mSize*mRealX);
-		mY=300.0f-(this.getHeight())+((80000.0f)/(mZ+2000))+pDeltaY;
+		mY=300.0f-(this.getHeight())+((80000.0f)/(mZ+2000))+mDeltaY;
 		
 		this.setPosition(mX,mY);
-		
 	}
 
 }

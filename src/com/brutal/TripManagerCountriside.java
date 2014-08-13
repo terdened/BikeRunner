@@ -3,12 +3,20 @@ package com.brutal;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 public class TripManagerCountriside extends TripManager {
+	
+	//---------------------------------------------
+    // CONSTRUCTOR
+    //---------------------------------------------
 
-	TripManagerCountriside(Road road, VertexBufferObjectManager vbom,
-			ResourcesManager resManager) {
-		super(road, vbom, resManager);
+	TripManagerCountriside(Road pRoad, VertexBufferObjectManager pVbom,
+			ResourcesManager pResManager) {
+		super(pRoad, pVbom, pResManager);
 	}
 	
+	//---------------------------------------------
+    // OVERLOADED METHODS
+    //---------------------------------------------
+
 	@Override
 	public void initTripManager()
 	{
@@ -32,8 +40,6 @@ public class TripManagerCountriside extends TripManager {
 		
 		this.mScript.add(new TripCacheItem(10000, mResManager.road_background_region[0], mVbom));
 		this.mScript.getLast().initObject(6000, 5000, 750, 1, 1500, 3000);
-		
-		
 	}	
 
 }

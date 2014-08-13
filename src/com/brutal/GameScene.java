@@ -333,9 +333,9 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
     public void createRoad()
     {
     	mRoad = new Road();
-    	this.attachChild(mRoad.pBackScene);
-     	this.attachChild(mRoad.pMiddleScene);
-     	this.attachChild(mRoad.pFrontScene);
+    	this.attachChild(mRoad.mBackScene);
+     	this.attachChild(mRoad.mMiddleScene);
+     	this.attachChild(mRoad.mFrontScene);
     }
     
     public void createBiker()

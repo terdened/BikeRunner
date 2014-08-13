@@ -6,8 +6,16 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 public class Tutorial extends AnimatedSprite
 {
+	//---------------------------------------------
+    // VARIABLES
+    //---------------------------------------------
 
-	int counter = 0;
+	int mCounter = 0;
+	
+	//---------------------------------------------
+    // CONSTRUCTOR
+    //---------------------------------------------
+
 	public Tutorial(float pX, float pY,
 			ITiledTextureRegion pTiledTextureRegion,
 			VertexBufferObjectManager pVertexBufferObjectManager) {
@@ -19,12 +27,16 @@ public class Tutorial extends AnimatedSprite
 												   1500, 2500, 2500,
 												   2500, 2500, 1500};
 		animate(PLAYER_ANIMATE, 0, 11, false);
-		counter = 0;
+		mCounter = 0;
 	}
 	
+	//---------------------------------------------
+    // PUBLIC METHODS
+    //---------------------------------------------
+
 	public Boolean canDelete()
 	{
-		counter++;
+		mCounter++;
 		
 		if(this.isAnimationRunning())
 			return false;

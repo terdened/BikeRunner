@@ -23,33 +23,14 @@ public class SceneManager
     private BaseScene gameScene;
     private BaseScene loadingScene;
     
-    private String bike;
-    private String level;
     //---------------------------------------------
     // VARIABLES
     //---------------------------------------------
-    
+
     private static final SceneManager INSTANCE = new SceneManager();
-    
-    private SceneType currentSceneType = SceneType.SCENE_SPLASH;
-    
+    private SceneType currentSceneType = SceneType.SCENE_SPLASH; 
     private BaseScene currentScene;
-    
     private Engine engine = ResourcesManager.getInstance().engine;
-    
-    private int EstimateHeight()
-    {
-    	DisplayMetrics displaymetrics = new DisplayMetrics();
-    	ResourcesManager.getInstance().activity.getWindowManager().getDefaultDisplay().getMetrics(displaymetrics); 
-    	double width = displaymetrics.widthPixels;
-    	double height = displaymetrics.heightPixels;
-		
-		double ratio = 1280/width;
-		width*=ratio;
-		height*=ratio;	
-    	
-    	return (int)engine.getEngineOptions().getCamera().getHeight();
-    }
     
     public enum SceneType
     {
@@ -61,19 +42,108 @@ public class SceneManager
     }
     
     //---------------------------------------------
-    // CLASS LOGIC
+    // PRIVATE METHODS
     //---------------------------------------------
-    
-    public void setScene(BaseScene scene)
+
+    private int EstimateHeight()
     {
-        engine.setScene(scene);
-        currentScene = scene;
-        currentSceneType = scene.getSceneType();
+    	DisplayMetrics displaymetrics = new DisplayMetrics();
+    	ResourcesManager.getInstance().activity.getWindowManager().getDefaultDisplay().getMetrics(displaymetrics); 
+ 	
+    	return (int)engine.getEngineOptions().getCamera().getHeight();
     }
     
-    public void setScene(SceneType sceneType)
+    private void disposeSplashScene()
     {
-        switch (sceneType)
+        ResourcesManager.getInstance().unloadSplashScreen();
+        splashScene.disposeScene();
+        splashScene = null;
+    }
+    
+    //---------------------------------------------
+    // PUBLIC METHODS
+    //---------------------------------------------
+
+    public void createSplashScene(OnCreateSceneCallback pOnCreateSceneCallback)
+    {
+        ResourcesManager.getInstance().loadSplashScreen();
+        splashScene = new SplashScene();
+        currentScene = splashScene;
+        pOnCreateSceneCallback.onCreateSceneFinished(splashScene);
+    }
+    
+    public void createMenuScene()
+    {        
+        ResourcesManager.getInstance().loadMenuResources();
+        menuScene = new MainMenuScene(EstimateHeight());
+        ResourcesManager.getInstance().loadLoadingResources();
+        loadingScene = new LoadingScene();
+        SceneManager.getInstance().setScene(menuScene);
+        disposeSplashScene();
+    }
+    
+    public void loadGameScene(final Engine pEngine, final String pStage, final String pBike)
+    {
+    	
+        setScene(loadingScene);
+        ResourcesManager.getInstance().unloadMenuResources();
+        pEngine.registerUpdateHandler(new TimerHandler(0.1f, new ITimerCallback() 
+        {
+            public void onTimePassed(final TimerHandler pTimerHandler) 
+            {
+
+                ResourcesManager.getInstance().loadGameResources(pStage,pBike);
+                pEngine.registerUpdateHandler(new TimerHandler(0.1f, new ITimerCallback() 
+                {
+                    public void onTimePassed(final TimerHandler pTimerHandler) 
+                    {
+                    	pEngine.unregisterUpdateHandler(pTimerHandler);
+		                menuScene.disposeScene();
+		                GameScene tempScene=new GameScene();
+		                tempScene.initScene(pStage);
+		                gameScene = tempScene;
+		                
+		                setScene(gameScene);
+                    }
+                }));
+            }
+        }));
+    }
+    
+    public void loadMenuScene(final Engine pEngine)
+    {
+        setScene(loadingScene);
+        
+        if(gameScene!=null)
+        	ResourcesManager.getInstance().soundManager.setState("stop");
+        
+        ResourcesManager.getInstance().unloadGameResources();
+        pEngine.registerUpdateHandler(new TimerHandler(0.1f, new ITimerCallback() 
+        {
+            public void onTimePassed(final TimerHandler pTimerHandler) 
+            {
+            	pEngine.unregisterUpdateHandler(pTimerHandler);
+                ResourcesManager.getInstance().loadMenuResources();                
+                menuScene = new MainMenuScene(EstimateHeight());
+                setScene(menuScene);
+            }
+        }));
+    }
+  
+    //---------------------------------------------
+    // SETTERS
+    //---------------------------------------------
+    
+    public void setScene(BaseScene pScene)
+    {
+        engine.setScene(pScene);
+        currentScene = pScene;
+        currentSceneType = pScene.getSceneType();
+    }
+    
+    public void setScene(SceneType pSceneType)
+    {
+        switch (pSceneType)
         {
             case SCENE_MENU:
                 setScene(menuScene);
@@ -96,7 +166,7 @@ public class SceneManager
     }
     
     //---------------------------------------------
-    // GETTERS AND SETTERS
+    // GETTERS
     //---------------------------------------------
     
     public static SceneManager getInstance()
@@ -113,79 +183,5 @@ public class SceneManager
     {
         return currentScene;
     }
-    
-    public void createSplashScene(OnCreateSceneCallback pOnCreateSceneCallback)
-    {
-        ResourcesManager.getInstance().loadSplashScreen();
-        splashScene = new SplashScene();
-        currentScene = splashScene;
-        pOnCreateSceneCallback.onCreateSceneFinished(splashScene);
-    }
-
-    private void disposeSplashScene()
-    {
-        ResourcesManager.getInstance().unloadSplashScreen();
-        splashScene.disposeScene();
-        splashScene = null;
-    }
-    
-    public void createMenuScene()
-    {        
-        ResourcesManager.getInstance().loadMenuResources();
-        menuScene = new MainMenuScene(EstimateHeight());
-        ResourcesManager.getInstance().loadLoadingResources();
-        loadingScene = new LoadingScene();
-        SceneManager.getInstance().setScene(menuScene);
-        disposeSplashScene();
-    }
-    
-    public void loadGameScene(final Engine mEngine, final String stage, final String bike)
-    {
-    	
-        setScene(loadingScene);
-        ResourcesManager.getInstance().unloadMenuResources();
-        mEngine.registerUpdateHandler(new TimerHandler(0.1f, new ITimerCallback() 
-        {
-            public void onTimePassed(final TimerHandler pTimerHandler) 
-            {
-
-                ResourcesManager.getInstance().loadGameResources(stage,bike);
-                mEngine.registerUpdateHandler(new TimerHandler(0.1f, new ITimerCallback() 
-                {
-                    public void onTimePassed(final TimerHandler pTimerHandler) 
-                    {
-		                mEngine.unregisterUpdateHandler(pTimerHandler);
-		                menuScene.disposeScene();
-		                GameScene tempScene=new GameScene();
-		                tempScene.initScene(stage);
-		                gameScene = tempScene;
-		                
-		                setScene(gameScene);
-                    }
-                }));
-            }
-        }));
-    }
-    
-    public void loadMenuScene(final Engine mEngine)
-    {
-        setScene(loadingScene);
-        
-        if(gameScene!=null)
-        	ResourcesManager.getInstance().soundManager.setState("stop");
-        
-        ResourcesManager.getInstance().unloadGameResources();
-        mEngine.registerUpdateHandler(new TimerHandler(0.1f, new ITimerCallback() 
-        {
-            public void onTimePassed(final TimerHandler pTimerHandler) 
-            {
-                mEngine.unregisterUpdateHandler(pTimerHandler);
-                ResourcesManager.getInstance().loadMenuResources();                
-                menuScene = new MainMenuScene(EstimateHeight());
-                setScene(menuScene);
-            }
-        }));
-    }
-
     
 }

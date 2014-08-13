@@ -4,11 +4,19 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 public class TripManagerDesert extends TripManager {
 
-	TripManagerDesert(Road road, VertexBufferObjectManager vbom,
-			ResourcesManager resManager) {
-		super(road, vbom, resManager);
+	//---------------------------------------------
+    // CONSTRUCTOR
+    //---------------------------------------------
+
+	TripManagerDesert(Road pRoad, VertexBufferObjectManager pVbom,
+			ResourcesManager pResManager) {
+		super(pRoad, pVbom, pResManager);
 	}
 	
+	//---------------------------------------------
+    // OVERLOADED METHODS
+    //---------------------------------------------
+
 	@Override
 	public void initTripManager()
 	{

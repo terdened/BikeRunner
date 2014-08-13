@@ -4,35 +4,45 @@ import java.util.LinkedList;
 
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
-public class TripManager {
+public abstract class TripManager {
 	
+	//---------------------------------------------
+    // VARIABLES
+    //---------------------------------------------
+
 	protected final Road mRoad;
 	protected int mCounter;
 	protected final VertexBufferObjectManager mVbom;
 	protected final ResourcesManager mResManager;
 	protected LinkedList<TripCacheItem> mScript;
 	
-	TripManager(Road road, VertexBufferObjectManager vbom, ResourcesManager resManager)
+	//---------------------------------------------
+    // CONSTRUCTOR
+    //---------------------------------------------
+
+	TripManager(Road pRoad, VertexBufferObjectManager pVbom, ResourcesManager pResManager)
 	{
-		mRoad=road;
-		mVbom=vbom;
-		mResManager=resManager;
+		mRoad=pRoad;
+		mVbom=pVbom;
+		mResManager=pResManager;
 		mCounter=0;
 		mScript=new LinkedList<TripCacheItem>();
 	}
 	
-	public void initTripManager()
-	{
-	}
+	//---------------------------------------------
+    // PUBLIC METHODS
+    //---------------------------------------------
+
+	abstract public void initTripManager();
 	
-	public void update(int distance)
+	public void update(int pDistance)
 	{
 		
 		LinkedList<TripCacheItem> toRemove=new LinkedList<TripCacheItem>();
 		
 		for(int i=0; i<mScript.size();i++)
 		{
-			if(mScript.get(i).isAppear(distance))
+			if(mScript.get(i).isAppear(pDistance))
 			{
 				mRoad.addObject(mScript.get(i).getObject(), "middle");
 				mScript.get(i).getObject().setAlpha(0);

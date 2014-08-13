@@ -1,14 +1,15 @@
 package com.brutal;
 
 import org.andengine.opengl.texture.region.ITextureRegion;
-import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 public class TripCacheItem {
-	
-	public int mTimeToAppear;
-	
-	protected RoadObjectFar object;
+
+	//---------------------------------------------
+    // VARIABLES
+    //---------------------------------------------
+
+	protected RoadObjectFar mObject;
 	protected float mZ;
 	protected float mX;
 	protected float mY;
@@ -17,41 +18,57 @@ public class TripCacheItem {
 	protected float mRealHeight;
 	protected float mRealWidth;
 	protected float mSize;
-	protected float speed;
-	protected float pDeltaY;
-	protected ITextureRegion pTextureRegion;
-	protected final VertexBufferObjectManager pVbom; 
+	protected float mSpeed;
+	protected float mDeltaY;
+	protected ITextureRegion mTextureRegion;
+	protected final VertexBufferObjectManager mVbom; 
 	
-	TripCacheItem(int timeToAppear, ITextureRegion textureRegion, VertexBufferObjectManager vbom)
+	public int mTimeToAppear;
+	
+	//---------------------------------------------
+    // CONSTRUCTOR
+    //---------------------------------------------
+
+	TripCacheItem(int pTimeToAppear, ITextureRegion pTextureRegion, 
+			VertexBufferObjectManager pVbom)
 	{
-		mTimeToAppear=timeToAppear;
-		pVbom=vbom;
-		pTextureRegion=textureRegion;
+		mTimeToAppear=pTimeToAppear;
+		mVbom=pVbom;
+		mTextureRegion=pTextureRegion;
 	}
 	
-	public void initObject(float z, float x, float y, float size, float realHeight, float realWidth)
+	//---------------------------------------------
+    // PUBLIC METHODS
+    //---------------------------------------------
+
+	public void initObject(float pZ, float pX, float pY, float pSize, 
+			float pRealHeight, float pRealWidth)
 	{
-		mZ=z;
-		mRealX=x;
-		mRealY=y;
-		mSize=size;
-		mRealHeight=realHeight;
-		mRealWidth=realWidth;
+		mZ=pZ;
+		mRealX=pX;
+		mRealY=pY;
+		mSize=pSize;
+		mRealHeight=pRealHeight;
+		mRealWidth=pRealWidth;
 	}
 	
-	public boolean isAppear(int time)
+	public boolean isAppear(int pTime)
 	{
-		if(time>mTimeToAppear)
+		if(pTime>mTimeToAppear)
 			return true;
 		else
 			return false;
 	}
 	
+	//---------------------------------------------
+    // GETTERS
+    //---------------------------------------------
+
 	public RoadObjectFar getObject()
 	{
-		object = new RoadObjectFar(0,0,pTextureRegion,pVbom);
-		object.initObject(mZ, mRealX, mRealY, mSize, mRealHeight, mRealWidth);
-		return object;
+		mObject = new RoadObjectFar(0,0,mTextureRegion,mVbom);
+		mObject.initObject(mZ, mRealX, mRealY, mSize, mRealHeight, mRealWidth);
+		return mObject;
 	}
 	
 }

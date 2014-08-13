@@ -1,12 +1,14 @@
 package com.brutal;
 
-import org.andengine.entity.sprite.AnimatedSprite;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.opengl.texture.region.ITextureRegion;
-import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 public class RoadObject extends Sprite{
+	
+	//---------------------------------------------
+    // VARIABLES
+    //---------------------------------------------
 	
 	protected float mZ;
 	protected float mX;
@@ -16,9 +18,12 @@ public class RoadObject extends Sprite{
 	protected float mRealHeight;
 	protected float mRealWidth;
 	protected float mSize;
-	protected float speed;
-	protected float pDeltaY;
+	//protected float mSpeed;
+	protected float mDeltaY;
 	
+	//---------------------------------------------
+    // CONSTRUCTOR
+    //---------------------------------------------
 	
 	public RoadObject(float pX, float pY, ITextureRegion pTextureRegion,
 			VertexBufferObjectManager pVertexBufferObjectManager) {
@@ -26,25 +31,30 @@ public class RoadObject extends Sprite{
 		
 	}
 	
-	public void initObject(float z, float x, float y, float size, float realHeight, float realWidth)
+	//---------------------------------------------
+    // PUBLILC METHODS
+    //---------------------------------------------
+	
+	public void initObject(float pZ, float pX, float pY, float pSize, 
+			float pRealHeight, float pRealWidth)
 	{
-		mZ=z;
-		mRealX=x;
-		mRealY=y;
-		mSize=size;
-		mRealHeight=realHeight;
-		mRealWidth=realWidth;
+		mZ=pZ;
+		mRealX=pX;
+		mRealY=pY;
+		mSize=pSize;
+		mRealHeight=pRealHeight;
+		mRealWidth=pRealWidth;
 		updateObject(0);
-		pDeltaY=0;
+		mDeltaY=0;
 		setAlpha(0);
 	}
 	
-	public void initDeltaY(float delta)
+	public void initDeltaY(float pDelta)
 	{
-		pDeltaY=delta;
+		mDeltaY=pDelta;
 	}
 	
-	public void updateObject(int speed)
+	public void updateObject(int pSpeed)
 	{
 		if(this.getAlpha()<1)
 		{
@@ -55,14 +65,14 @@ public class RoadObject extends Sprite{
 			this.setAlpha(1);
 		}
 		
-		mZ-=speed;
+		mZ-=pSpeed;
 		mSize=(150.0f)/(mZ+2000);
 
 		this.setWidth(mSize*mRealWidth);
 		this.setHeight(mSize*mRealHeight);
 		
 		mX=640.0f-(this.getWidth()/2)+(mSize*mRealX);
-		mY=300.0f-(this.getHeight())+((80000.0f)/(mZ+2000))+(mSize*pDeltaY);
+		mY=300.0f-(this.getHeight())+((80000.0f)/(mZ+2000))+(mSize*mDeltaY);
 		
 		this.setPosition(mX,mY);
 		
@@ -75,6 +85,10 @@ public class RoadObject extends Sprite{
 		else
 			return false;
 	}
+	
+	//---------------------------------------------
+    // GETTERS
+    //---------------------------------------------
 	
 	public float getZ()
 	{

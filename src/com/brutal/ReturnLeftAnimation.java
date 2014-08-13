@@ -2,10 +2,18 @@ package com.brutal;
 
 public class ReturnLeftAnimation extends Animation{
 
-	ReturnLeftAnimation(Biker target) {
-		super(target);
+	//---------------------------------------------
+    // CONSTRUCTOR
+    //---------------------------------------------
+
+	ReturnLeftAnimation(Biker pTarget) {
+		super(pTarget);
 	}
 	
+	//---------------------------------------------
+    // OVERLOADED METHODS
+    //---------------------------------------------
+
 	@Override
 	public void update()
 	{

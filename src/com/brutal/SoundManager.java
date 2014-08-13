@@ -3,7 +3,6 @@ package com.brutal;
 import java.util.LinkedList;
 
 import org.andengine.audio.music.Music;
-import org.andengine.audio.sound.Sound;
 
 import android.content.SharedPreferences;
 import android.media.MediaPlayer;
@@ -11,33 +10,39 @@ import android.media.MediaPlayer.OnCompletionListener;
 
 public class SoundManager {
 
-	private final ResourcesManager pResourcesManager;
-	private final PlayerDataManager pDataManager;
-	private String pState;
-	private LinkedList<Music> pPlayngMusic;
-	private LinkedList<Music> pPlayngSound;
+	//---------------------------------------------
+    // VARIABLES
+    //---------------------------------------------
+
+	private final ResourcesManager mResourcesManager;
+	private final PlayerDataManager mDataManager;
+	private String mState;
+	private LinkedList<Music> mPlayngMusic;
+	private LinkedList<Music> mPlayngSound;
 	
-	public SoundManager(final ResourcesManager resourcesManager, SharedPreferences prefs)
+	//---------------------------------------------
+    // CONSTRUCTOR
+    //---------------------------------------------
+
+	public SoundManager(final ResourcesManager pResourcesManager, SharedPreferences pPrefs)
 	{
-		pResourcesManager=resourcesManager;
-		pDataManager = new PlayerDataManager(prefs);
-		pPlayngMusic = new LinkedList<Music>();
-		pPlayngSound = new LinkedList<Music>();
+		mResourcesManager=pResourcesManager;
+		mDataManager = new PlayerDataManager(pPrefs);
+		mPlayngMusic = new LinkedList<Music>();
+		mPlayngSound = new LinkedList<Music>();
 	}
-	
-	public void setState(String state)
-	{
-		pState=state;
-		updateSound();
-	}
-	
+
+	//---------------------------------------------
+    // PUBLIC METHODS
+    //---------------------------------------------
+
 	private void clearPlaylist()
 	{
-		for(int i=0;i<pPlayngMusic.size();i++)
+		for(int i=0;i<mPlayngMusic.size();i++)
 		{
 			try
 			{
-				pPlayngMusic.get(i).pause();
+				mPlayngMusic.get(i).pause();
 			}
 			finally
 			{
@@ -45,11 +50,11 @@ public class SoundManager {
 			}
 		}
 		
-		for(int i=0;i<pPlayngSound.size();i++)
+		for(int i=0;i<mPlayngSound.size();i++)
 		{
 			try
 			{
-				pPlayngSound.get(i).pause();
+				mPlayngSound.get(i).pause();
 			}
 			finally
 			{
@@ -57,17 +62,17 @@ public class SoundManager {
 			}
 		}
 		
-		pPlayngSound.clear();
-		pPlayngMusic.clear();
+		mPlayngSound.clear();
+		mPlayngMusic.clear();
 	}
 	
 	private void clearSoundlist()
 	{
-		for(int i=0;i<pPlayngSound.size();i++)
+		for(int i=0;i<mPlayngSound.size();i++)
 		{
 			try
 			{
-				pPlayngSound.get(i).pause();
+				mPlayngSound.get(i).pause();
 			}
 			finally
 			{
@@ -75,46 +80,46 @@ public class SoundManager {
 			}
 		}
 		
-		pPlayngSound.clear();
+		mPlayngSound.clear();
 	}
 	
 	private void playPlaylist()
 	{
-		for(int i=0;i<pPlayngMusic.size();i++)
+		for(int i=0;i<mPlayngMusic.size();i++)
 		{
-			pPlayngMusic.get(i).play();
-			pPlayngMusic.get(i).setVolume(pDataManager.getMusicVolume());
+			mPlayngMusic.get(i).play();
+			mPlayngMusic.get(i).setVolume(mDataManager.getMusicVolume());
 		}
 		
-		for(int i=0;i<pPlayngSound.size();i++)
+		for(int i=0;i<mPlayngSound.size();i++)
 		{
-			pPlayngSound.get(i).play();
-			pPlayngSound.get(i).setVolume(pDataManager.getSoundVolume());
+			mPlayngSound.get(i).play();
+			mPlayngSound.get(i).setVolume(mDataManager.getSoundVolume());
 		}
 	}
 	
 	private void updateSound()
 	{
-		if(pState=="menu")
+		if(mState=="menu")
 		{
 			clearPlaylist();
-			pPlayngMusic.add(pResourcesManager.menu_1);
-			pResourcesManager.menu_1.setLooping(true);
-			pResourcesManager.menu_2.setLooping(true);
-			pResourcesManager.menu_3.setLooping(true);
+			mPlayngMusic.add(mResourcesManager.menu_1);
+			mResourcesManager.menu_1.setLooping(true);
+			mResourcesManager.menu_2.setLooping(true);
+			mResourcesManager.menu_3.setLooping(true);
 			playPlaylist();
 		}else
-		if(pState=="game")
+		if(mState=="game")
 		{
 			clearPlaylist();
-			pPlayngMusic.add(pResourcesManager.game);
-			pResourcesManager.game.setLooping(true);
-			pPlayngSound.add(pResourcesManager.motorSound);
-			pPlayngSound.getLast().setLooping(true);
+			mPlayngMusic.add(mResourcesManager.game);
+			mResourcesManager.game.setLooping(true);
+			mPlayngSound.add(mResourcesManager.motorSound);
+			mPlayngSound.getLast().setLooping(true);
 			playPlaylist();
 		}
 		else
-		if(pState=="stop")
+		if(mState=="stop")
 		{
 			clearPlaylist();
 		}
@@ -123,13 +128,13 @@ public class SoundManager {
 	public void crash()
 	{
 		clearSoundlist();
-		if(pPlayngSound.indexOf(pResourcesManager.crashSound)==-1)
-			pPlayngSound.add(pResourcesManager.crashSound);
-		pResourcesManager.crashSound.seekTo(0);
-		pResourcesManager.crashSound.resume();
+		if(mPlayngSound.indexOf(mResourcesManager.crashSound)==-1)
+			mPlayngSound.add(mResourcesManager.crashSound);
+		mResourcesManager.crashSound.seekTo(0);
+		mResourcesManager.crashSound.resume();
 		updateVolume();
 		
-		pPlayngMusic.getFirst().setVolume(pDataManager.getMusicVolume()/2);
+		mPlayngMusic.getFirst().setVolume(mDataManager.getMusicVolume()/2);
 	}
 	
 	public void pause()
@@ -137,40 +142,40 @@ public class SoundManager {
 		clearSoundlist();
 		updateVolume();
 		
-		pPlayngMusic.getFirst().setVolume(pDataManager.getMusicVolume()/2);
+		mPlayngMusic.getFirst().setVolume(mDataManager.getMusicVolume()/2);
 	}
 	
 	public void resume()
 	{
 		clearSoundlist();
-		pPlayngMusic.getFirst().setVolume(pDataManager.getMusicVolume());
-		pPlayngSound.add(pResourcesManager.motorSound);
-		pResourcesManager.motorSound.seekTo(0);
-		pResourcesManager.motorSound.resume();
+		mPlayngMusic.getFirst().setVolume(mDataManager.getMusicVolume());
+		mPlayngSound.add(mResourcesManager.motorSound);
+		mResourcesManager.motorSound.seekTo(0);
+		mResourcesManager.motorSound.resume();
 	}
 	
 	public void restart()
 	{
 		clearSoundlist();
-		pPlayngMusic.getFirst().setVolume(pDataManager.getMusicVolume());
-		pPlayngSound.add(pResourcesManager.motorSound);
-		pResourcesManager.motorSound.seekTo(0);
-		pResourcesManager.motorSound.resume();
+		mPlayngMusic.getFirst().setVolume(mDataManager.getMusicVolume());
+		mPlayngSound.add(mResourcesManager.motorSound);
+		mResourcesManager.motorSound.seekTo(0);
+		mResourcesManager.motorSound.resume();
 	}
 	
 	public void collectCoin()
 	{
-		if(pPlayngSound.indexOf(pResourcesManager.coinSound)==-1)
-			pPlayngSound.add(pResourcesManager.coinSound);
+		if(mPlayngSound.indexOf(mResourcesManager.coinSound)==-1)
+			mPlayngSound.add(mResourcesManager.coinSound);
 		
-		pResourcesManager.coinSound.seekTo(0);
-		pResourcesManager.coinSound.resume();
-		pResourcesManager.coinSound.setOnCompletionListener(new OnCompletionListener()
+		mResourcesManager.coinSound.seekTo(0);
+		mResourcesManager.coinSound.resume();
+		mResourcesManager.coinSound.setOnCompletionListener(new OnCompletionListener()
 		{
 
 			@Override
 			public void onCompletion(MediaPlayer arg0) {
-				pPlayngSound.remove(this);
+				mPlayngSound.remove(this);
 				
 			}
 			
@@ -178,46 +183,46 @@ public class SoundManager {
 		updateVolume();
 	}
 	
-	public void changeStage(String stage)
+	public void changeStage(String pStage)
 	{
-		if(stage=="Desert")
+		if(pStage=="Desert")
 		{
 			clearPlaylist();
-			pPlayngMusic.add(pResourcesManager.menu_1);
+			mPlayngMusic.add(mResourcesManager.menu_1);
 			playPlaylist();
 		}else
-		if(stage=="Countryside")
+		if(pStage=="Countryside")
 		{
 			clearPlaylist();
-			pPlayngMusic.add(pResourcesManager.menu_2);
+			mPlayngMusic.add(mResourcesManager.menu_2);
 			playPlaylist();
 		}else
-		if(stage=="Coming soon")
+		if(pStage=="Coming soon")
 		{
 			clearPlaylist();
-			pPlayngMusic.add(pResourcesManager.menu_3);
+			mPlayngMusic.add(mResourcesManager.menu_3);
 			playPlaylist();
 		}else
 		{
 			clearPlaylist();
-			pPlayngMusic.add(pResourcesManager.menu_1);
+			mPlayngMusic.add(mResourcesManager.menu_1);
 			playPlaylist();
 		}
 	}
 	
 	public void moveRight()
 	{
-		if(pPlayngSound.indexOf(pResourcesManager.moveRightSound)==-1)
-			pPlayngSound.add(pResourcesManager.moveRightSound);
+		if(mPlayngSound.indexOf(mResourcesManager.moveRightSound)==-1)
+			mPlayngSound.add(mResourcesManager.moveRightSound);
 		
-		pResourcesManager.moveRightSound.seekTo(0);
-		pResourcesManager.moveRightSound.resume();
-		pResourcesManager.moveRightSound.setOnCompletionListener(new OnCompletionListener()
+		mResourcesManager.moveRightSound.seekTo(0);
+		mResourcesManager.moveRightSound.resume();
+		mResourcesManager.moveRightSound.setOnCompletionListener(new OnCompletionListener()
 		{
 
 			@Override
 			public void onCompletion(MediaPlayer arg0) {
-				pPlayngSound.remove(this);
+				mPlayngSound.remove(this);
 				
 			}
 			
@@ -228,16 +233,16 @@ public class SoundManager {
 	
 	public void moveLeft()
 	{
-		if(pPlayngSound.indexOf(pResourcesManager.moveLeftSound)==-1)
-			pPlayngSound.add(pResourcesManager.moveLeftSound);
-		pResourcesManager.moveLeftSound.seekTo(0);
-		pResourcesManager.moveLeftSound.resume();
-		pResourcesManager.moveLeftSound.setOnCompletionListener(new OnCompletionListener()
+		if(mPlayngSound.indexOf(mResourcesManager.moveLeftSound)==-1)
+			mPlayngSound.add(mResourcesManager.moveLeftSound);
+		mResourcesManager.moveLeftSound.seekTo(0);
+		mResourcesManager.moveLeftSound.resume();
+		mResourcesManager.moveLeftSound.setOnCompletionListener(new OnCompletionListener()
 		{
 
 			@Override
 			public void onCompletion(MediaPlayer arg0) {
-				pPlayngSound.remove(this);
+				mPlayngSound.remove(this);
 				
 			}
 			
@@ -247,20 +252,34 @@ public class SoundManager {
 	
 	public void updateVolume()
 	{
-		for(int i=0;i<pPlayngMusic.size();i++)
+		for(int i=0;i<mPlayngMusic.size();i++)
 		{
-			pPlayngMusic.get(i).setVolume(pDataManager.getMusicVolume());
+			mPlayngMusic.get(i).setVolume(mDataManager.getMusicVolume());
 		}
 		
-		for(int i=0;i<pPlayngSound.size();i++)
+		for(int i=0;i<mPlayngSound.size();i++)
 		{
-			pPlayngSound.get(i).setVolume(pDataManager.getSoundVolume());
+			mPlayngSound.get(i).setVolume(mDataManager.getSoundVolume());
 		}
 	}
 	
+	//---------------------------------------------
+    // SETTERS
+    //---------------------------------------------
+	
+	public void setState(String pState)
+	{
+		mState=pState;
+		updateSound();
+	}
+	
+	//---------------------------------------------
+    // GETTERS
+    //---------------------------------------------
+	
 	public String getState()
 	{
-		return this.pState;
+		return this.mState;
 	}
 	
 }

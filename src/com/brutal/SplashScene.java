@@ -11,12 +11,20 @@ import com.brutal.SceneManager.SceneType;
 
 public class SplashScene extends BaseScene
 {
-	private Sprite splash;
+	//---------------------------------------------
+    // VARIABLES
+    //---------------------------------------------
+	
+	private Sprite mSplash;
+	
+	//---------------------------------------------
+    // OVERLOADED METHODS
+    //---------------------------------------------
 	
     @Override
     public void createScene()
     {
-    	splash = new Sprite(0, 0, resourcesManager.splash_region, vbom)
+    	mSplash = new Sprite(0, 0, resourcesManager.splash_region, vbom)
     	{
     	    @Override
     	    protected void preDraw(GLState pGLState, Camera pCamera) 
@@ -26,9 +34,9 @@ public class SplashScene extends BaseScene
     	    }
     	};
     	float height = this.engine.getEngineOptions().getCamera().getHeight();
-    	splash.setScale(1.5f);
-    	splash.setPosition(384, (height-320)/2);
-    	attachChild(splash);
+    	mSplash.setScale(1.5f);
+    	mSplash.setPosition(384, (height-320)/2);
+    	attachChild(mSplash);
     }
 
     @Override
@@ -46,8 +54,8 @@ public class SplashScene extends BaseScene
     @Override
     public void disposeScene()
     {
-    	splash.detachSelf();
-        splash.dispose();
+    	mSplash.detachSelf();
+        mSplash.dispose();
         this.detachSelf();
         this.dispose();
     }

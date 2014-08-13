@@ -2,37 +2,51 @@ package com.brutal;
 
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
-public class WorldController {
+public abstract class WorldController {
 	
+	//---------------------------------------------
+    // VARIABLES
+    //---------------------------------------------
+
 	protected final Road mRoad;
 	protected int mCounter;
 	protected final VertexBufferObjectManager mVbom;
 	protected final ResourcesManager mResManager;
-	protected ObjectsFactory objFactory;
+	protected ObjectsFactory mObjFactory;
 	
-	public WorldController(Road road, VertexBufferObjectManager vbom, ResourcesManager resManager)
+	//---------------------------------------------
+    // CONSTRUCTOR
+    //---------------------------------------------
+
+	public WorldController(Road pRoad, VertexBufferObjectManager pVbom, 
+			ResourcesManager pResManager)
 	{
-		mRoad = road;
+		mRoad = pRoad;
 		mCounter=0;
-		mVbom = vbom;
-		mResManager = resManager;
-		objFactory = new ObjectsFactory();
+		mVbom = pVbom;
+		mResManager = pResManager;
+		mObjFactory = new ObjectsFactory();
 	}
 	
-	public void updateWorld(int speed)
-	{
-		
-	}
-	
-	protected int getComplexityBySpeed(int speed)
+	//---------------------------------------------
+    // PUBLIC METHODS
+    //---------------------------------------------
+
+	abstract public void updateWorld(int pSpeed);
+
+	//---------------------------------------------
+    // GETTERS
+    //---------------------------------------------
+
+	protected int getComplexityBySpeed(int pSpeed)
 	{
 		int result=0;
 		
-		if(speed<20)
+		if(pSpeed<20)
 		{
 			result=1;
 		}else
-		if(speed<25)
+		if(pSpeed<25)
 		{
 			result=2;
 		}else
