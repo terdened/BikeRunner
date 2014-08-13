@@ -1,7 +1,5 @@
 package com.brutal;
 
-import org.andengine.entity.sprite.AnimatedSprite;
-
 public class MoveRightAnimation extends Animation{
 
 	MoveRightAnimation(Biker target) {
@@ -11,25 +9,25 @@ public class MoveRightAnimation extends Animation{
 	@Override
 	public void update()
 	{
-		this.pCounter--;
-		pTarget.setX(pTarget.getX()+28);
-		if(pCounter==pDuration/2)
+		this.mCounter--;
+		mTarget.setX(mTarget.getX()+28);
+		if(mCounter==mDuration/2)
 		{
-			if(pTarget.moveRight())
+			if(mTarget.moveRight())
 			{
-				if(pTarget.getLine()==2)
+				if(mTarget.getLine()==2)
 				{
 					final long[] PLAYER_ANIMATE = new long[] { 0, 0, 200, 0, 0, 200 };
-					pTarget.animate(PLAYER_ANIMATE, 0, 5, true);
+					mTarget.animate(PLAYER_ANIMATE, 0, 5, true);
 				}else
-				if(pTarget.getLine()==1)
+				if(mTarget.getLine()==1)
 				{
 					final long[] PLAYER_ANIMATE = new long[] { 0, 200, 0, 0, 200, 0 };
-					pTarget.animate(PLAYER_ANIMATE, 0, 5, true);
+					mTarget.animate(PLAYER_ANIMATE, 0, 5, true);
 				}
 			}else
 			{
-				pTarget.returnLeft();
+				mTarget.returnLeft();
 			}
 		}
 	}
@@ -37,13 +35,11 @@ public class MoveRightAnimation extends Animation{
 	@Override
 	public boolean canDelete()
 	{
-		if(pCounter<=0)
+		if(mCounter<=0)
 		{
 			return true;
 		}else
 			return false;
-
-		
 	}
 
 }

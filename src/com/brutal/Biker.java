@@ -2,48 +2,141 @@ package com.brutal;
 
 import java.util.LinkedList;
 
-import org.andengine.entity.scene.Scene;
 import org.andengine.entity.sprite.AnimatedSprite;
-import org.andengine.entity.sprite.Sprite;
-import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
-import com.badlogic.gdx.math.Vector2;
-
-public class Biker extends AnimatedSprite {
-
-
-
+public class Biker extends AnimatedSprite 
+{
+    //---------------------------------------------
+    // VARIABLES
+    //---------------------------------------------
+	
 	private int mLine;
 	private int mHeight;
-	private int pDeltaY;
-	private int pDeltaTrampY;
-	private boolean isJump=false;
-	private int jumpCounter=100;
+	private int mDeltaY;
+	private int mDeltaTrampY;
+	private boolean mIsJump=false;
+	private int mJumpCounter=100;
+	private LinkedList<Animation> mAnimationList;
+	private final Road mRoad;
+	private final GameScene mScene;
 	
-	private LinkedList<Animation> pAnimationList;
-	private final Road pRoad;
-	private final GameScene pScene;
+    //---------------------------------------------
+    // CONSTRUCTOR
+    //---------------------------------------------
 	
 	public Biker(float pX, float pY, ITiledTextureRegion pTiledTextureRegion,
-			VertexBufferObjectManager pVertexBufferObjectManager, final Road road, GameScene scene) {
-		
+			VertexBufferObjectManager pVertexBufferObjectManager,
+			final Road road, GameScene scene) 
+	{
 		super(pX, pY,pTiledTextureRegion, pVertexBufferObjectManager);
 		
-		pScene = scene;
-		pRoad = road;
+		mScene = scene;
+		mRoad = road;
 		mLine = 1;
 		mHeight = 0;
-		pDeltaY = 0;
-		pDeltaTrampY = 0;
-		pAnimationList = new LinkedList<Animation>();
+		mDeltaY = 0;
+		mDeltaTrampY = 0;
+		mAnimationList = new LinkedList<Animation>();
+		
 		final long[] PLAYER_ANIMATE = new long[] { 0, 200, 0, 0, 200, 0 };
 		animate(PLAYER_ANIMATE, 0, 5, true);
 		updateObject(0);
 	}
 	
-	public String updateObject(int speed)
+	//---------------------------------------------
+    // PRIVATE METHODS
+    //---------------------------------------------
+	
+	private void moveBiker(String pDirection)
+	{
+		if(pDirection=="left")
+		{
+			if((mLine>0)&&(!isMovingAnimation()))
+			{
+				mAnimationList.add(new MoveLeftAnimation(this));
+				mAnimationList.getLast().initAnimation("left", 10);
+				if(this.thereIsGround())
+				{
+					mScene.resourcesManager.soundManager.moveLeft();
+				}
+			}
+		}else
+		if(pDirection=="right")
+		{
+			if((mLine<2)&&(!isMovingAnimation()))
+			{
+				mAnimationList.add(new MoveRightAnimation(this));
+				mAnimationList.getLast().initAnimation("right", 10);
+				if(this.thereIsGround())
+				{
+					mScene.resourcesManager.soundManager.moveRight();
+				}
+			}
+		}else
+		if(pDirection=="up")
+		{
+			if((mAnimationList.size()==0)&&(this.thereIsGround()))
+			{
+				mDeltaY=17;
+				initJump();
+			}
+			
+		}else
+		if(pDirection=="down")
+		{
+			if(!this.thereIsGround())
+			{
+				mDeltaY-=15;
+				resetJump();
+			}
+		}
+	}
+	
+	private void resetJump()
+	{
+		mIsJump=false;
+	}
+	
+	private void initJump()
+	{
+		mIsJump=true;
+		mJumpCounter=100;
+	}
+	
+	private void checkGround()
+	{
+		if(!thereIsGround())
+		{
+			if(!mIsJump)
+				mDeltaY--;
+			else
+			{
+				if((mJumpCounter>0)&&(mDeltaY<2))
+				{
+					mJumpCounter--;
+				}
+				else
+				{
+					mDeltaY--;
+					resetJump();
+				}
+			}
+		}else
+		{
+			mDeltaY=0;
+			resetJump();
+		}
+		
+	}
+	
+	
+	//---------------------------------------------
+    // PUBLIC METHODS
+    //---------------------------------------------
+	
+	public String updateObject(int pSpeed)
 	{
 		updateHeight();
 		
@@ -51,19 +144,19 @@ public class Biker extends AnimatedSprite {
 		coinCollisionControl();
 		
 		
-		if((mLine==0)&&(pAnimationList.size()==0))
+		if((mLine==0)&&(mAnimationList.size()==0))
 			this.setX(350-128);
-		if((mLine==1)&&(pAnimationList.size()==0))
+		if((mLine==1)&&(mAnimationList.size()==0))
 			this.setX(640-128);
-		if((mLine==2)&&(pAnimationList.size()==0))
+		if((mLine==2)&&(mAnimationList.size()==0))
 			this.setX(910-128);
 		
-		for(int i=0;i<pAnimationList.size();i++)
+		for(int i=0;i<mAnimationList.size();i++)
 		{
-			pAnimationList.get(i).update();
-			if(pAnimationList.get(i).canDelete())
+			mAnimationList.get(i).update();
+			if(mAnimationList.get(i).canDelete())
 			{
-				pAnimationList.remove(i);
+				mAnimationList.remove(i);
 			}
 		}
 		
@@ -71,11 +164,11 @@ public class Biker extends AnimatedSprite {
 		
 	}
 	
-	public void setAction(float xStart, float yStart, float xStop, float yStop)
+	public void setAction(float pXStart, float pYStart, float pXStop, float pYStop)
 	{
-		if(Math.abs(xStart-xStop)>Math.abs(yStart-yStop))
+		if(Math.abs(pXStart-pXStop)>Math.abs(pYStart-pYStop))
 		{
-			if(xStart>xStop)
+			if(pXStart>pXStop)
 			{
 				moveBiker("left");
 			}
@@ -86,7 +179,7 @@ public class Biker extends AnimatedSprite {
 			}
 		}else
 		{
-			if(yStart>yStop)
+			if(pYStart>pYStop)
 			{
 				moveBiker("up");
 			}
@@ -97,76 +190,21 @@ public class Biker extends AnimatedSprite {
 		}
 	}
 	
-	public int getLine()
-	{
-		return mLine;
-	}
-	
-	public int getBikeHight()
-	{
-		return mHeight;
-	}
-	
 	public void resetGame()
 	{
 		mLine = 1;
 		mHeight = 0;
-		pDeltaY = 0;
-		pAnimationList = new LinkedList<Animation>();
+		mDeltaY = 0;
+		mAnimationList = new LinkedList<Animation>();
 		final long[] PLAYER_ANIMATE = new long[] {  0, 200, 0, 0, 200, 0 };
 		animate(PLAYER_ANIMATE, 0, 5, true);
 		updateObject(0);
 	}
 	
-	private void moveBiker(String direction)
-	{
-		if(direction=="left")
-		{
-			if((mLine>0)&&(!isMovingAnimation()))
-			{
-				pAnimationList.add(new MoveLeftAnimation(this));
-				pAnimationList.getLast().initAnimation("left", 10);
-				if(this.thereIsGround())
-				{
-					pScene.resourcesManager.soundManager.moveLeft();
-				}
-			}
-		}else
-		if(direction=="right")
-		{
-			if((mLine<2)&&(!isMovingAnimation()))
-			{
-				pAnimationList.add(new MoveRightAnimation(this));
-				pAnimationList.getLast().initAnimation("right", 10);
-				if(this.thereIsGround())
-				{
-					pScene.resourcesManager.soundManager.moveRight();
-				}
-			}
-		}else
-		if(direction=="up")
-		{
-			if((pAnimationList.size()==0)&&(this.thereIsGround()))
-			{
-				pDeltaY=17;
-				initJump();
-			}
-			
-		}else
-		if(direction=="down")
-		{
-			if(!this.thereIsGround())
-			{
-				pDeltaY-=15;
-				resetJump();
-			}
-		}
-	}
-	
 	public boolean moveLeft()
 	{
 		boolean result=false;
-		int[] linesHeight=pRoad.getLinesHeight();
+		int[] linesHeight=mRoad.getLinesHeight();
 		
 		if(linesHeight[mLine-1]-mHeight<30)
     	{
@@ -180,7 +218,7 @@ public class Biker extends AnimatedSprite {
 	public boolean moveRight()
 	{
 		boolean result=false;
-		int[] linesHeight=pRoad.getLinesHeight();
+		int[] linesHeight=mRoad.getLinesHeight();
 		
 		if(linesHeight[mLine+1]-mHeight<30)
     	{
@@ -193,94 +231,55 @@ public class Biker extends AnimatedSprite {
 	
 	public void returnLeft()
 	{
-		pAnimationList=new LinkedList<Animation>();
-		pAnimationList.add(new ReturnLeftAnimation(this));
-		pAnimationList.getLast().initAnimation("return_left", 5);
+		mAnimationList=new LinkedList<Animation>();
+		mAnimationList.add(new ReturnLeftAnimation(this));
+		mAnimationList.getLast().initAnimation("return_left", 5);
 	}
 	
 	public void returnRight()
 	{
-		pAnimationList=new LinkedList<Animation>();
-		pAnimationList.add(new ReturnRightAnimation(this));
-		pAnimationList.getLast().initAnimation("return_right", 5);
+		mAnimationList=new LinkedList<Animation>();
+		mAnimationList.add(new ReturnRightAnimation(this));
+		mAnimationList.getLast().initAnimation("return_right", 5);
 	}
 	
 	public boolean isMovingAnimation()
 	{
 		boolean result=false;
 		
-		for(int i=0;i<pAnimationList.size();i++)
+		for(int i=0;i<mAnimationList.size();i++)
 		{
-			if((pAnimationList.get(i).getTitle()=="right")||(pAnimationList.get(i).getTitle()=="left"))
+			if((mAnimationList.get(i).getTitle()=="right")||(mAnimationList.get(i).getTitle()=="left"))
 				result=true;
 		}
 		
 		return result;
 	}
-	
-
-	
-	private void checkGround()
-	{
-		if(!thereIsGround())
-		{
-			if(!isJump)
-				pDeltaY--;
-			else
-			{
-				if((jumpCounter>0)&&(pDeltaY<2))
-				{
-					jumpCounter--;
-				}
-				else
-				{
-					pDeltaY--;
-					resetJump();
-				}
-			}
-		}else
-		{
-			pDeltaY=0;
-			resetJump();
-		}
 		
-	}
-	
-	private void resetJump()
-	{
-		isJump=false;
-	}
-	
-	private void initJump()
-	{
-		isJump=true;
-		jumpCounter=100;
-	}
-	
 	public boolean thereIsGround()
 	{
 		if(mHeight>0)
 		{
-			int[] linesHeight=pRoad.getLinesHeight();
+			int[] linesHeight=mRoad.getLinesHeight();
 			
 			if(linesHeight[mLine]<mHeight)
 	    	{
-				if(pDeltaTrampY>0)
+				if(mDeltaTrampY>0)
 				{
-					pDeltaY+=pDeltaTrampY;
-					pDeltaTrampY=0;
+					mDeltaY+=mDeltaTrampY;
+					mDeltaTrampY=0;
 				}
 				return false;
 	    	}
 			else
 			{
-				pDeltaTrampY=0;
+				mDeltaTrampY=0;
 				return true;
 			}
 		}
 		else
 		{
-			pDeltaTrampY=0;
+			mDeltaTrampY=0;
 			return true;
 		}
 	}
@@ -288,13 +287,12 @@ public class Biker extends AnimatedSprite {
 	public String collisionControl()
     {
 		
-    	int[] linesHeight=pRoad.getLinesHeight();
-    	//int[] prevLinesHeight=pRoad.getLinesHeightByPosition(-20);
+    	int[] linesHeight=mRoad.getLinesHeight();
     	String gameState="game";
     	
     	if(linesHeight[mLine]-mHeight>30)
     	{
-    		if(linesHeight[mLine]-mHeight>Math.abs(pDeltaY)+30)
+    		if(linesHeight[mLine]-mHeight>Math.abs(mDeltaY)+30)
     		{
     			gameState="die";
     			pause();
@@ -309,7 +307,7 @@ public class Biker extends AnimatedSprite {
     	if(linesHeight[mLine]-mHeight>0)
     	{
     		checkGround();
-    		pDeltaTrampY=Math.abs(linesHeight[mLine]-mHeight);
+    		mDeltaTrampY=Math.abs(linesHeight[mLine]-mHeight);
     		mHeight=linesHeight[mLine];
     	}
     	else
@@ -322,20 +320,20 @@ public class Biker extends AnimatedSprite {
 	
 	public void coinCollisionControl()
     {
-    	ObstacleCoin[] linesCoin=pRoad.getLineCoins();
+    	ObstacleCoin[] linesCoin=mRoad.getLineCoins();
     	
     	if(linesCoin[mLine]!=null)
     	{	
 	    	if(linesCoin[mLine].getObstacleHeight()>mHeight)
 	    	{
-	    		pScene.collectCoin(linesCoin[mLine]);
+	    		mScene.collectCoin(linesCoin[mLine]);
 	    	}
     	}
     }
 	
 	private void updateHeight()
 	{
-		mHeight+=pDeltaY;
+		mHeight+=mDeltaY;
 		this.setY(400-mHeight);
 	}
 	
@@ -364,5 +362,18 @@ public class Biker extends AnimatedSprite {
 			animate(PLAYER_ANIMATE, 0, 5, true);
 		}
 	}
-
+	
+	//---------------------------------------------
+    // Getters
+    //---------------------------------------------
+	
+	public int getLine()
+	{
+		return mLine;
+	}
+	
+	public int getBikeHight()
+	{
+		return mHeight;
+	}
 }

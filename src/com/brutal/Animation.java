@@ -1,26 +1,37 @@
 package com.brutal;
 
-import org.andengine.entity.sprite.AnimatedSprite;
-
-public class Animation {
-	protected String pAnimationTitle;
-	protected float pCounter;
-	protected int pDuration;
-	protected final Biker pTarget;
-	protected boolean pIsStarted;
+public class Animation 
+{	
+	//---------------------------------------------
+    // VARIABLES
+    //---------------------------------------------
 	
-	Animation(Biker target)
+	protected String mAnimationTitle;
+	protected float mCounter;
+	protected int mDuration;
+	protected final Biker mTarget;
+	protected boolean mIsStarted;
+	
+    //---------------------------------------------
+    // CONSTRUCTOR
+    //---------------------------------------------
+	
+	Animation(Biker pTarget)
 	{
-		pTarget=target;
-		pIsStarted=false;
+		mTarget=pTarget;
+		mIsStarted=false;
 	}
 	
-	public void initAnimation(String title, int duration)
+    //---------------------------------------------
+    // PUBLIC METHODS
+    //---------------------------------------------
+	
+	public void initAnimation(String pTitle, int pDuration)
 	{
-		pCounter = duration;
-		pDuration = duration;
-		pAnimationTitle = title;
-		pIsStarted = true;
+		mCounter = pDuration;
+		mDuration = pDuration;
+		mAnimationTitle = pTitle;
+		mIsStarted = true;
 	}
 	
 	public void update()
@@ -35,6 +46,6 @@ public class Animation {
 	
 	public String getTitle()
 	{
-		return this.pAnimationTitle;
+		return this.mAnimationTitle;
 	}
 }

@@ -1,7 +1,5 @@
 package com.brutal;
 
-import org.andengine.entity.sprite.AnimatedSprite;
-
 public class ReturnLeftAnimation extends Animation{
 
 	ReturnLeftAnimation(Biker target) {
@@ -11,20 +9,18 @@ public class ReturnLeftAnimation extends Animation{
 	@Override
 	public void update()
 	{
-		this.pCounter--;
-		pTarget.setX(pTarget.getX()-28);
+		this.mCounter--;
+		mTarget.setX(mTarget.getX()-28);
 	}
 	
 	@Override
 	public boolean canDelete()
 	{
-		if(pCounter<=0)
+		if(mCounter<=0)
 		{
 			return true;
 		}else
 			return false;
-
-		
 	}
 
 }

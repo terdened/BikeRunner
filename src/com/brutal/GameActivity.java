@@ -3,30 +3,31 @@ package com.brutal;
 import java.io.IOException;
 
 import org.andengine.engine.camera.BoundCamera;
-import org.andengine.engine.camera.Camera;
 import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.engine.options.*;
-import org.andengine.engine.options.resolutionpolicy.FillResolutionPolicy;
 import org.andengine.engine.options.resolutionpolicy.RatioResolutionPolicy;
 import org.andengine.entity.scene.Scene;
-import org.andengine.entity.scene.background.Background;
 import org.andengine.ui.activity.BaseGameActivity;
 import org.andengine.engine.*;
 
-import android.content.Context;
-import android.graphics.Point;
 import android.util.DisplayMetrics;
-import android.view.Display;
 import android.view.KeyEvent;
 
 
 public class GameActivity extends BaseGameActivity
 {
-
+	//---------------------------------------------
+    // VARIABLES
+    //---------------------------------------------
+	
 	private BoundCamera camera;
 	private ResourcesManager resourcesManager;
 	private String LastSoundState="";
+		
+	//---------------------------------------------
+    // OVERLOADED METHODS
+    //---------------------------------------------
 	
 	@Override
 	protected void onDestroy()
@@ -71,6 +72,10 @@ public class GameActivity extends BaseGameActivity
 	    return new LimitedFPSEngine(pEngineOptions, 60);
 	}
 	
+	//---------------------------------------------
+    // PUBLIC METHODS
+    //---------------------------------------------
+	
 	public EngineOptions onCreateEngineOptions()
 	{
 		DisplayMetrics displaymetrics = new DisplayMetrics();
@@ -83,14 +88,15 @@ public class GameActivity extends BaseGameActivity
 		height*=ratio;		
 		
 		camera = new BoundCamera(0, 0, (int)width, (int)height);
-	    EngineOptions engineOptions = new EngineOptions(true, ScreenOrientation.LANDSCAPE_SENSOR, new RatioResolutionPolicy((int)width, (int)height), this.camera);
+	    EngineOptions engineOptions = new EngineOptions(true, ScreenOrientation.LANDSCAPE_SENSOR,
+	    		new RatioResolutionPolicy((int)width, (int)height), this.camera);
 	    engineOptions.getAudioOptions().setNeedsMusic(true).setNeedsSound(true);
 	    engineOptions.setWakeLockOptions(WakeLockOptions.SCREEN_ON);
 	    return engineOptions;
 	}
 	
-
-	public void onCreateResources(OnCreateResourcesCallback pOnCreateResourcesCallback) throws IOException
+	public void onCreateResources(
+			OnCreateResourcesCallback pOnCreateResourcesCallback) throws IOException
 	{
 	    ResourcesManager.prepareManager(mEngine, this, camera, getVertexBufferObjectManager());
 	    resourcesManager = ResourcesManager.getInstance();
@@ -102,7 +108,8 @@ public class GameActivity extends BaseGameActivity
     	SceneManager.getInstance().createSplashScene(pOnCreateSceneCallback);
     }
 
-    public void onPopulateScene(Scene pScene, OnPopulateSceneCallback pOnPopulateSceneCallback) throws IOException
+    public void onPopulateScene(
+    		Scene pScene, OnPopulateSceneCallback pOnPopulateSceneCallback) throws IOException
     {
     	 mEngine.registerUpdateHandler(new TimerHandler(2f, new ITimerCallback() 
     	    {
