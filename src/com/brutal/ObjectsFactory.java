@@ -2,42 +2,52 @@ package com.brutal;
 
 import java.util.LinkedList;
 
-import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
-import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 public class ObjectsFactory {
 	
-	private int pLastLine;
-	private int[] pCoinLessTimes;
-	private int pCoinLessCounter;
+	//---------------------------------------------
+    // VARIABLES
+    //---------------------------------------------
 	
-	public ObjectsFactory(ResourcesManager resManager)
+	private int mLastLine;
+	private int[] mCoinLessTimes;
+	private int mCoinLessCounter;
+	
+	//---------------------------------------------
+    // CONSTRUCTOR
+    //---------------------------------------------
+	
+	public ObjectsFactory()
 	{
-		pLastLine=(int) (Math.random()*3);
-		pCoinLessTimes = new int[10];
-		pCoinLessTimes[0]=2;
-		pCoinLessTimes[1]=4;
-		pCoinLessTimes[2]=6;
-		pCoinLessTimes[3]=8;
-		pCoinLessTimes[4]=10;
-		pCoinLessTimes[5]=12;
-		pCoinLessTimes[6]=14;
-		pCoinLessTimes[7]=16;
-		pCoinLessTimes[8]=18;
-		pCoinLessTimes[9]=20;
-		pCoinLessCounter=0;
+		mLastLine=(int) (Math.random()*3);
+		mCoinLessTimes = new int[10];
+		mCoinLessTimes[0]=2;
+		mCoinLessTimes[1]=4;
+		mCoinLessTimes[2]=6;
+		mCoinLessTimes[3]=8;
+		mCoinLessTimes[4]=10;
+		mCoinLessTimes[5]=12;
+		mCoinLessTimes[6]=14;
+		mCoinLessTimes[7]=16;
+		mCoinLessTimes[8]=18;
+		mCoinLessTimes[9]=20;
+		mCoinLessCounter=0;
 	}
 
-	public RoadObject createBlink(VertexBufferObjectManager vbom, ResourcesManager resManager)
+	//---------------------------------------------
+    // PUBLIC METHODS
+    //---------------------------------------------
+	
+	public RoadObject createBlink(VertexBufferObjectManager pVbom, ResourcesManager pResManager)
 	{
-		int rand=(int)(Math.random()*resManager.road_background_blink_region.length);
-		RoadObject result= new RoadObject((float)Math.random()*1000-500, 40, resManager.road_background_blink_region[rand], vbom);
+		int rand=(int)(Math.random()*pResManager.road_background_blink_region.length);
+		RoadObject result= new RoadObject((float)Math.random()*1000-500, 40, pResManager.road_background_blink_region[rand], pVbom);
 		
 		return result;
 	}
 	
-	public RoadObject createBackgroundObject(VertexBufferObjectManager vbom, ResourcesManager resManager)
+	public RoadObject createBackgroundObject(VertexBufferObjectManager pVbom, ResourcesManager pResManager)
 	{
 		int sign=1;
 		if(Math.random()*2>1)
@@ -45,32 +55,32 @@ public class ObjectsFactory {
 			sign=-1;
 		}
 		
-		int rand=(int)(Math.random()*resManager.road_background_object.length);
-		RoadObject result= new RoadObject(((float)Math.random()*5000+1000)*sign, 40, resManager.road_background_object[rand], vbom);
+		int rand=(int)(Math.random()*pResManager.road_background_object.length);
+		RoadObject result= new RoadObject(((float)Math.random()*5000+1000)*sign, 40, pResManager.road_background_object[rand], pVbom);
 		
 		return result;
 	}
 	
-	public RoadObject createBackgroundPart(VertexBufferObjectManager vbom, ResourcesManager resManager)
+	public RoadObject createBackgroundPart(VertexBufferObjectManager pVbom, ResourcesManager pResManager)
 	{
-		RoadObject obj = new RoadObject(0, 156, resManager.road_background_fon_region, vbom);
+		RoadObject obj = new RoadObject(0, 156, pResManager.road_background_fon_region, pVbom);
 		return obj;
 	}
 	
-	public RoadObject createSign(VertexBufferObjectManager vbom, ResourcesManager resManager)
+	public RoadObject createSign(VertexBufferObjectManager pVbom, ResourcesManager pResManager)
 	{
 		RoadObject obj;
 		
 		if(Math.random()*2>1)
-			obj = new RoadObject(700, 480, resManager.sign_speed_region, vbom);
+			obj = new RoadObject(700, 480, pResManager.sign_speed_region, pVbom);
 		else 
-			obj = new RoadObject(-700, 480, resManager.sign_speed_region, vbom);
+			obj = new RoadObject(-700, 480, pResManager.sign_speed_region, pVbom);
 	
 		obj.initObject(600, obj.getX(), obj.getY(), 1, obj.getHeight(), obj.getWidth());
 		return obj; 
 	}
 	
-	public Obstacle createObstacle(VertexBufferObjectManager vbom, ResourcesManager resManager)
+	public Obstacle createObstacle(VertexBufferObjectManager pVbom, ResourcesManager pResManager)
 	{
 		Obstacle obj;
 		
@@ -79,67 +89,67 @@ public class ObjectsFactory {
 		
 		if(randomValue>8)
 		{
-			obj = new ObstacleTramp(-380, 128, resManager.tramp_a_region, vbom);
+			obj = new ObstacleTramp(-380, 128, pResManager.tramp_a_region, pVbom);
 			obj.initLine(0);
 		}
 		else
 		if(randomValue>7)
 		{
-			obj = new ObstacleTramp(0, 128, resManager.tramp_a_region, vbom);
+			obj = new ObstacleTramp(0, 128, pResManager.tramp_a_region, pVbom);
 			obj.initLine(1);
 		}
 		else
 		if(randomValue>6)
 		{
-			obj = new ObstacleTramp(380, 128, resManager.tramp_a_region, vbom);
+			obj = new ObstacleTramp(380, 128, pResManager.tramp_a_region, pVbom);
 			obj.initLine(2);
 		}
 		else
 		if(randomValue>5)
 		{
-			obj = new ObstacleBus(-380, 128, resManager.bus_region, vbom);
+			obj = new ObstacleBus(-380, 128, pResManager.bus_region, pVbom);
 			obj.initLine(0);
 		}
 		else
 		if(randomValue>4)
 		{
-			obj = new ObstacleBus(0, 128, resManager.bus_region, vbom);
+			obj = new ObstacleBus(0, 128, pResManager.bus_region, pVbom);
 			obj.initLine(1);
 		}
 		else 
 		if(randomValue>3)
 		{
-			obj = new ObstacleBus(380, 128, resManager.bus_region, vbom);
+			obj = new ObstacleBus(380, 128, pResManager.bus_region, pVbom);
 			obj.initLine(2);
 		}
 		else 
 		if(randomValue>2)
 		{
-			obj = new ObstacleFency(-380, 128, resManager.fence_region, vbom);
+			obj = new ObstacleFency(-380, 128, pResManager.fence_region, pVbom);
 			obj.initLine(0);
 		}
 		else 
 		if(randomValue>1)
 		{
-			obj = new ObstacleFency(0, 128, resManager.fence_region, vbom);
+			obj = new ObstacleFency(0, 128, pResManager.fence_region, pVbom);
 			obj.initLine(1);
 		}
 		else
 		{
-			obj = new ObstacleFency(380, 128, resManager.fence_region, vbom);
+			obj = new ObstacleFency(380, 128, pResManager.fence_region, pVbom);
 			obj.initLine(2);
 		}
 		
 		return obj; 
 	}
 	
-	public Obstacle[] createTemplate(VertexBufferObjectManager vbom, ResourcesManager resManager,
-			LinkedList<String> ids)
+	public Obstacle[] createTemplate(VertexBufferObjectManager pVbom, ResourcesManager pResManager,
+			LinkedList<String> pIds)
 	{
 		
-		int randomValue=(int)((float)Math.random()*ids.size());
+		int randomValue=(int)((float)Math.random()*pIds.size());
 		
-		Template template =  new Template(Integer.parseInt(ids.get(randomValue)),resManager,vbom);
+		Template template =  new Template(Integer.parseInt(pIds.get(randomValue)),pResManager,pVbom);
 		Obstacle[] obj=new Obstacle[template.objects.size()];
 		
 		for(int i=0;i<template.objects.size();i++)
@@ -154,78 +164,68 @@ public class ObjectsFactory {
 	{
 		if(Math.random()*20>18)
 		{
-			if(pLastLine==0)
-				pLastLine++;
+			if(mLastLine==0)
+				mLastLine++;
 			else
-			if(pLastLine==2)
-				pLastLine--;
+			if(mLastLine==2)
+				mLastLine--;
 			else
 			{
 				if(Math.random()*2>1)
 				{
-					pLastLine++;
+					mLastLine++;
 				}
 				else
 				{
-					pLastLine--;
+					mLastLine--;
 				}
 			}
 		}
 	}
 	
-	public ObstacleCoin createCoin(VertexBufferObjectManager vbom, ResourcesManager resManager)
+	public ObstacleCoin createCoin(VertexBufferObjectManager pVbom, ResourcesManager pResManager)
 	{
 		
-		if(pCoinLessCounter<=0)
+		if(mCoinLessCounter<=0)
 		{
-			pCoinLessCounter++;
+			mCoinLessCounter++;
 			ObstacleCoin obj;
 			changeCoinsLine();
 			
-			if(pCoinLessCounter>0)
+			if(mCoinLessCounter>0)
 			{
-				pCoinLessCounter=pCoinLessTimes[(int) (pCoinLessTimes.length*Math.random())];
+				mCoinLessCounter=mCoinLessTimes[(int) (mCoinLessTimes.length*Math.random())];
 			}
 			
 			
-			if(pLastLine==0)
+			if(mLastLine==0)
 			{
-				obj = new ObstacleCoin(-380, 128, resManager.coin_region, vbom);
+				obj = new ObstacleCoin(-380, 128, pResManager.coin_region, pVbom);
 				obj.initObject(0, 100, 600, obj.getY(), 1, obj.getHeight()*3, obj.getWidth()*3, 50);
 			}
 			else
-			if(pLastLine==1)
+			if(mLastLine==1)
 			{
-				obj = new ObstacleCoin(0, 128, resManager.coin_region, vbom);
+				obj = new ObstacleCoin(0, 128, pResManager.coin_region, pVbom);
 				obj.initObject(1, 100, 600, obj.getY(), 1, obj.getHeight()*3, obj.getWidth()*3, 50);
 			}
 			else
 			{
-				obj = new ObstacleCoin(380, 128, resManager.coin_region, vbom);
+				obj = new ObstacleCoin(380, 128, pResManager.coin_region, pVbom);
 				obj.initObject(2, 100, 600, obj.getY(), 1, obj.getHeight()*3, obj.getWidth()*3, 50);
 			}
 			
 			return obj;
 		}
 		
-		pCoinLessCounter--;
-		if(pCoinLessCounter<=0)
+		mCoinLessCounter--;
+		if(mCoinLessCounter<=0)
 		{
-			pCoinLessCounter=-pCoinLessTimes[(int) (pCoinLessTimes.length*Math.random())];
+			mCoinLessCounter=-mCoinLessTimes[(int) (mCoinLessTimes.length*Math.random())];
 		}
 		
 		return null;
 	}
-	
-	
-	/*public Obstacle createLift(VertexBufferObjectManager vbom, ResourcesManager resManager)
-	{
-		Obstacle obj= new Obstacle(-380, 128, resManager.bus_region[0], vbom);
-		obj.initObject(0, 0, 400, obj.getY(), 1, obj.getHeight(), obj.getWidth(), 110);
-		obj.setDislocation(50);
-		
-		return obj; 
-	}*/
 }
 
 

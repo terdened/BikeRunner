@@ -6,16 +6,14 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 public class Obstacle extends AnimatedSprite {
 
-	public Obstacle(float pX, float pY,ITiledTextureRegion pTiledTextureRegion,
-			VertexBufferObjectManager pVertexBufferObjectManager) {
-		super(pX, pY, pTiledTextureRegion, pVertexBufferObjectManager);
-	}
-
-	protected int pLine;
-	protected int pHeight;
-	protected String pAction;
+	//---------------------------------------------
+    // VARIABLES
+    //---------------------------------------------
 	
-	protected float pLength;
+	protected int mLine;
+	protected int mHeight;
+	protected String mAction;
+	protected float mLength;
 	protected float mZ;
 	protected float mX;
 	protected float mY;
@@ -25,49 +23,63 @@ public class Obstacle extends AnimatedSprite {
 	protected float mRealHeight;
 	protected float mRealWidth;
 	protected float mSize;
-	protected float pSpeed;
+	protected float mSpeed;
 	
-	public void initObject(int line, int height, float z, float y, float size, float realHeight, float realWidth, float length)
+	//---------------------------------------------
+    // CONSTRUCTOR
+    //---------------------------------------------
+	
+	public Obstacle(float pX, float pY,ITiledTextureRegion pTiledTextureRegion,
+			VertexBufferObjectManager pVertexBufferObjectManager) {
+		super(pX, pY, pTiledTextureRegion, pVertexBufferObjectManager);
+	}
+
+	//---------------------------------------------
+    // PUBLIC METHODS
+    //---------------------------------------------
+	
+	public void initObject(int pLine, int pHeight, float pZ, float pY, float pSize, 
+			float pRealHeight, float pRealWidth, float pLength)
 	{
-		pHeight=height;
+		mHeight=pHeight;
 		mDislocationX=0;
-		pSpeed=0;
-		mZ=z;
-		mRealY=y;
-		mSize=size;
-		mRealHeight=realHeight;
-		mRealWidth=realWidth;
-		pLine=line;
-		pLength=length;
+		mSpeed=0;
+		mZ=pZ;
+		mRealY=pY;
+		mSize=pSize;
+		mRealHeight=pRealHeight;
+		mRealWidth=pRealWidth;
+		mLine=pLine;
+		mLength=pLength;
 		
-		if(pLine==0)
+		if(mLine==0)
 		{
 			mRealX=-380;
 		}
 		else
-		if(pLine==1)
+		if(mLine==1)
 		{
 			mRealX=0;
 		}
 		else
-		if(pLine==2)
+		if(mLine==2)
 		{
 			mRealX=380;
 		}
 		
-		if(pLine==0)
+		if(mLine==0)
 		{
 			final long[] PLAYER_ANIMATE = new long[] { 200, 0, 0 };
 			animate(PLAYER_ANIMATE, 0, 2, true);
 		}
 		else
-		if(pLine==1)
+		if(mLine==1)
 		{
 			final long[] PLAYER_ANIMATE = new long[] { 0, 200, 0 };
 			animate(PLAYER_ANIMATE, 0, 2, true);
 		}
 		else
-		if(pLine==2)
+		if(mLine==2)
 		{
 			final long[] PLAYER_ANIMATE = new long[] { 0, 0, 200 };
 			animate(PLAYER_ANIMATE, 0, 2, true);
@@ -76,91 +88,27 @@ public class Obstacle extends AnimatedSprite {
 		updateObject(0);
 	}
 	
-
-	
-	public void initLine(int line)
+	public void initLine(int pLine)
 	{
-		this.pLine=line;
+		this.mLine=pLine;
 	}
 	
-	public void setRealHeight(int height)
+	public boolean canDelete()
 	{
-		pHeight += height;
-		mRealY += height;
-	}
-	
-	public void setDislocation(float dislocation)
-	{
-		mDislocationX = dislocation;
-	}
-	
-	public void setSpeed(float speed)
-	{
-		pSpeed = speed;
-	}
-	
-	public void setAction(String action)
-	{
-		pAction=action;
-	}
-	
-	public void setDepth(int z)
-	{
-		mZ=z;
-	}
-	
-	public String getAction()
-	{
-		return pAction;
-	}
-	
-	public float getZ()
-	{
-		return this.mZ;
-	}
-	
-	public float getLength()
-	{
-		return this.pLength;
-	}
-	
-	public int getLine()
-	{
-		return this.pLine;
-	}
-	
-	public int getObstacleHeight()
-	{
-		if((mZ<-1700-25)&&(mZ>-1700-this.pLength-25))
-			return pHeight;
+		if(mZ<-1999)
+			return true;
 		else
-			return 0;
+			return false;
 	}
 	
-	public int getObstacleHeightByPosition(int position)
-	{
-		if((mZ<-1700+position-25)&&(mZ>-1700+position-this.pLength-25))
-			return pHeight;
-		else
-			return 0;
-	}
-	
-	public int getObstacleHeightByDeep(float deep)
-	{
-		if((mZ<deep)&&(mZ>deep-this.pLength))
-			return pHeight;
-		else
-			return 0;
-	}
-	
-	public void updateObject(int speed)
+	public void updateObject(int pSpeed)
 	{
 		if(this.getAlpha()<1)
 		{
 			this.setAlpha(this.getAlpha()+0.1f);
 		}
 		
-		mZ-=speed-pSpeed;
+		mZ-=pSpeed-mSpeed;
 		mSize=(150.0f)/(mZ+2000);
 
 		this.setWidth(mSize*mRealWidth);
@@ -173,11 +121,82 @@ public class Obstacle extends AnimatedSprite {
 		
 	}
 	
-	public boolean canDelete()
+	//---------------------------------------------
+    // SETTERS
+    //---------------------------------------------
+	
+	public void setRealHeight(int pHeight)
 	{
-		if(mZ<-1999)
-			return true;
-		else
-			return false;
+		mHeight += pHeight;
+		mRealY += pHeight;
 	}
+	
+	public void setDislocation(float pDislocation)
+	{
+		mDislocationX = pDislocation;
+	}
+	
+	public void setSpeed(float pSpeed)
+	{
+		mSpeed = pSpeed;
+	}
+	
+	public void setAction(String pAction)
+	{
+		mAction=pAction;
+	}
+	
+	public void setDepth(int pZ)
+	{
+		mZ=pZ;
+	}
+	
+	//---------------------------------------------
+    // GETTERS
+    //---------------------------------------------
+	
+	public String getAction()
+	{
+		return mAction;
+	}
+	
+	public float getZ()
+	{
+		return this.mZ;
+	}
+	
+	public float getLength()
+	{
+		return this.mLength;
+	}
+	
+	public int getLine()
+	{
+		return this.mLine;
+	}
+	
+	public int getObstacleHeight()
+	{
+		if((mZ<-1700-25)&&(mZ>-1700-this.mLength-25))
+			return mHeight;
+		else
+			return 0;
+	}
+	
+	public int getObstacleHeightByPosition(int pPosition)
+	{
+		if((mZ<-1700+pPosition-25)&&(mZ>-1700+pPosition-this.mLength-25))
+			return mHeight;
+		else
+			return 0;
+	}
+	
+	public int getObstacleHeightByDeep(float pDeep)
+	{
+		if((mZ<pDeep)&&(mZ>pDeep-this.mLength))
+			return mHeight;
+		else
+			return 0;
+	}
+	
 }

@@ -69,7 +69,6 @@ public class MenuBackground extends Sprite{
     // PUBLIC METHODS
     //---------------------------------------------
 	
-
 	public void next()
 	{
 		if(mCurrentLevel<mLevelList.size()-1)

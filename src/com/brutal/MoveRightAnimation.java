@@ -2,9 +2,18 @@ package com.brutal;
 
 public class MoveRightAnimation extends Animation{
 
-	MoveRightAnimation(Biker target) {
-		super(target);
+	//---------------------------------------------
+    // CONSTRUCTOR
+    //---------------------------------------------
+	
+	MoveRightAnimation(Biker pTarget) {
+		super(pTarget);
 	}
+	
+	//---------------------------------------------
+    // OVERLOADED METHODS
+    //---------------------------------------------
+	
 	
 	@Override
 	public void update()

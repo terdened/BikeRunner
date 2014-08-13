@@ -7,25 +7,38 @@ import android.media.MediaPlayer.OnCompletionListener;
 
 public class MusicManager {
 	
-	private final ResourcesManager pResourcesManager;
-	private Music pCurrentMusic;
+	//---------------------------------------------
+    // VARIABLES
+    //---------------------------------------------
+
+	private final ResourcesManager mResourcesManager;
 	
-	MusicManager(final ResourcesManager resourcesManager)
+	private Music mCurrentMusic;
+	
+	//---------------------------------------------
+    // CONSTRUCTOR
+    //---------------------------------------------
+	
+	MusicManager(final ResourcesManager pResourcesManager)
 	{
-		pResourcesManager=resourcesManager;
-		pCurrentMusic=pResourcesManager.game;
-		pCurrentMusic.setLooping(false);
-		pCurrentMusic.setOnCompletionListener(new OnCompletionListener()
+		mResourcesManager=pResourcesManager;
+		mCurrentMusic=mResourcesManager.game;
+		mCurrentMusic.setLooping(false);
+		mCurrentMusic.setOnCompletionListener(new OnCompletionListener()
         {
 			@Override
 			public void onCompletion( final MediaPlayer pMediaPlayer )
 			{
-				pCurrentMusic.seekTo(0);
-				pCurrentMusic.resume();
+				mCurrentMusic.seekTo(0);
+				mCurrentMusic.resume();
 			}
         });
 		
 	}
+	
+	//---------------------------------------------
+    // PUBLIC METHODS
+    //---------------------------------------------
 	
 	public void onComplete()
 	{
@@ -34,33 +47,33 @@ public class MusicManager {
 	
 	public void playMusic()
     {
-		pCurrentMusic.play();
-		pCurrentMusic.setVolume(0.5f);
+		mCurrentMusic.play();
+		mCurrentMusic.setVolume(0.5f);
 
-		pResourcesManager.motorSound.setLooping(true);
-		pResourcesManager.motorSound.play();
-		pResourcesManager.motorSound.setVolume(0.3f);
+		mResourcesManager.motorSound.setLooping(true);
+		mResourcesManager.motorSound.play();
+		mResourcesManager.motorSound.setVolume(0.3f);
     }
     
     public void resumeMusic()
     {
-    	pCurrentMusic.setVolume(0.5f);
-    	pCurrentMusic.resume();
-    	pResourcesManager.motorSound.setVolume(0.3f);
-    	pResourcesManager.motorSound.resume();
+    	mCurrentMusic.setVolume(0.5f);
+    	mCurrentMusic.resume();
+    	mResourcesManager.motorSound.setVolume(0.3f);
+    	mResourcesManager.motorSound.resume();
     }
     
     public void lowerMusic()
     {
-    	pCurrentMusic.setVolume(0.2f);
-    	pCurrentMusic.resume();
-    	pResourcesManager.motorSound.pause();
+    	mCurrentMusic.setVolume(0.2f);
+    	mCurrentMusic.resume();
+    	mResourcesManager.motorSound.pause();
     }
     
     public void stopMusic()
     {
-    	pCurrentMusic.pause();
-    	pResourcesManager.motorSound.pause();
+    	mCurrentMusic.pause();
+    	mResourcesManager.motorSound.pause();
     }
 
 }

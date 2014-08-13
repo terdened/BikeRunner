@@ -16,7 +16,7 @@ public class WorldController {
 		mCounter=0;
 		mVbom = vbom;
 		mResManager = resManager;
-		objFactory = new ObjectsFactory(mResManager);
+		objFactory = new ObjectsFactory();
 	}
 	
 	public void updateWorld(int speed)

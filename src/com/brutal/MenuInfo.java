@@ -8,191 +8,198 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 public class MenuInfo extends Entity {
 	
-	private int pHeight;
-	private int pWidth;
+	//---------------------------------------------
+    // VARIABLES
+    //---------------------------------------------
 	
-	private Text pHighScore;
-	private Text pBikeName;
-	private Text pLevelName;
-	private Text pCoins;
-	private Text pTapToPlay;
-	private Text pLevelCost;
-	private AnimatedSprite pLevelCoinIcon;
+	private int mHeight;
+	private int mWidth;
+	private Text mHighScore;
+	private Text mBikeName;
+	private Text mLevelName;
+	private Text mCoins;
+	private Text mTapToPlay;
+	private Text mLevelCost;
+	private String mLevelNameString;
+	private String mBikeNameString;
+	private AnimatedSprite mCoinIcon;
+	private Sprite mLockIcon;
 	
-	private String pLevelNameString;
-	private String pBikeNameString;
-	private AnimatedSprite pCoinIcon;
-	private Sprite pLockIcon;
-	private Sprite pBikeLockIcon;
-
-	private final ResourcesManager pResourcesManager;
-	private final VertexBufferObjectManager pVbom;
-	private final PlayerDataManager pPlayerDataManager;
+	private final ResourcesManager mResourcesManager;
+	private final VertexBufferObjectManager mVbom;
+	private final PlayerDataManager mPlayerDataManager;
 	
-	MenuInfo(int width, int height, ResourcesManager resourcesManager,VertexBufferObjectManager vbom,
-			PlayerDataManager playerDataManager)
+	//---------------------------------------------
+    // CONSTRUCTOR
+    //---------------------------------------------
+	
+	MenuInfo(int pWidth, int pHeight, ResourcesManager pResourcesManager,VertexBufferObjectManager pVbom,
+			PlayerDataManager pPlayerDataManager)
 	{
-		pPlayerDataManager=playerDataManager;
-		pResourcesManager=resourcesManager;
-		pVbom=vbom;
-		pHeight=height;
-		pWidth=width;
-		pLevelNameString="";
-		pBikeNameString="";
+		mPlayerDataManager=pPlayerDataManager;
+		mResourcesManager=pResourcesManager;
+		mVbom=pVbom;
+		mHeight=pHeight;
+		mWidth=pWidth;
+		mLevelNameString="";
+		mBikeNameString="";
 		init();
 	}
 	
-	void setLevelName(String name)
+	//---------------------------------------------
+    // PUBLIC METHODS
+    //---------------------------------------------
+	
+	public void setLevelName(String pName)
 	{
-		pLevelNameString=name;
+		mLevelNameString=pName;
 	}
 	
-	void setBikeName(String name)
+	public void setBikeName(String pName)
 	{
-		pBikeNameString=name;
+		mBikeNameString=pName;
 	}
 	
-	public Entity showLevelCost(String cost)
+	public Entity showLevelCost(String pCost)
 	{
 		Entity layer = new Entity();
 		
-		pLevelCost = new Text(60, 10, pResourcesManager.font,cost, cost.length(), pVbom);
+		mLevelCost = new Text(60, 10, mResourcesManager.font, pCost, pCost.length(), mVbom);
 		
-		pCoinIcon = new AnimatedSprite(0, 25, pResourcesManager.coin_region, pVbom);
+		mCoinIcon = new AnimatedSprite(0, 25, mResourcesManager.coin_region, mVbom);
 		final long[] PLAYER_ANIMATE = new long[] { 200, 0, 0, 0, 0, 0, 0, 0 };
-		pCoinIcon.animate(PLAYER_ANIMATE, 0, 7, true);
+		mCoinIcon.animate(PLAYER_ANIMATE, 0, 7, true);
 		
-		layer.attachChild(pCoinIcon);
-		layer.attachChild(pLevelCost);
+		layer.attachChild(mCoinIcon);
+		layer.attachChild(mLevelCost);
 		
 		return layer;
 	}
 	
 	public void init()
 	{
-		pHighScore = new Text(0, 0, pResourcesManager.font, 
-				String.valueOf(pPlayerDataManager.getHighScore()), 10, pVbom);
-		pHighScore.setX(pWidth-pHighScore.getWidth()-10);
+		mHighScore = new Text(0, 0, mResourcesManager.font, 
+				String.valueOf(mPlayerDataManager.getHighScore()), 10, mVbom);
+		mHighScore.setX(mWidth-mHighScore.getWidth()-10);
 		
-		pCoins = new Text(0, 60, pResourcesManager.font, 
-				String.valueOf(pPlayerDataManager.getCoins()), 10, pVbom);
-		pCoins.setX(pWidth-pCoins.getWidth()-10);
-		pCoins.setY(50);
+		mCoins = new Text(0, 60, mResourcesManager.font, 
+				String.valueOf(mPlayerDataManager.getCoins()), 10, mVbom);
+		mCoins.setX(mWidth-mCoins.getWidth()-10);
+		mCoins.setY(50);
 		
-		pLevelName= new Text(0, 0, pResourcesManager.font, pLevelNameString, pLevelNameString.length(), pVbom);
-		pLevelName.setX(pWidth/2-pLevelName.getWidth()/2);
+		mLevelName= new Text(0, 0, mResourcesManager.font, mLevelNameString, mLevelNameString.length(), mVbom);
+		mLevelName.setX(mWidth/2-mLevelName.getWidth()/2);
 		
-		pBikeName = new Text(0, 0, pResourcesManager.font, pBikeNameString, pBikeNameString.length(), pVbom);
-		pBikeName.setX(pWidth/2-pBikeName.getWidth()/2);
-		pBikeName.setY(pHeight-130);
+		mBikeName = new Text(0, 0, mResourcesManager.font, mBikeNameString, mBikeNameString.length(), mVbom);
+		mBikeName.setX(mWidth/2-mBikeName.getWidth()/2);
+		mBikeName.setY(mHeight-130);
 		
-		if(pPlayerDataManager.getLevelAccess(pLevelNameString)&&pPlayerDataManager.getBikeAccess(pBikeNameString))
+		if(mPlayerDataManager.getLevelAccess(mLevelNameString)&&mPlayerDataManager.getBikeAccess(mBikeNameString))
 		{
-			pTapToPlay = new Text(0, 0, pResourcesManager.font,"Tap to play!", 10, pVbom);
-			pTapToPlay.setX(pWidth/2-pTapToPlay.getWidth()/2);
-			pTapToPlay.setY(500);
-			this.attachChild(pTapToPlay);
+			mTapToPlay = new Text(0, 0, mResourcesManager.font,"Tap to play!", 10, mVbom);
+			mTapToPlay.setX(mWidth/2-mTapToPlay.getWidth()/2);
+			mTapToPlay.setY(500);
+			this.attachChild(mTapToPlay);
 		}
 		
-		pCoinIcon = new AnimatedSprite(pCoins.getX()-60, pCoins.getY()+15, pResourcesManager.coin_region, pVbom);
+		mCoinIcon = new AnimatedSprite(mCoins.getX()-60, mCoins.getY()+15, mResourcesManager.coin_region, mVbom);
 		final long[] PLAYER_ANIMATE = new long[] { 200, 0, 0, 0, 0, 0, 0, 0 };
-		pCoinIcon.animate(PLAYER_ANIMATE, 0, 7, true);
+		mCoinIcon.animate(PLAYER_ANIMATE, 0, 7, true);
 		
-		if(!pPlayerDataManager.getLevelAccess(pLevelNameString))
+		if(!mPlayerDataManager.getLevelAccess(mLevelNameString))
 		{
-			pLockIcon = new Sprite(pLevelName.getX()-50, pLevelName.getY()+10, pResourcesManager.lock_region, pVbom);
-			this.attachChild(pLockIcon);
+			mLockIcon = new Sprite(mLevelName.getX()-50, mLevelName.getY()+10, mResourcesManager.lock_region, mVbom);
+			this.attachChild(mLockIcon);
 		}
 		
-		if(!pPlayerDataManager.getBikeAccess(pBikeNameString))
+		if(!mPlayerDataManager.getBikeAccess(mBikeNameString))
 		{
-			pBikeLockIcon = new Sprite(pBikeName.getX()-50, pBikeName.getY()+10, pResourcesManager.lock_region, pVbom);
-			this.attachChild(pBikeLockIcon);
+			mLockIcon = new Sprite(mBikeName.getX()-50, mBikeName.getY()+10, mResourcesManager.lock_region, mVbom);
+			this.attachChild(mLockIcon);
 		}
 		
-		this.attachChild(pBikeName);
-		this.attachChild(pLevelName);
-		this.attachChild(pCoinIcon);
-		this.attachChild(pHighScore);
-		this.attachChild(pCoins);
+		this.attachChild(mBikeName);
+		this.attachChild(mLevelName);
+		this.attachChild(mCoinIcon);
+		this.attachChild(mHighScore);
+		this.attachChild(mCoins);
 	}
 	
 	public void update()
 	{
 
 		try{
-			this.detachChild(pLockIcon);
-		}
-		finally
-		{
-		}
-		
-
-		try{
-			this.detachChild(pBikeLockIcon);
+			this.detachChild(mLockIcon);
 		}
 		finally
 		{
 		}
 		
 		try{
-			this.detachChild(pTapToPlay);
+			this.detachChild(mLockIcon);
 		}
 		finally
 		{
 		}
 		
-		this.detachChild(pHighScore);
-		this.detachChild(pCoins);
-		this.detachChild(pCoinIcon);
-		this.detachChild(pLevelName);
-		this.detachChild(pBikeName);
-		
-		pHighScore = new Text(0, 0, pResourcesManager.font, 
-				String.valueOf(pPlayerDataManager.getHighScore()), 10, pVbom);
-		pHighScore.setX(pWidth-pHighScore.getWidth()-10);
-		pHighScore.setY(10);
-		
-		pCoins = new Text(0, 60, pResourcesManager.font, 
-				String.valueOf(pPlayerDataManager.getCoins()), 10, pVbom);
-		pCoins.setX(pWidth-pCoins.getWidth()-10);
-		pCoins.setY(60);
-		
-		pLevelName= new Text(0, 0, pResourcesManager.font, pLevelNameString, pLevelNameString.length(), pVbom);
-		pLevelName.setX(pWidth/2-pLevelName.getWidth()/2);
-		
-		pBikeName = new Text(0, 0, pResourcesManager.font, pBikeNameString, pBikeNameString.length(), pVbom);
-		pBikeName.setX(pWidth/2-pBikeName.getWidth()/2);
-		pBikeName.setY(pHeight-70);
-		
-		if(pPlayerDataManager.getLevelAccess(pLevelNameString)&&pPlayerDataManager.getBikeAccess(pBikeNameString))
+		try{
+			this.detachChild(mTapToPlay);
+		}
+		finally
 		{
-			pTapToPlay = new Text(0, 0, pResourcesManager.font,"Tap to play!", 10, pVbom);
-			pTapToPlay.setX(pWidth/2-pTapToPlay.getWidth()/2);
-			pTapToPlay.setY(500);
-			this.attachChild(pTapToPlay);
 		}
 		
-		pCoinIcon = new AnimatedSprite(pCoins.getX()-60, pCoins.getY()+15, pResourcesManager.coin_region, pVbom);
+		this.detachChild(mHighScore);
+		this.detachChild(mCoins);
+		this.detachChild(mCoinIcon);
+		this.detachChild(mLevelName);
+		this.detachChild(mBikeName);
+		
+		mHighScore = new Text(0, 0, mResourcesManager.font, 
+				String.valueOf(mPlayerDataManager.getHighScore()), 10, mVbom);
+		mHighScore.setX(mWidth-mHighScore.getWidth()-10);
+		mHighScore.setY(10);
+		
+		mCoins = new Text(0, 60, mResourcesManager.font, 
+				String.valueOf(mPlayerDataManager.getCoins()), 10, mVbom);
+		mCoins.setX(mWidth-mCoins.getWidth()-10);
+		mCoins.setY(60);
+		
+		mLevelName= new Text(0, 0, mResourcesManager.font, mLevelNameString, mLevelNameString.length(), mVbom);
+		mLevelName.setX(mWidth/2-mLevelName.getWidth()/2);
+		
+		mBikeName = new Text(0, 0, mResourcesManager.font, mBikeNameString, mBikeNameString.length(), mVbom);
+		mBikeName.setX(mWidth/2-mBikeName.getWidth()/2);
+		mBikeName.setY(mHeight-70);
+		
+		if(mPlayerDataManager.getLevelAccess(mLevelNameString)&&mPlayerDataManager.getBikeAccess(mBikeNameString))
+		{
+			mTapToPlay = new Text(0, 0, mResourcesManager.font,"Tap to play!", 10, mVbom);
+			mTapToPlay.setX(mWidth/2-mTapToPlay.getWidth()/2);
+			mTapToPlay.setY(500);
+			this.attachChild(mTapToPlay);
+		}
+		
+		mCoinIcon = new AnimatedSprite(mCoins.getX()-60, mCoins.getY()+15, mResourcesManager.coin_region, mVbom);
 		final long[] PLAYER_ANIMATE = new long[] { 200, 0, 0, 0, 0, 0, 0, 0 };
-		pCoinIcon.animate(PLAYER_ANIMATE, 0, 7, true);
+		mCoinIcon.animate(PLAYER_ANIMATE, 0, 7, true);
 		
-		if(!pPlayerDataManager.getLevelAccess(pLevelNameString))
+		if(!mPlayerDataManager.getLevelAccess(mLevelNameString))
 		{
-			pLockIcon = new Sprite(pLevelName.getX()-50, pLevelName.getY()+10, pResourcesManager.lock_region, pVbom);
-			this.attachChild(pLockIcon);
+			mLockIcon = new Sprite(mLevelName.getX()-50, mLevelName.getY()+10, mResourcesManager.lock_region, mVbom);
+			this.attachChild(mLockIcon);
 		}
 		
-		if(!pPlayerDataManager.getBikeAccess(pBikeNameString))
+		if(!mPlayerDataManager.getBikeAccess(mBikeNameString))
 		{
-			pBikeLockIcon = new Sprite(pBikeName.getX()-50, pBikeName.getY()+10, pResourcesManager.lock_region, pVbom);
-			this.attachChild(pBikeLockIcon);
+			mLockIcon = new Sprite(mBikeName.getX()-50, mBikeName.getY()+10, mResourcesManager.lock_region, mVbom);
+			this.attachChild(mLockIcon);
 		}
 		
-		this.attachChild(pBikeName);
-		this.attachChild(pLevelName);
-		this.attachChild(pCoinIcon);
-		this.attachChild(pHighScore);
-		this.attachChild(pCoins);
+		this.attachChild(mBikeName);
+		this.attachChild(mLevelName);
+		this.attachChild(mCoinIcon);
+		this.attachChild(mHighScore);
+		this.attachChild(mCoins);
 	}
 }
