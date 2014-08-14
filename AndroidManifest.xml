@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.brutal"
-    android:versionCode="4"
-    android:versionName="1.0.3" >
+    package="com.brutal.engine"
+    android:versionCode="5"
+    android:versionName="1.0.4" >
 
     <uses-sdk
         android:minSdkVersion="8"
@@ -14,7 +14,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="com.brutal.GameActivity"
+            android:name="com.brutal.engine.GameActivity"
             android:configChanges="orientation"
             android:label="@string/app_name"
             android:screenOrientation="landscape">
